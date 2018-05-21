@@ -1,0 +1,167 @@
+GLOBAL clearI
+GLOBAL setI
+GLOBAL halt
+GLOBAL haltCPU
+
+GLOBAL irq00Handler
+GLOBAL irq01Handler
+GLOBAL irq02Handler
+GLOBAL irq03Handler
+GLOBAL irq04Handler
+GLOBAL irq05Handler
+
+GLOBAL exception0Handler
+
+GLOBAL getIDTBaseAddress
+
+GLOBAL int80Handler
+
+EXTERN irqDispatcher
+EXTERN exceptionDispatcher
+EXTERN int80
+
+section .text
+
+%macro pushState 0
+	push rax
+	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
+%endmacro
+
+%macro popState 0
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rsi
+	pop rdi
+	pop rbp
+	pop rdx
+	pop rcx
+	pop rbx
+	pop rax
+%endmacro
+
+; the following two macros call the C function in charge of handling exceptions/interrupts given
+; the IRQ number passed on by the following functions.
+
+%macro irqHandlerMaster 1
+	pushState
+
+	mov rdi, %1 ; pasaje de parametro
+	call irqDispatcher
+
+	; signal pic EOI (End of Interrupt)
+	mov al, 20h
+	out 20h, al
+
+	popState
+	iretq
+%endmacro
+
+%macro exceptionHandler 1
+	pushState
+
+	mov rdi, %1 ; pasaje de parametro
+	call exceptionDispatcher
+
+	popState
+	iretq
+%endmacro
+
+; 8254 Timer (Timer Tick)
+irq00Handler:
+	irqHandlerMaster 0
+
+; Keyboard
+irq01Handler:
+	irqHandlerMaster 1
+
+; Cascade pic never called
+irq02Handler:
+	irqHandlerMaster 2
+
+; Serial Port 2 and 4
+irq03Handler:
+	irqHandlerMaster 3
+
+; Serial Port 1 and 3
+irq04Handler:
+	irqHandlerMaster 4
+
+; USB
+irq05Handler:
+	irqHandlerMaster 5
+
+
+; Zero Division Exception
+exception0Handler:
+	exceptionHandler 0
+
+; handles systemcalls called with the int 80h instruction
+; el orden de los registros al recibir parámetros en C en
+; 64 bits es rdi, rsi, rdx, r10, r9, r8 este es el mismo
+; orden en el que se reciben las syscalls de linux en 64
+; bits.
+int80Handler:
+	
+	pushState
+	call int80
+	popState
+
+	iretq
+
+; halts the CPU until an external interrupt is fired (this is simply what the hlt instruction does).
+
+halt:
+	sti
+	hlt
+	ret
+
+; halts CPU forever
+
+haltcpu:
+	cli
+	hlt
+	ret
+
+; disables hardware interruptions.
+
+clearI:
+	cli
+	ret
+
+; enables hardware interruptions.
+
+setI:
+	sti
+	ret
+
+getIDTBaseAddress:
+
+	sidt [idtr]
+	mov rax, [idtr + 2]
+	ret
+
+section .bss
+
+idtr db 10		; saved memory for storing the idtr when needed.
+				; Please Recall that the IDTR is 80 bits in size, 
+				; bits 0...15 store the length of the IDT and
+				; bits 16...79 store the base adress
