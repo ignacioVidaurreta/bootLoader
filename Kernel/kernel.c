@@ -114,7 +114,7 @@ int main()
 	ncNewline();
 	ncNewline();
 
+	test();
 	while(1){;}
-	//test();
 	return 0;
 }

@@ -14,11 +14,7 @@ void int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t 
 }
 
 void write(uint64_t fd, char* buffer, uint64_t count){
-
-	ncPrintDec(count);
-	ncNewline();
-	ncPrintDec((uint64_t) buffer);
-	ncNewline();
+	
 	char aux[count + 1];
 	int i;
 	for(i = 0; i < 12; i++)

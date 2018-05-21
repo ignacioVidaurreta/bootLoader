@@ -116,12 +116,13 @@ exception0Handler:
 
 ; handles systemcalls called with the int 80h instruction
 ; el orden de los registros al recibir parámetros en C en
-; 64 bits es rdi, rsi, rdx, r10, r9, r8 este es el mismo
+; 64 bits es rdi, rsi, rdx, r10, r8, r9 este es el mismo
 ; orden en el que se reciben las syscalls de linux en 64
 ; bits.
 int80Handler:
 	
 	pushState
+	mov r9, rax
 	call int80
 	popState
 
