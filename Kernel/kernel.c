@@ -7,7 +7,6 @@
 #include <timeManip.h>
 #include <time.h>
 #include <idtLoader.h>
-#include <test.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -113,8 +112,6 @@ int main()
 	ncPrint("[Finished]");
 	ncNewline();
 	ncNewline();
-
-	test();
 	while(1){;}
 	return 0;
 }

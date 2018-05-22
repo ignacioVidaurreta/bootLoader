@@ -4,27 +4,30 @@
 #include <naiveConsole.h>
 
 //por ahora solo maneja caracteres nonshift
+		
+int bufferIndex = 0;
 
-int isAlphaNumeric(char c);
-int pressed = 0;
+int shiftl = 0;					//flags to know whether shift has been pressed or not.
+int shiftr = 0;
 
 void keyboardHandler(void){
-
-	char key = readFromKeyboard();
-	char c = asciiNonShift[key];
-	if((isAlphaNumeric(c) | (c == ' ')) && !pressed){
-		pressed = 1;
-		ncPrintChar(c);
+	int key = readFromKeyboard();
+	switch (key){
+		case RIGHT_SHIFT:
+			shiftr = 1;
+			break;
+		case LEFT_SHIFT:
+			shiftl = 1;
+			break;
+		case RIGHT_SHIFT + 128:
+			shiftr = 0;
+			break;
+		case LEFT_SHIFT + 128:
+			shiftl = 0;
+			break;
 	}
-	else if (c == BACKSPACE){
-		ncDeleteChar();
-	}
-	else pressed = 0;
-}
-
-int isAlphaNumeric(char c){
-
-	if((c >= 48 && c <= 57) | (c >= 97 && c <= 122))
-		return 1;
-	return 0;
+	if((shiftr | shiftl) && (key < 128))
+		keyBuffer[bufferIndex++] = asciiShift[key];
+	else if(key < 128)
+		keyBuffer[bufferIndex++] = asciiNonShift[key];
 }

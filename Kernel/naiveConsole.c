@@ -5,8 +5,15 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 static char buffer[64] = { '0' };
 static uint8_t * const video = (uint8_t*)0xB8000;
 static uint8_t * currentVideo = (uint8_t*)0xB8000;
+static uint8_t * lastNonUserLine = (uint8_t*)0xB8FA0;
+static uint8_t * lastNonUserChar = (uint8_t*)0xB8E99;
+static uint8_t * userVideo = (uint8_t*)0xB8F00;
+static uint8_t * currentUser = (uint8_t*)0xB8F00;
+static uint8_t * maxVideo = (uint8_t*)0xB9040;
 static const uint32_t width = 80;
-static const uint32_t height = 25 ;
+static const uint32_t height = 24;					//the ammount of lines in the screen is actually 25, however,
+													//since the last line will be reserved for user commands
+													//writing to it will have its own special function.
 
 void ncPrint(const char * string)
 {
@@ -16,14 +23,8 @@ void ncPrint(const char * string)
 		ncPrintChar(string[i]);
 }
 
-void ncPrintChar(char character)
-{
-	*currentVideo = character;
-	currentVideo++;
-	*currentVideo = WHITE;
-	currentVideo ++;
-	if((int)(currentVideo - video) == width*height*2 - 1)
-		ncMoveUpOneLine();
+void ncPrintChar(char character){
+	ncPrintCharInColor(character, WHITE);
 }
 
 void ncDeleteChar(){
@@ -38,8 +39,37 @@ void ncNewline()
 		ncPrintChar(' ');
 	}
 	while((uint64_t)(currentVideo - video) % (width * 2) != 0);
-	if( (int)(currentVideo - video) == width*height*2 - 1)
-		ncMoveUpOneLine();
+}
+
+void ncPrintUserLine(char* buffer){
+	ncPrintUserLineInColor(buffer, WHITE);
+}
+
+void ncPrintUserLineInColor(char* buffer, uint8_t color){
+	for(int i = 0; buffer[i] != 0; i++){
+		ncPrintUserCharInColor(buffer[i], color);
+	}
+}
+
+void ncPrintUserChar(char c){
+	ncPrintUserCharInColor(c, WHITE);
+}
+
+void ncPrintUserCharInColor(char c, uint8_t color){
+	*currentUser = c;
+	currentUser++;
+	*currentUser = color;
+	currentUser++;
+
+	if(currentUser == maxVideo)
+		ncClearUser();
+}
+
+void ncClearUser(void){
+	currentUser = userVideo;
+	while(currentUser < maxVideo)
+		ncPrintUserChar(' ');
+	currentUser = userVideo;
 }
 
 void ncMoveUpOneLine(void){
@@ -47,12 +77,15 @@ void ncMoveUpOneLine(void){
 	int newScreen = width*2;
 	int i = 0;
 	while(i < width*2*(height-1)){
-		currentVideo[i*2] = currentVideo[newScreen*2];
+		video[i*2] = currentVideo[newScreen*2];
 		i++;
 		newScreen++;
 	}
-	while(i < width*height*2)
+	while(i < width*height*2){
 		currentVideo[i] = ' ';
+		i++;
+	}
+	currentVideo = lastNonUserLine;
 }
 
 void ncPrintDec(uint64_t value)
@@ -87,9 +120,12 @@ void ncPrintInColor(const char * string, uint8_t color)
 void ncPrintCharInColor(char character, uint8_t color)
 {
 	*currentVideo = character;
-	currentVideo ++;
+	currentVideo++;
 	*currentVideo = color;
 	currentVideo++;
+
+	if(currentVideo == lastNonUserChar)
+		ncMoveUpOneLine();
 }
 
 void ncClear()
