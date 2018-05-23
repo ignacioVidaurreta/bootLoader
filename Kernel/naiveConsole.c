@@ -15,10 +15,26 @@ static const uint32_t height = 24;					//the ammount of lines in the screen is a
 													//since the last line will be reserved for user commands
 													//writing to it will have its own special function.
 
-void ncPrint(const char * string)
+void ncPrintInColor(const char * string, uint8_t color)
 {
 	int i;
 
+	for (i = 0; string[i] != 0; i++)
+		ncPrintCharInColor(string[i], color);
+}
+
+void ncPrintCharInColor(char character, uint8_t color)
+{
+	*currentVideo = character;
+	currentVideo+=2;
+
+	if(currentVideo == lastNonUserChar)
+		ncMoveUpOneLine();
+}
+
+void ncPrint(const char * string)
+{
+	int i;
 	for (i = 0; string[i] != 0; i++)
 		ncPrintChar(string[i]);
 }
@@ -28,8 +44,10 @@ void ncPrintChar(char character){
 }
 
 void ncDeleteChar(){
-	currentVideo -= 2;
-	*currentVideo = ' ';
+	if(currentVideo != video){
+		currentVideo -= 2;
+		*currentVideo = ' ';
+	}
 }
 
 void ncNewline()
@@ -41,11 +59,11 @@ void ncNewline()
 	while((uint64_t)(currentVideo - video) % (width * 2) != 0);
 }
 
-void ncPrintUserLine(char* buffer){
-	ncPrintUserLineInColor(buffer, WHITE);
+void ncPrintUser(const char* buffer){
+	ncPrintUserInColor(buffer, WHITE);
 }
 
-void ncPrintUserLineInColor(char* buffer, uint8_t color){
+void ncPrintUserInColor(const char* buffer, uint8_t color){
 	for(int i = 0; buffer[i] != 0; i++){
 		ncPrintUserCharInColor(buffer[i], color);
 	}
@@ -66,10 +84,10 @@ void ncPrintUserCharInColor(char c, uint8_t color){
 }
 
 void ncClearUser(void){
-	currentUser = userVideo;
-	while(currentUser < maxVideo)
-		ncPrintUserChar(' ');
-	currentUser = userVideo;
+	while(currentUser != userVideo){
+		*currentUser = ' ';
+		currentUser -= 2;
+	}
 }
 
 void ncMoveUpOneLine(void){
@@ -107,25 +125,6 @@ void ncPrintBase(uint64_t value, uint32_t base)
 {
     uintToBase(value, buffer, base);
     ncPrint(buffer);
-}
-
-void ncPrintInColor(const char * string, uint8_t color)
-{
-	int i;
-
-	for (i = 0; string[i] != 0; i++)
-		ncPrintCharInColor(string[i], color);
-}
-
-void ncPrintCharInColor(char character, uint8_t color)
-{
-	*currentVideo = character;
-	currentVideo++;
-	*currentVideo = color;
-	currentVideo++;
-
-	if(currentVideo == lastNonUserChar)
-		ncMoveUpOneLine();
 }
 
 void ncClear()

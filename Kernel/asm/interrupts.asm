@@ -19,7 +19,7 @@ GLOBAL int80Handler
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN int80
-
+EXTERN ncPrint
 section .text
 
 %macro pushState 0
@@ -125,7 +125,6 @@ int80Handler:
 	mov r9, rax
 	call int80
 	popState
-
 	iretq
 
 ; halts the CPU until an external interrupt is fired (this is simply what the hlt instruction does).
@@ -166,3 +165,7 @@ idtr db 10		; saved memory for storing the idtr when needed.
 				; Please Recall that the IDTR is 80 bits in size, 
 				; bits 0...15 store the length of the IDT and
 				; bits 16...79 store the base adress
+
+section .data
+
+aux db "ok"
