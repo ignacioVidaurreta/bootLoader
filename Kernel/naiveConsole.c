@@ -1,51 +1,69 @@
 #include <naiveConsole.h>
 
-static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
-
-#pragma pack(push)
-#pragma pack(1)
-//http://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
 typedef struct {
-	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
-	uint8_t window_a;			// deprecated
-	uint8_t window_b;			// deprecated
-	uint16_t granularity;		// deprecated; used while calculating bank numbers
-	uint16_t window_size;
-	uint16_t segment_a;
-	uint16_t segment_b;
-	uint32_t win_func_ptr;		// deprecated; used to switch banks from protected mode without returning to real mode
-	uint16_t pitch;				// number of bytes per horizontal line
-	uint16_t width;				// width in pixels
-	uint16_t height;			// height in pixels
-	uint8_t w_char;				// unused...
-	uint8_t y_char;				// ...
-	uint8_t planes;
-	uint8_t bpp;				// bits per pixel in this mode
-	uint8_t banks;				// deprecated; total number of banks in this mode
-	uint8_t memory_model;
-	uint8_t bank_size;			// deprecated; size of a bank, almost always 64 KB but may be 16 KB...
-	uint8_t image_pages;
-	uint8_t reserved0;
- 
-	uint8_t red_mask;
-	uint8_t red_position;
-	uint8_t green_mask;
-	uint8_t green_position;
-	uint8_t blue_mask;
-	uint8_t blue_position;
-	uint8_t reserved_mask;
-	uint8_t reserved_position;
-	uint8_t direct_color_attributes;
- 
-	uint32_t framebuffer;				// physical address of the linear frame buffer; write here to draw to the screen
-	uint32_t off_screen_mem_off;
-	uint16_t off_screen_mem_size;		// size of memory in the framebuffer but not being displayed on the screen
-	uint8_t reserved1[206];
-}vbeModeInfoStructure;
+	uint8_t Red;
+	uint8_t Green;
+	uint8_t Blue;
+} Colour;
 
-#pragma pack(pop)
+static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
+void drawAPixelWithColour(int x, int y, Colour col);
 
-vbeModeInfoStructure* vbeInfo = (vbeModeInfoStructure*) 0x5C00;
+struct ModeInfoBlock {
+    uint16_t ModeAttributes;
+    uint8_t WinAAttributes;
+    uint8_t WinBAttributes;
+    uint16_t WinGranularity;
+    uint16_t WinSize;
+    uint16_t WinSegmentA;
+    uint16_t WinSegmentB;
+    uint32_t WinRealFctPtr;
+    uint16_t pitch; 					// Bytes per ScanLine.
+
+    uint16_t XResolution;
+    uint16_t YResolution;
+    uint8_t XcharSize;
+    uint8_t YcharSize;
+    uint8_t NumberOfPlanes;
+    uint8_t BitsPerPixel;
+    uint8_t NumberOfBanks;
+    uint8_t MemoryModel;
+    uint8_t BankSize;
+    uint8_t NumberOfImagePages;
+    uint8_t ReservedPage;
+
+    uint8_t RedMaskSize;
+    uint8_t RedMaskPosition;
+    uint8_t GreenMaskSize;
+    uint8_t GreenMaskPosition;
+    uint8_t BlueMaskSize;
+    uint8_t BlueMaskPosition;
+    uint8_t ReservedMaskSize;
+    uint8_t ReservedMaskPosition;
+    uint8_t DirectColorAttributes;
+
+    uint32_t PhysBasePtr;  				// Your LFB (Linear Framebuffer) address.
+    uint32_t OffScreenMemOffset;
+    uint16_t OffScreenMemSize;
+} __attribute__((packed));
+
+//The _attribute_ modifiers are needed to make gcc pack the structure into 
+//the standard VESA layout, rather than adding pad bytes between some of the 
+//fields like it would normally do.
+//http://www.delorie.com/djgpp/doc/ug/graphics/vesa.html
+
+typedef struct ModeInfoBlock ModeInfoVBE;
+
+ModeInfoVBE* VBEModeInfo = (ModeInfoVBE*) 0x5C00;
+
+void drawAPixelWithColour(int x, int y, Colour col)
+{
+    char * video = (char *) ((uint64_t)(VBEModeInfo->PhysBasePtr + VBEModeInfo->pitch *y + x* (int)(VBEModeInfo->BitsPerPixel/8)));
+    video[0] = col.Blue;
+    video[1] = col.Green;
+    video[2] = col.Red;
+}
+
 
 static char buffer[64] = { '0' };
 static uint8_t * const video = (uint8_t*)0xB8000;
@@ -60,16 +78,23 @@ static const uint32_t height = 24;					//the ammount of lines in the screen is a
 													//since the last line will be reserved for user commands
 													//writing to it will have its own special function.
 
+void scTest(void){
+
+	Colour col;
+	col.Red = 0;
+	col.Green = 0xFF;
+	col.Blue = 0;
+	for(int i = 0; i < 100000; i++)
+		for(int j = 0; j < 100000; j++)
+			drawAPixelWithColour(i,j, col);
+}
+
 void ncPrintInColor(const char * string, uint8_t color)
 {
 	int i;
 
 	for (i = 0; string[i] != 0; i++)
 		ncPrintCharInColor(string[i], color);
-}
-
-void scTest(){
-	ncPrintDec(vbeInfo->width);
 }
 
 void ncPrintCharInColor(char character, uint8_t color)

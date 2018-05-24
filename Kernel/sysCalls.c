@@ -18,8 +18,11 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 		case SYS_WRITE:
 			write(arg1, (char*)arg2, arg3);
 			return 1;
-		case SYS_RST_USR:
+		case SYS_CLR_USR:
 			cleanUser();
+			return 1;
+		case SYS_CLR_SCRN:
+			ncClear();
 			return 1;
 		case SYS_READ_KEYA:
 			return readKeyboardBufferAll((char*)arg1);
@@ -45,7 +48,7 @@ int time(uint64_t timeType){
 			return getTimeFromRTC(7);
 		case MONTHS:
 			return getTimeFromRTC(8);
-		case YEARS:
+		case YRS:
 			return getTimeFromRTC(9);
 	}
 	return -1;

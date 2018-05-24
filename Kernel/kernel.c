@@ -41,7 +41,7 @@ void * getStackBase()
 void * initializeKernelBinary()
 {
 	char buffer[10];
-
+	
 	ncPrintInColor("Welcome to snmOS", 2);
 	ncNewline();
 	ncPrint("System time is: ");
@@ -91,7 +91,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	
+	scTest();
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }
