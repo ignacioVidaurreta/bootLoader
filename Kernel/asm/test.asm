@@ -1,14 +1,25 @@
-section .text
 GLOBAL test
+section .text
+
+extern ncPrintDec
+extern ncPrintUser
 
 test:
-	mov rsi, cadena 	; Puntero a la cadena
-	mov rdx, 12			; Largo de la cadena 
-	mov rdi, 2			; FileDescriptor (STDOUT)
-	mov rax, 4			; ID del Syscall WRITE
-	int 80h				; Ejecucion de la llamada
 
+	mov eax, 1
+	mov rsi, cadena
+	mov rdi, 1
+	mov rdx, 10
+
+	int 80h
+
+	mov rdx, 10
+	mov rax, 2
+	mov rdi, 3
+	mov rsi, cadena
+
+	int 80h
 	ret
 
 section .data
-cadena db "Hola Mundo!!"
+cadena db 50

@@ -36,6 +36,6 @@
 
 void keyboardHandler(void);
 void readKeyboardBuffer(char* buffer, int count);
-void readKeyboardBufferAll(char* buffer);
+int readKeyboardBufferAll(char* buffer);
 
 #endif

@@ -58,6 +58,40 @@ section .text
 	pop rax
 %endmacro
 
+%macro pushStateWithReturn 0
+	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
+%endmacro
+
+%macro popStateWithReturn 0
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rsi
+	pop rdi
+	pop rbp
+	pop rdx
+	pop rcx
+	pop rbx
+%endmacro
+	
 ; the following two macros call the C function in charge of handling exceptions/interrupts given
 ; the IRQ number passed on by the following functions.
 
@@ -121,10 +155,10 @@ exception0Handler:
 ; bits.
 int80Handler:
 	
-	pushState
+	pushStateWithReturn
 	mov r9, rax
 	call int80
-	popState
+	popStateWithReturn
 	iretq
 
 ; halts the CPU until an external interrupt is fired (this is simply what the hlt instruction does).

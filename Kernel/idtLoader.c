@@ -4,7 +4,9 @@
 #include <peripherals.h>
 #include <interrupts.h>
 
-INT_DESCR * idt = (INT_DESCR *) 0;	// IDT de 255 entradas
+//the following code obtained from an example on campus
+//as well as most of he code on interrupts.asm
+INT_DESCR * idt = (INT_DESCR *) 0;	// IDT with 255 entries
 
 static void setupIDTEntry (int index, uint64_t offset);
 
@@ -15,8 +17,6 @@ void loadIDT() {
   setupIDTEntry (0x00, (uint64_t)&exception0Handler);
   setupIDTEntry (0x80, (uint64_t)&int80Handler);
 
-
-	//Solo interrupcion timer tick habilitadas
 	picMasterMask(0xFC); 
 	picSlaveMask(0xFF);
         

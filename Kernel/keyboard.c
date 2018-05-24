@@ -13,7 +13,7 @@ char keyBuffer[WIDTH];
 //because the keys you receive depend on if shift is pressed or not.
 //
 //IMPORTANT: the code for the realease of a key is equal to the code for pressing
-//that key + 128. Don't ask me I didn't desing it.
+//that key + 128. Don't ask me I didn't design it.
 
 const unsigned char asciiNonShift[] = {
 0, ESC, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', BACKSPACE,
@@ -70,12 +70,17 @@ void readKeyboardBuffer(char* buffer, int count){
 	}
 }
 
-void readKeyboardBufferAll(char* buffer){
+int readKeyboardBufferAll(char* buffer){
+	int ret = bufferIndex;
 	readKeyboardBuffer(buffer, bufferIndex);
+	return ret;
 }
 
 void cleanBuffer(int count){
-	for(int i = 0, j = count; i < bufferIndex - count; i++, j++)
+	for(int i = 0, j = count; i < count, j < bufferIndex; i++, j++)
 		keyBuffer[i] = keyBuffer[j];
-	bufferIndex -= count;
+	if(bufferIndex > count)
+		bufferIndex -= count;
+	else
+		bufferIndex = 0;
 }

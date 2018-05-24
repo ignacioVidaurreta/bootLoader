@@ -7,6 +7,7 @@
 #include <timeManip.h>
 #include <time.h>
 #include <idtLoader.h>
+#include <test.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -17,7 +18,7 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
-static void * const sampleCodeModuleAddress = (void*)0x400000;
+static void * const userMainAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
@@ -41,7 +42,7 @@ void * initializeKernelBinary()
 {
 	char buffer[10];
 
-	ncPrintInColor("Welcome to gondOS", 2);
+	ncPrintInColor("Welcome to snmOS", 2);
 	ncNewline();
 	ncPrint("System time is: ");
 	getTime1(buffer);
@@ -51,8 +52,6 @@ void * initializeKernelBinary()
 	ncNewline();
 	ncNewline();
 
-	ncPrint("[Loading modules]");
-	ncNewline();
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
@@ -92,26 +91,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	ncPrint("[Kernel Main]");
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	ncNewline();
-	ncNewline();
-
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char*)sampleDataModuleAddress);
-	ncNewline();
-
-	ncPrint("[Finished]");
-	ncNewline();
-	ncNewline();
-	while(1){;}
+	
+	((EntryPoint)userMainAddress)();
 	return 0;
 }

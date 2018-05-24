@@ -34,8 +34,9 @@ void ncPrintUserChar(char c);
 void ncPrintUserInColor(const char* buffer, uint8_t color);
 void ncPrintUserCharInColor(char character, uint8_t color);
 void ncClearUser(void);
-void ncDeleteChar();
 void ncMoveUpOneLine();
 void ncClear();
+
+void scTest(void);
 
 #endif
