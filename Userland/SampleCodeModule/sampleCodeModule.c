@@ -1,19 +1,15 @@
-/* sampleCodeModule.c */
+//This is the program that will be called from the kernel to begin the execution
+//of any and all user programs. All communication from this user space to kernel
+//space should occur through systemCalls which are clearly defined at
+//Kernel/include/sysCalls.h
 
-char * v = (char*)0xB8000 + 79 * 2;
 
-static int var1 = 0;
-static int var2 = 0;
+
+
 
 
 int main() {
-	//All the following code may be removed 
-	*v = 'X';
-	*(v+1) = 0x74;
-
-	//Test if BSS is properly set up
-	if (var1 == 0 && var2 == 0)
-		return 0xDEADC0DE;
-
-	return 0xDEADBEEF;
+	//the following code is here merely as a test to see if this function is indeed called
+	//anything may be added or removed from here.	
+	return 0xDEADC0DE;
 }
