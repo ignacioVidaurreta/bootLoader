@@ -5,7 +5,7 @@ section .text
 test:
 
 	mov eax, 7
-	mov rdi, 1
+	mov rdi, 1000
 
 	int 80h
 
