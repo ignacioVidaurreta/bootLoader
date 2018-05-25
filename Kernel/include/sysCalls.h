@@ -27,13 +27,13 @@
 //please be aware that the information is returned in greenwich mean time, which
 //is 3 hours ahead of Argentina.
 #define TICKS 1			//returns in rax the ammount of ticks since system start.
-#define SECS 2			//returns in rax the seconds since the current minute began.
-#define MINS 3			//returns in rax the minutes since the current hour began.
-#define HRS	4			//returns in rax the hours since the current day began.
-#define DAYS_WEEK 5		//returns in rax the days since the current week began.
-#define DAYS_MONTH 6	//returns in rax the days since the current month began.
-#define MONTHS 7		//returns in rax the months since the current year began.
-#define YRS 8			//returns in rax the years since the current birth of christ (I ain't rewriting this for the second coming).
+#define SECS 2			//returns seconds since the current minute began.
+#define MINS 3			//returns the minutes since the current hour began.
+#define HRS	4			//returns the hours since the current day began.
+#define DAYS_WEEK 5		//returns the days since the current week began.
+#define DAYS_MONTH 6	//returns the days since the current month began.
+#define MONTHS 7		//returns the months since the current year began.
+#define YRS 8			//returns the years since the current birth of christ (I ain't rewriting this for the second coming).
 
 //the following arguements are received in order according to C 64 bit calling convention.
 //So, the arguements should be inserted in the order: arg1 = rdi, arg2 = rsi and so on for rdx, r10, r8
