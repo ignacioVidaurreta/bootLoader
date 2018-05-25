@@ -8,6 +8,9 @@ void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
 void cleanUser(void);
 int time(uint64_t timeType);
+void beep(uint32_t freq);
+void noBeep(void);
+
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
@@ -28,6 +31,12 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return readKeyboardBufferAll((char*)arg1);
 		case SYS_TIME:
 			return time(arg1);
+		case SYS_BEEP:
+			beep(arg1);
+			return 1;
+		case SYS_NO_BEEP:
+			noBeep();
+			return 1;
 	}
 	return -1;
 }
@@ -87,4 +96,30 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 
 void cleanUser(){
 	ncClearUser();
+}
+
+//the following two functions were obtained from
+//https://wiki.osdev.org/PC_Speaker
+void beep(uint32_t freq){
+
+	uint32_t Div;
+ 	uint8_t tmp;
+ 
+    //Set the PIT to the desired frequency
+ 	Div = 1193180 / freq;
+ 	outb(0x43, 0xb6);
+ 	outb(0x42, (uint8_t) (Div) );
+ 	outb(0x42, (uint8_t) (Div >> 8));
+ 
+    //And play the sound using the PC speaker
+ 	tmp = inb(0x61);
+  	if (tmp != (tmp | 3)) {
+ 		outb(0x61, tmp | 3);
+ 	}
+}
+
+void noBeep(void){
+
+	uint8_t tmp = inb(0x61) & 0xFC;
+ 	outb(0x61, tmp);
 }

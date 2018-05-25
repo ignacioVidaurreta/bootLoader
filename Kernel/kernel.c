@@ -91,7 +91,9 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	scTest();
+	test();
+	while(secondsElapsed() < 3){;}
+	test2();
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }

@@ -2,6 +2,8 @@ GLOBAL getTimeFromRTC
 GLOBAL readFromKeyboard
 GLOBAL picMasterMask
 GLOBAL picSlaveMask
+GLOBAL outb
+GLOBAL inb
 
 ; The following function gets the segment of time that is specified by this function's only parameter from the RTC
 ; where the available values are: 0 for seconds, 2 for minutes, 4 for hours, 6 for day of week, 7 for day of month
@@ -35,6 +37,7 @@ readFromKeyboard:
 ; hardware exceptions.
 
 picMasterMask:
+
 	push rbp
     mov rbp, rsp
     mov ax, di
@@ -46,9 +49,26 @@ picMasterMask:
 ; the desired hardware exceptions.
 
 picSlaveMask:
+
 	push    rbp
     mov     rbp, rsp
     mov     ax, di  ; ax = mascara de 16 bits
-    out	0A1h,al
+    out		0A1h,al
     pop     rbp
     retn
+
+; puts the desired value into the specified I/O register
+outb:
+	mov rax, rsi
+	mov rdx, rdi
+	out dx, al
+
+	ret
+
+; reads from the desired I/O register
+inb:
+	xor rax, rax
+	mov rdx, rdi
+	in al, dx
+
+	ret
