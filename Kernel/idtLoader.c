@@ -15,6 +15,7 @@ void loadIDT() {
   setupIDTEntry (0x20, (uint64_t)&irq00Handler);
   setupIDTEntry (0x21, (uint64_t)&irq01Handler);
   setupIDTEntry (0x00, (uint64_t)&exception0Handler);
+  setupIDTEntry (0x06, (uint64_t)&exception6Handler);
   setupIDTEntry (0x80, (uint64_t)&int80Handler);
 
 	picMasterMask(0xFC); 

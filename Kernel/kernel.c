@@ -89,11 +89,15 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
+int k = 0;
+
 int main()
 {	
-	test();
-	while(secondsElapsed() < 3){;}
-	test2();
+	if(k == 0){
+		k++;
+		test();
+	}
 	((EntryPoint)sampleCodeModuleAddress)();
+	while(1){;}
 	return 0;
 }

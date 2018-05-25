@@ -9,6 +9,7 @@ void irq04Handler(void);
 void irq05Handler(void);
 
 void exception0Handler(void);
+void exception6Handler(void);
 
 void clearI(void);
 

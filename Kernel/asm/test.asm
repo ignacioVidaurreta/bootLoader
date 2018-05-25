@@ -4,18 +4,7 @@ section .text
 
 test:
 
-	mov eax, 7
-	mov rdi, 1000
-
-	int 80h
-
-	ret
-
-test2:
-
-	mov eax, 8
-
-	int 80h
+	UD2
 	ret
 
 section .data
