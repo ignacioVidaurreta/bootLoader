@@ -4,7 +4,11 @@ section .text
 
 test:
 
-	UD2
+	mov eax, 7
+	mov rdi, 1000
+
+	int 80h
+
 	ret
 
 section .data

@@ -93,10 +93,7 @@ int k = 0;
 
 int main()
 {	
-	if(k == 0){
-		k++;
-		test();
-	}
+	
 	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;

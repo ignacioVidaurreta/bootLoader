@@ -3,9 +3,8 @@
 #define EXCEPTIONS 2
 #define REGS 15
 #include <naiveConsole.h>
-#include <time.h>
 
-char* exceptions[EXCEPTIONS] = {"Zero division error", "Invalid opcode exception"};
+char* exceptions[EXCEPTIONS] = {"Zero division exception", "Invalid opcode exception"};
 char* registers[REGS] = {"rax", "rbx", "rcx", "rdx", "rbp", "rdi","rsi","r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"};
 
 static void errorMessage(char* exception, uint64_t* sp);
