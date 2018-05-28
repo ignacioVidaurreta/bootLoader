@@ -5,7 +5,7 @@
 
 void cleanBuffer(int count);
 
-char keyBuffer[WIDTH];
+char keyBuffer[BUFFERSIZE];
 
 //the following two arrays define the layout of the standard US keyboard
 //in the form of a keymap. The signal sent to the processor by the keyboard will
@@ -56,6 +56,8 @@ void keyboardHandler(void){
 		keyBuffer[bufferIndex++] = asciiShift[key];
 	else if(key < 128)
 		keyBuffer[bufferIndex++] = asciiNonShift[key];
+	if(bufferIndex == BUFFERSIZE)
+			bufferIndex = 0;
 }
 
 //Para recordar: este comentario debe ser removido una vez cumplido

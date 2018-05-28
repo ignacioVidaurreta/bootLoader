@@ -55,7 +55,7 @@ void initializeScreen(void){
 	ncClear();
 	titlePosition.x = vbeInfo->width/2 - CHAR_WIDTH*12;
 	ncPrintInColorAt("hope you enjoy yourself!", GREEN, &titlePosition);
-	while(secondsElapsed() < 6){;}		//espera para mostrar el siguinte mensaje
+	while(secondsElapsed() < 6){;}		//espera para borrar la pantalla
 	ncClear();
 }
 
@@ -108,6 +108,20 @@ void copyPixel(int toX, int toY, int fromX, int fromY){
 	videoTo[0] = videoFrom[0];
 	videoTo[1] = videoFrom[1];
 	videoTo[2] = videoFrom[2];
+}
+
+void ncDeleteChar(){
+	if(position.y != 0){
+		if(position.x == 0){
+			position.x = vbeInfo->width - CHAR_WIDTH;
+		}
+		else
+			position.x -= CHAR_WIDTH;
+	}
+	else if(position.x != 0)
+		position.x -= CHAR_WIDTH;
+	Position p = {position.x, position.y};
+	ncPrintCharInColorAt(' ', WHITE, &p);
 }
 
 void ncClear()
@@ -177,3 +191,7 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	return digits;
 }
 
+int width(){return vbeInfo->width;}
+int height(){return vbeInfo->height;}
+int cwidth(){return CHAR_WIDTH;}
+int cheight(){return CHAR_HEIGHT;}

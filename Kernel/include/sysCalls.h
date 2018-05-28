@@ -23,6 +23,8 @@ it is assumed you are writting to the command line (last line) unless specified 
 #define SYS_TIME 6 			//returns data related to time. Information expanded in the arguements section.
 #define SYS_BEEP 7			//makes the pc speaker beep. arg1: frequency (1000 is recommended if you just want a normal beep).
 #define SYS_NO_BEEP 8		//makes the pc speaker stop beeping.
+#define SYS_SCRN_INFO 9		//returns information on the screen, such as its width or height, or the width or height of a particular character.
+#define SYS_DEL_CHAR 10		//deletes the last user character.
 
 //arguements for read: 1 file descriptor
 //					   2 buffer to be read into
@@ -50,6 +52,13 @@ it is assumed you are writting to the command line (last line) unless specified 
 #define DAYS_MONTH 6	//returns days since the current month began.
 #define MONTHS 7		//returns months since the current year began.
 #define YRS 8			//returns years since the current birth of christ (I ain't rewriting this for the second coming).
+
+//possible arguements for calling the SCRN_INFO sysCall, all of them received as arg1
+//all of these are measured in pixels.
+#define WIDTH 1			//width of the screen.
+#define HEIGHT 2		//height of the screen.
+#define CWIDTH 3		//width of a character.
+#define CHEIGHT 4		//height of a character.
 
 //the following arguements are received in order according to C 64 bit calling convention.
 //So, the arguements should be inserted in the order: arg1 = rdi, arg2 = rsi and so on for rdx, r10, r8

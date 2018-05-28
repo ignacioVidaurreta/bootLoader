@@ -3,6 +3,7 @@
 #include <sysCalls.h>
 #include <time.h>
 #include <peripherals.h>
+#include <bitMap.h>
 
 void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
@@ -10,6 +11,7 @@ void cleanUser(void);
 int time(uint64_t timeType);
 void beep(uint32_t freq);
 void noBeep(void);
+int screenInfo(uint8_t arg1);
 
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
@@ -33,6 +35,11 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return 1;
 		case SYS_NO_BEEP:
 			noBeep();
+			return 1;
+		case SYS_SCRN_INFO:
+			return screenInfo(arg1);
+		case SYS_DEL_CHAR:
+			ncDeleteChar();
 			return 1;
 	}
 	return -1;
@@ -117,4 +124,18 @@ void noBeep(void){
 
 	uint8_t tmp = inb(0x61) & 0xFC;
  	outb(0x61, tmp);
+}
+
+int screenInfo(uint8_t arg1){
+	switch(arg1){
+		case HEIGHT:
+			return height();
+		case WIDTH:
+			return width();
+		case CHEIGHT:
+			return cheight();
+		case CWIDTH:
+			return cwidth();
+	}
+	return -1;
 }

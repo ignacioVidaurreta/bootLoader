@@ -64,8 +64,14 @@ void ncPrintInColor(const char * string, Colour color);
 void ncPrintCharInColorAt(char character, Colour color, Position* p);
 void ncPrintInColorAt(const char* character, Colour color, Position* line);
 void ncMoveUpOneLine();
+void ncDeleteChar();
 void ncClear();
 
 void initializeScreen(void);
+
+int width();
+int height();
+int cwidth();
+int cheight();
 
 #endif

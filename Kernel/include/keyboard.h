@@ -31,8 +31,8 @@
 #define KINS 0
 #define KDEL 0
 				
-#define WIDTH 80							//since the user will only be able to write to the last line
-											//the array length is merely the width of the screen.
+#define BUFFERSIZE 80							//since the user will only be able to write to the last line
+												//the array length is merely the width of the screen.
 
 void keyboardHandler(void);
 void readKeyboardBuffer(char* buffer, int count);
