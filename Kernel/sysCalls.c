@@ -16,6 +16,8 @@ int screenInfo(uint8_t arg1);
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
+	Colour c;
+
 	switch(sysCallID){
 		case SYS_READ:
 			read(arg1, (char*)arg2, arg3);
@@ -40,6 +42,12 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return screenInfo(arg1);
 		case SYS_DEL_CHAR:
 			ncDeleteChar();
+			return 1;
+		case SYS_DRAW_PXL:
+			c.red = arg3;
+			c.green = arg4;
+			c.blue = arg5;
+			drawPixelWithColour(arg1, arg2, c);
 			return 1;
 	}
 	return -1;
@@ -94,10 +102,6 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 			readKeyboardBuffer(buffer, count);
 			break;
 	}
-}
-
-void cleanUser(){
-	//ncClearUser();
 }
 
 //the following two functions were obtained from

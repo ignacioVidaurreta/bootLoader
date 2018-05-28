@@ -6,6 +6,7 @@
 #include <math.h>
 #include <time.h>
 #include <idtLoader.h>
+#include <test.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -57,6 +58,7 @@ int k = 0;
 int main()
 {	
 	initializeScreen();
+	test();
 	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;

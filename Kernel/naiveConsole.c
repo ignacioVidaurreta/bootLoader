@@ -20,7 +20,6 @@ char* title[16] ={"                                                             
 				  "  sssssssssss       nnnnnn    nnnnnn mmmmmm   mmmmmm   mmmmmm      OOOOOOOOO       SSSSSSSSSSSSSSS   ",};
 
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
-static void drawPixelWithColour(int x, int y, Colour col);
 
 vbeModeInfoStructure* vbeInfo = (vbeModeInfoStructure*) 0x5C00;
 Position position = {0,0};

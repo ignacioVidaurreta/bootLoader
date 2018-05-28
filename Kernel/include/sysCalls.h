@@ -25,6 +25,7 @@ it is assumed you are writting to the command line (last line) unless specified 
 #define SYS_NO_BEEP 8		//makes the pc speaker stop beeping.
 #define SYS_SCRN_INFO 9		//returns information on the screen, such as its width or height, or the width or height of a particular character.
 #define SYS_DEL_CHAR 10		//deletes the last user character.
+#define SYS_DRAW_PXL 11		//draws a pixel at the specified location and with the specified colour.
 
 //arguements for read: 1 file descriptor
 //					   2 buffer to be read into
@@ -59,6 +60,13 @@ it is assumed you are writting to the command line (last line) unless specified 
 #define HEIGHT 2		//height of the screen.
 #define CWIDTH 3		//width of a character.
 #define CHEIGHT 4		//height of a character.
+
+//arguements for the DRAW_PXL sysCall. arg1: x position, distance in pixels from the left edge of the screen of the pixel to draw.
+//									   arg2: y position, distance in pixels from the top edge of the screen of the pixel to draw.
+//									   arg3: red, intensity of the color red in the pixel.
+//									   arg4: green, intensity of the color green in the pixel.
+//									   arg5: blue, intensity of the color blue in the pixel.
+
 
 //the following arguements are received in order according to C 64 bit calling convention.
 //So, the arguements should be inserted in the order: arg1 = rdi, arg2 = rsi and so on for rdx, r10, r8

@@ -53,6 +53,8 @@ typedef struct {
 	uint8_t reserved1[206];
 } __attribute__ ((packed)) vbeModeInfoStructure;
 
+void drawPixelWithColour(int x, int y, Colour col);
+
 void ncPrint(const char * string);
 void ncPrintChar(char character);
 void ncNewline(Position* p);
