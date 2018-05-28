@@ -2,6 +2,11 @@
 #include <stdint.h>
 extern uint64_t _int80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
+void putChar(char c){
+  _int80(1,&c, 1, 0,0,2);
+}
+
+
 int strlen(const char * str){
   int i;
   for (i= 0; str[i] != 0; i++){
@@ -58,21 +63,27 @@ void printf(const char * str, ...){
       if (str[i] == '%'){
         state = 1;
       }else{
-          //imprimir letra
+          putChar(str[i]);
       }
     }else{
       if (str[i] == 'd'){
         intToString(va_arg(argsList, int), num);
-        //imprimir
+        for (int index=0; num[index]!=0; index++){
+          putChar(num[index]);
+        }
         state=0;
       }else if(str[i] == 's'){
-        //imprimir va_arg(argsList, char*);
+        /*
+         *  printf("%s", "Hola") es igual a hace printf("Hola"):
+        */
+        printf(va_arg(argsList, char*));
         state = 0;
       }else if(str[i] == 'c'){
-        //imprimir
+        putChar(va_arg(argsList, char));
         state = 0;
       }else{
-        //imprimir %c y el caracter
+        putChar('%');
+        putChar(str[i]);
         state = 0;
       }
     }
