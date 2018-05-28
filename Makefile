@@ -10,7 +10,7 @@ kernel:
 userland:
 	cd Userland; make all
 
-image:  kernel bootloader userland
+image: kernel bootloader userland
 	cd Image; make all
 
 clean:

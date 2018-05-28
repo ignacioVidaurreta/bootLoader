@@ -1,178 +1,126 @@
 #include <naiveConsole.h>
+#include <bitMap.h>
+#include <time.h>
 
-typedef struct {
-	uint8_t Red;
-	uint8_t Green;
-	uint8_t Blue;
-} Colour;
+char* title[16] ={"                                                                   OOOOOOOOO         SSSSSSSSSSSSSSS ",
+				  "                                                                 OO:::::::::OO     SS:::::::::::::::S",
+				  "                                                               OO:::::::::::::OO  S:::::SSSSSS::::::S",
+				  "                                                              O:::::::OOO:::::::O S:::::S     SSSSSSS",
+				  "    ssssssssss    nnnn  nnnnnnnn        mmmmmmm    mmmmmmm    O::::::O   O::::::O S:::::S            ",
+				  "  ss::::::::::s   n:::nn::::::::nn    mm:::::::m  m:::::::mm  O:::::O     O:::::O S:::::S            ",
+				  "ss:::::::::::::s  n::::::::::::::nn  m::::::::::mm::::::::::m O:::::O     O:::::O  S::::SSSS         ",
+				  "s::::::ssss:::::s nn:::::::::::::::n m::::::::::::::::::::::m O:::::O     O:::::O   SS::::::SSSSS    ",
+				  " s:::::s  ssssss    n:::::nnnn:::::n m:::::mmm::::::mmm:::::m O:::::O     O:::::O     SSS::::::::SS  ",
+				  "   s::::::s         n::::n    n::::n m::::m   m::::m   m::::m O:::::O     O:::::O        SSSSSS::::S ",
+				  "      s::::::s      n::::n    n::::n m::::m   m::::m   m::::m O:::::O     O:::::O             S:::::S",
+				  "ssssss   s:::::s    n::::n    n::::n m::::m   m::::m   m::::m O::::::O   O::::::O             S:::::S",
+				  "s:::::ssss::::::s   n::::n    n::::n m::::m   m::::m   m::::m O:::::::OOO:::::::O SSSSSSS     S:::::S",
+				  "s::::::::::::::s    n::::n    n::::n m::::m   m::::m   m::::m  OO:::::::::::::OO  S::::::SSSSSS:::::S",
+				  " s:::::::::::ss     n::::n    n::::n m::::m   m::::m   m::::m    OO:::::::::OO    S:::::::::::::::SS ",
+				  "  sssssssssss       nnnnnn    nnnnnn mmmmmm   mmmmmm   mmmmmm      OOOOOOOOO       SSSSSSSSSSSSSSS   ",};
 
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
-void drawAPixelWithColour(int x, int y, Colour col);
+static void drawPixelWithColour(int x, int y, Colour col);
 
-struct ModeInfoBlock {
-    uint16_t ModeAttributes;
-    uint8_t WinAAttributes;
-    uint8_t WinBAttributes;
-    uint16_t WinGranularity;
-    uint16_t WinSize;
-    uint16_t WinSegmentA;
-    uint16_t WinSegmentB;
-    uint32_t WinRealFctPtr;
-    uint16_t pitch; 					// Bytes per ScanLine.
+vbeModeInfoStructure* vbeInfo = (vbeModeInfoStructure*) 0x5C00;
+Position position = {0,0};
+Colour WHITE = {.red = 0xFF, .green = 0xFF, .blue = 0xFF};
+Colour RED = {.red = 0xFF, .green = 0, .blue = 0};
+Colour GREEN = {.red = 0, .green = 0xFF, .blue = 0};
+Colour BLUE = {.red = 0, .green = 0, .blue = 0xFF};
+Colour BLACK = {.red = 0, .green = 0, .blue = 0};
 
-    uint16_t XResolution;
-    uint16_t YResolution;
-    uint8_t XcharSize;
-    uint8_t YcharSize;
-    uint8_t NumberOfPlanes;
-    uint8_t BitsPerPixel;
-    uint8_t NumberOfBanks;
-    uint8_t MemoryModel;
-    uint8_t BankSize;
-    uint8_t NumberOfImagePages;
-    uint8_t ReservedPage;
-
-    uint8_t RedMaskSize;
-    uint8_t RedMaskPosition;
-    uint8_t GreenMaskSize;
-    uint8_t GreenMaskPosition;
-    uint8_t BlueMaskSize;
-    uint8_t BlueMaskPosition;
-    uint8_t ReservedMaskSize;
-    uint8_t ReservedMaskPosition;
-    uint8_t DirectColorAttributes;
-
-    uint32_t PhysBasePtr;  				// Your LFB (Linear Framebuffer) address.
-    uint32_t OffScreenMemOffset;
-    uint16_t OffScreenMemSize;
-} __attribute__((packed));
-
-//The _attribute_ modifiers are needed to make gcc pack the structure into 
-//the standard VESA layout, rather than adding pad bytes between some of the 
-//fields like it would normally do.
-//http://www.delorie.com/djgpp/doc/ug/graphics/vesa.html
-
-typedef struct ModeInfoBlock ModeInfoVBE;
-
-ModeInfoVBE* VBEModeInfo = (ModeInfoVBE*) 0x5C00;
-
-void drawAPixelWithColour(int x, int y, Colour col)
+void drawPixelWithColour(int x, int y, Colour col)
 {
-    char * video = (char *) ((uint64_t)(VBEModeInfo->PhysBasePtr + VBEModeInfo->pitch *y + x* (int)(VBEModeInfo->BitsPerPixel/8)));
-    video[0] = col.Blue;
-    video[1] = col.Green;
-    video[2] = col.Red;
+    char * video = (char *) ((uint64_t)(vbeInfo->framebuffer + vbeInfo->pitch *y + x* (int)(vbeInfo->bpp/8)));
+    video[0] = col.blue;
+    video[1] = col.green;
+    video[2] = col.red;
 }
 
 
 static char buffer[64] = { '0' };
-static uint8_t * const video = (uint8_t*)0xB8000;
-static uint8_t * currentVideo = (uint8_t*)0xB8000;
-static uint8_t * lastNonUserLine = (uint8_t*)0xB8E60;
-static uint8_t * lastNonUserChar = (uint8_t*)0xB8EFF;
-static uint8_t * userVideo = (uint8_t*)0xB8F00;
-static uint8_t * currentUser = (uint8_t*)0xB8F00;
-static uint8_t * maxVideo = (uint8_t*)0xB9040;
-static const uint32_t width = 80;
-static const uint32_t height = 24;					//the ammount of lines in the screen is actually 25, however,
-													//since the last line will be reserved for user commands
-													//writing to it will have its own special function.
 
-void scTest(void){
-
-	Colour col;
-	col.Red = 0;
-	col.Green = 0xFF;
-	col.Blue = 0;
-	for(int i = 0; i < 100000; i++)
-		for(int j = 0; j < 100000; j++)
-			drawAPixelWithColour(i,j, col);
+void initializeScreen(void){
+	position.x = 0;
+	position.y = vbeInfo->height - CHAR_HEIGHT;
+	Position titlePosition = {0,0};
+	ncPrintInColorAt("welcome to:", GREEN, &titlePosition);
+	for(int i = 0; i < 16; i++){
+		titlePosition.x = CHAR_WIDTH*5;
+		titlePosition.y = CHAR_HEIGHT*(i + 2);
+		ncPrintInColorAt(title[i], GREEN, &titlePosition);
+	}
+	while(secondsElapsed() < 3){;}		//espera para mostrar el siguinte mensaje
+	ncClear();
+	titlePosition.x = vbeInfo->width/2 - CHAR_WIDTH*12;
+	ncPrintInColorAt("hope you enjoy yourself!", GREEN, &titlePosition);
+	while(secondsElapsed() < 6){;}		//espera para mostrar el siguinte mensaje
+	ncClear();
 }
 
-void ncPrintInColor(const char * string, uint8_t color)
+void ncPrintInColor(const char * string, Colour color)
 {
-	int i;
-
-	for (i = 0; string[i] != 0; i++)
-		ncPrintCharInColor(string[i], color);
+	ncPrintInColorAt(string, color, &position);
 }
 
-void ncPrintCharInColor(char character, uint8_t color)
-{
-	*currentVideo = character;
-	currentVideo++;
-	*currentVideo = color;
-	currentVideo++;
+void ncPrintInColorAt(const char * string, Colour color, Position* p){
+	for (int i = 0; string[i] != 0; i++)
+		ncPrintCharInColorAt(string[i], color, p);
+}
 
-	if(currentVideo == lastNonUserChar)
-		ncMoveUpOneLine();
+void ncPrintCharInColorAt(char character, Colour color, Position* p)
+{	
+	if(p->x >= vbeInfo->width){
+		p->x = 0;
+		if(p->y >= vbeInfo->height - CHAR_HEIGHT)
+			ncMoveUpOneLine();
+		else
+			p->y += CHAR_HEIGHT;
+	}
+    uint8_t * letter = pixelMap(character);
+	for(int i = 0; i < CHAR_HEIGHT; i++) {
+      for(int j = 0; j < CHAR_WIDTH; j++) {
+         if(1<<j & letter[i])
+            drawPixelWithColour(CHAR_WIDTH - 1 - j + p->x, i + p->y, color);
+         else
+            drawPixelWithColour(CHAR_WIDTH - 1 - j + p->x, i + p->y, BLACK);   
+      }
+    }
+    p->x += CHAR_WIDTH;
 }
 
 void ncPrint(const char * string)
 {
-	int i;
-	for (i = 0; string[i] != 0; i++)
-		ncPrintChar(string[i]);
+	ncPrintInColor(string, WHITE);
 }
 
-void ncPrintChar(char character){
-	ncPrintCharInColor(character, WHITE);
-}
-
-void ncNewline()
+void ncNewline(Position* p)
 {
-	do
-	{
-		ncPrintChar(' ');
-	}
-	while((uint64_t)(currentVideo - video) % (width * 2) != 0);
+	int startingY = p->y;
+	while(p->x != vbeInfo->width  && startingY == p->y)
+		ncPrintCharInColorAt(' ', WHITE, p);
 }
 
-void ncPrintUser(const char* buffer){
-	ncPrintUserInColor(buffer, WHITE);
+void copyPixel(int toX, int toY, int fromX, int fromY){
+	char* videoFrom = (char *) ((uint64_t)(vbeInfo->framebuffer + vbeInfo->pitch *fromY + fromX* (int)(vbeInfo->bpp/8)));
+	char* videoTo = (char *) ((uint64_t)(vbeInfo->framebuffer + vbeInfo->pitch *toY + toX* (int)(vbeInfo->bpp/8)));
+	videoTo[0] = videoFrom[0];
+	videoTo[1] = videoFrom[1];
+	videoTo[2] = videoFrom[2];
 }
 
-void ncPrintUserInColor(const char* buffer, uint8_t color){
-	for(int i = 0; buffer[i] != 0; i++){
-		ncPrintUserCharInColor(buffer[i], color);
-	}
-}
-
-void ncPrintUserChar(char c){
-	ncPrintUserCharInColor(c, WHITE);
-}
-
-void ncPrintUserCharInColor(char c, uint8_t color){
-	*currentUser = c;
-	currentUser++;
-	*currentUser = color;
-	currentUser++;
-
-	if(currentUser == maxVideo)
-		ncClearUser();
-}
-
-void ncClearUser(void){
-	while(currentUser != userVideo){
-		*currentUser = ' ';
-		currentUser -= 2;
-	}
+void ncClear()
+{
+	for(int y = 0; y < vbeInfo->height; y ++)
+		for(int x = 0; x < vbeInfo->width; x ++)
+			drawPixelWithColour(x,y, BLACK);
 }
 
 void ncMoveUpOneLine(void){
-
-	int newScreen = width*2;
-	int i = 0;
-	while(i < width*2*height){
-		video[i] = video[newScreen];
-		i++;
-		newScreen++;
-	}
-	while(i < width*2){
-		lastNonUserLine[i] = ' ';
-		i++;
-	}
-	currentVideo = lastNonUserLine;
+	for(int y = 0; y < vbeInfo->height; y++)
+		for(int x = 0; x < vbeInfo->width; x++)
+			copyPixel(x, y, x, y + CHAR_HEIGHT);
 }
 
 void ncPrintDec(uint64_t value)
@@ -194,15 +142,6 @@ void ncPrintBase(uint64_t value, uint32_t base)
 {
     uintToBase(value, buffer, base);
     ncPrint(buffer);
-}
-
-void ncClear()
-{
-	int i;
-
-	for (i = 0; i < height * width; i++)
-		video[i * 2] = ' ';
-	currentVideo = video;
 }
 
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
@@ -237,3 +176,4 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 
 	return digits;
 }
+

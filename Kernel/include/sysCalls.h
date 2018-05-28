@@ -4,10 +4,20 @@
 #include <stdint.h>
 #include <keyboard.h>
 
+/* ---------------------------------ATTENTION-------------------------------------------
+
+
+USR_OUT, USR_ERR and SYS_CLR_USR have been deprecated, now whenever one writes to the screen
+it is assumed you are writting to the command line (last line) unless specified otherwise.
+
+
+
+------------------------------THANK YOU FOR YOUR TIME--------------------------------*/
+
 //Sys call IDs:
 #define SYS_READ 1			
 #define SYS_WRITE 2			
-#define SYS_CLR_USR 3		//fills the user command line with blank spaces.
+#define SYS_CLR_USR 3		//DEPRECATED: now whenever you write to the screen it assumes its the last line unless expressed otherwise
 #define SYS_CLR_SCRN 4		//fills all the screen, except for the command line with blank spaces.
 #define SYS_READ_KEYA 5		//reads the totality of the keyboard buffer. Returns in rax the total ammount of characters read.
 #define SYS_TIME 6 			//returns data related to time. Information expanded in the arguements section.
@@ -27,8 +37,7 @@
 //					2 user output, this represents the last line, into which the user inputs commands.
 //					3 user error. The command line will display a red message.
 #define STD_OUT 1
-#define USR_OUT 2
-#define USR_ERR 3
+#define STD_ERR 2
 
 //possible arguements for calling the time sysCall, all of them received as arg1
 //please be aware that the information is returned in greenwich mean time, which

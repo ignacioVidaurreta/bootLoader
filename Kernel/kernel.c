@@ -4,10 +4,8 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <math.h>
-#include <timeManip.h>
 #include <time.h>
 #include <idtLoader.h>
-#include <test.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -40,49 +38,14 @@ void * getStackBase()
 
 void * initializeKernelBinary()
 {
-	char buffer[10];
-	
-	ncPrintInColor("Welcome to snmOS", 2);
-	ncNewline();
-	ncPrint("System time is: ");
-	getTime1(buffer);
-	ncPrint(buffer);
-	ncPrint(" (GMT)");
-
-	ncNewline();
-	ncNewline();
-
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
 
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
-
-	ncPrint("[Initializing kernel's binary]");
-	ncNewline();
 
 	clearBSS(&bss, &endOfKernel - &bss);
-
-	ncPrint("  text: 0x");
-	ncPrintHex((uint64_t)&text);
-	ncNewline();
-	ncPrint("  rodata: 0x");
-	ncPrintHex((uint64_t)&rodata);
-	ncNewline();
-	ncPrint("  data: 0x");
-	ncPrintHex((uint64_t)&data);
-	ncNewline();
-	ncPrint("  bss: 0x");
-	ncPrintHex((uint64_t)&bss);
-	ncNewline();
-
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
 
 	loadIDT();
 
@@ -93,7 +56,7 @@ int k = 0;
 
 int main()
 {	
-	
+	initializeScreen();
 	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;

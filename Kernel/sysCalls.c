@@ -21,9 +21,6 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 		case SYS_WRITE:
 			write(arg1, (char*)arg2, arg3);
 			return 1;
-		case SYS_CLR_USR:
-			cleanUser();
-			return 1;
 		case SYS_CLR_SCRN:
 			ncClear();
 			return 1;
@@ -67,6 +64,7 @@ void write(uint64_t fd, char* buffer, uint64_t count){
 	
 	char aux[count + 1];
 	int i;
+	Colour error = {.red = 0xFF, .green = 0, .blue = 0};
 	for(i = 0; i < count; i++)
 		aux[i] = buffer[i];
 	aux[i] = 0;
@@ -75,11 +73,8 @@ void write(uint64_t fd, char* buffer, uint64_t count){
 		case STD_OUT:
 			ncPrint(aux);
 			break;
-		case USR_OUT:
-			ncPrintUser(aux);
-			break;
-		case USR_ERR:
-			ncPrintUserInColor(aux, RED);
+		case STD_ERR:
+			ncPrintInColor(aux, error);
 			break;
 	}
 }
@@ -95,7 +90,7 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 }
 
 void cleanUser(){
-	ncClearUser();
+	//ncClearUser();
 }
 
 //the following two functions were obtained from
