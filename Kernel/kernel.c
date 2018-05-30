@@ -58,7 +58,6 @@ int k = 0;
 int main()
 {	
 	initializeScreen();
-	test();
 	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;
