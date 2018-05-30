@@ -21,7 +21,9 @@
 
 
 
-
+//there are special characters which do not have an ascii representation
+//however they are stored in the keyboard buffer and returned this are: 
+//backspace which is represented by an 8 and ESC which is represented by a 27.
 //arguements for read: 1 file descriptor
 //					   2 buffer to be read into
 //					   3 ammount of characters to be read
