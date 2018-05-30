@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdint.h>
+#include <stdlib.h>
 extern uint64_t _int80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 void putChar(char c){
@@ -93,8 +94,8 @@ void printf(const char * str, ...){
 }
 
 char* strcpy(char* dest, char* src){
-  if (src == NULL){
-    return NULL;
+  if (src == 0){
+    return 0;
   }
   int i=0;
   for (; src[i] != 0; i++){
@@ -102,4 +103,65 @@ char* strcpy(char* dest, char* src){
   }
   dest[i] = 0;
   return dest;
+}
+
+int scanf(const char* format, ...){
+	va_list args;
+	va_start (args, format);
+	int count=0;
+	int i=0;
+	int j=0;
+	int* num;
+	char* line;
+  char* str;
+  readBuffer(line);
+	while(format[i]!=0){
+		if(format[i]!='%'){
+			if(format[i]==line[j]){ //Si fmt es igual a input lo ignoro
+				i++;
+				j++;
+			}else{
+        return count;
+      }
+		}
+		else{
+			if(format[j]=='%'){ //TODO SACARLO DESPUÉS
+				i++;
+				j++;
+				if(format[i]=='d'){
+					num=va_arg(args,int*);
+					*num=0;
+					while(line[j]!=0 && isNum(line[j])){ //TODO hacer isNum
+						*num=(*num)*10+line[j]-'0';
+						j++;
+					}
+				}
+        else if(format[i]=='s'){
+  					str=va_arg(args,char*);
+  					while(line[j]!=0){
+  						*str=line[j];
+  						j++;
+  						*str++;
+  					}
+				  }
+          else if(format[i]=='c'){
+  					str=va_arg(args,char*);
+  					*str=line[j];
+  					j++;
+  				}
+				count++;
+			}
+			i++;
+		}
+  }
+	va_end(args);
+	return count;
+}
+
+int readBuffer(char * read){
+  return _int80(1, read, 0, 0, 0, 4);
+}
+
+int isNum(char c){
+  return (c>='0' && c<='9');
 }
