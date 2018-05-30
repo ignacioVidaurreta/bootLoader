@@ -31,7 +31,14 @@ void printf(const char * str,...);
   */
  char * strcpy(char * dest, char* src);
 
+ int scanf(const char* format, ...);
+
+ int readBuffer(char * read);
+
+ int isNum(char c);
+
 
 
 
 #endif
+
