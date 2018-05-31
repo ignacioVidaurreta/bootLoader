@@ -50,6 +50,10 @@ void * initializeKernelBinary()
 
 	loadIDT();
 
+	beepASM(1000);
+	while(secondsElapsed() < 1){;}
+	noBeepASM();
+
 	return getStackBase();
 }
 
@@ -58,9 +62,6 @@ int k = 0;
 int main()
 {	
 	//initializeScreen();
-	beepASM(1000);
-	while(secondsElapsed() < 1){;}
-	noBeepASM();
 	//((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;
