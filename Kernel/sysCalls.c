@@ -49,6 +49,9 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			c.blue = arg5;
 			drawPixelWithColour(arg1, arg2, c);
 			return 1;
+		case SYS_SCRL:
+			ncMoveUpOneLine();
+			return 1;
 	}
 	return -1;
 }
@@ -108,25 +111,19 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 //https://wiki.osdev.org/PC_Speaker
 void beep(uint32_t freq){
 
-	uint32_t Div;
- 	uint8_t tmp;
- 
-    //Set the PIT to the desired frequency
- 	Div = 1193180 / freq;
- 	outb(0x43, 0xb6);
- 	outb(0x42, (uint8_t) (Div) );
- 	outb(0x42, (uint8_t) (Div >> 8));
- 
-    //And play the sound using the PC speaker
- 	tmp = inb(0x61);
-  	if (tmp != (tmp | 3)) {
- 		outb(0x61, tmp | 3);
- 	}
+	outb(0x43, 0xB6);		//mode register for PIT, thi sets the PIT to channel 2 (the pc speaker), access mode: hibyte/lobyte
+							//and to square wave generator.
+	outb(0x42, freq % 0xFF);//move to 0x42 the lower 8 bits of the frequency.
+	outb(0x42, freq >> 8);	//move to 0x42 the upper 8 bits of the frequency.
+	int temp = inb(0x61);
+	temp = 0x03;
+	outb(0x61, temp);
 }
 
 void noBeep(void){
 
-	uint8_t tmp = inb(0x61) & 0xFC;
+	int tmp = inb(0x61);
+	tmp = 0;
  	outb(0x61, tmp);
 }
 

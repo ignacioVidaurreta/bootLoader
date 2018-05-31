@@ -15,7 +15,7 @@
 #define SYS_SCRN_INFO 8		//returns information on the screen, such as its width or height, or the width or height of a particular character.
 #define SYS_DEL_CHAR 9		//deletes the last user character.
 #define SYS_DRAW_PXL 10		//draws a pixel at the specified location and with the specified colour. Information expanded in the arguements section.
-
+#define SYS_SCRL 11			//scrawls the screen up by one line.
 
 
 

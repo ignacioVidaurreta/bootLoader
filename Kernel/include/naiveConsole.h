@@ -57,7 +57,8 @@ void drawPixelWithColour(int x, int y, Colour col);
 
 void ncPrint(const char * string);
 void ncPrintChar(char character);
-void ncNewline(Position* p);
+void ncNewLineAt(Position* p);
+void ncNewLine();
 void ncPrintDec(uint64_t value);
 void ncPrintHex(uint64_t value);
 void ncPrintBin(uint64_t value);
