@@ -63,7 +63,7 @@ beepASM:
 	mov al, 0xB6
 	out 0x43, al 		;sets the PIT channel 2 corresponding to the beeper.
 						;also sets it as a square wave generator.
-	mov rax, rdi		;sets the frequency of the speaker to that which
+	mov ax, 1193		;sets the frequency of the speaker to that which
 	out 0x42, al 		;was passed as an arguement.
 	mov ah, al
 	out 0x42, al
