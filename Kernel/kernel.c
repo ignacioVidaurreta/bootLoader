@@ -6,7 +6,7 @@
 #include <math.h>
 #include <time.h>
 #include <idtLoader.h>
-#include <test.h>
+#include <peripherals.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -57,8 +57,10 @@ int k = 0;
 
 int main()
 {	
-	initializeScreen();
-	test();
+	//initializeScreen();
+	beepASM(1000);
+	while(secondsElapsed() < 1){;}
+	noBeepASM();
 	//((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;
