@@ -2,7 +2,7 @@
 #define _STDLIB_H
 
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 80
 
 /*turns the given integer into a string and stores it in
 ** the given array
@@ -33,11 +33,11 @@ void printf(const char * str,...);
 
  int scanf(const char* format, ...);
 
- int readBuffer(char * read);
+ char* readBuffer();
 
  int isNum(char c);
 
-
+ char readChar();
 
 
 #endif

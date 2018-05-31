@@ -80,7 +80,7 @@ void printf(const char * str, ...){
         printf(va_arg(argsList, char*));
         state = 0;
       }else if(str[i] == 'c'){
-        putChar(va_arg(argsList, char));
+        putChar((char)va_arg(argsList, int));
         state = 0;
       }else{
         putChar('%');
@@ -114,7 +114,8 @@ int scanf(const char* format, ...){
 	int* num;
 	char* line;
   char* str;
-  readBuffer(line);
+  line =readBuffer();
+  printf("FIN");
 	while(format[i]!=0){
 		if(format[i]!='%'){
 			if(format[i]==line[j]){ //Si fmt es igual a input lo ignoro
@@ -158,8 +159,27 @@ int scanf(const char* format, ...){
 	return count;
 }
 
-int readBuffer(char * read){
-  return _int80(1, read, 0, 0, 0, 4);
+char* readBuffer(){
+  char c;
+  int n=0;
+  char read[BUFFER_SIZE];
+  while(c=readChar()!='\n'){
+    if (n >= BUFFER_SIZE) return read;
+    if (c != 0){
+      read[n++]=c; 
+    }
+       
+    }
+  return read;
+}
+
+char readChar(){
+  char c;
+  _int80(1, &c, 1, 0, 0, 1);
+  if( c != 0){
+    printf("%c", c);
+  }
+  return c;
 }
 
 int isNum(char c){

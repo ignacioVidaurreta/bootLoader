@@ -38,6 +38,8 @@ int shiftr = 0;
 
 void keyboardHandler(void){
 	int key = readFromKeyboard();
+	if(key==-1)
+		keyBuffer[bufferIndex++]=0;
 	switch (key){
 		case RIGHT_SHIFT:
 			shiftr = 1;

@@ -15,7 +15,6 @@ int main() {
 	char * aux= "hola";
 	strcpy(str, aux);
 	scanf("%s", str);
-	printf("%s", str);
 	return 0xDEADC0DE;
 }
 

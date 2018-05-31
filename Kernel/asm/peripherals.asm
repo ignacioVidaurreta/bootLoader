@@ -23,7 +23,8 @@ readFromKeyboard:
 	in al, 64h
 	test al, 1
 	jz exit
-
+	
+	mov rax, 0
 	in al, 60h
 
 	ret
