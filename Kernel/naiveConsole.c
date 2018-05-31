@@ -94,7 +94,11 @@ void ncPrint(const char * string)
 	ncPrintInColor(string, WHITE);
 }
 
-void ncNewline(Position* p)
+void ncNewLine(){
+	ncNewLineAt(&position);
+}
+
+void ncNewLineAt(Position* p)
 {
 	int startingY = p->y;
 	while(p->x != vbeInfo->width  && startingY == p->y)

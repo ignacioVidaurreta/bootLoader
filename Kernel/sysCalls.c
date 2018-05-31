@@ -49,6 +49,9 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			c.blue = arg5;
 			drawPixelWithColour(arg1, arg2, c);
 			return 1;
+		case SYS_SCRL:
+			ncMoveUpOneLine();
+			return 1;
 	}
 	return -1;
 }
@@ -108,26 +111,12 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 //https://wiki.osdev.org/PC_Speaker
 void beep(uint32_t freq){
 
-	uint32_t Div;
- 	uint8_t tmp;
- 
-    //Set the PIT to the desired frequency
- 	Div = 1193180 / freq;
- 	outb(0x43, 0xb6);
- 	outb(0x42, (uint8_t) (Div) );
- 	outb(0x42, (uint8_t) (Div >> 8));
- 
-    //And play the sound using the PC speaker
- 	tmp = inb(0x61);
-  	if (tmp != (tmp | 3)) {
- 		outb(0x61, tmp | 3);
- 	}
+	beepASM(freq);
 }
 
 void noBeep(void){
 
-	uint8_t tmp = inb(0x61) & 0xFC;
- 	outb(0x61, tmp);
+	noBeepASM();
 }
 
 int screenInfo(uint8_t arg1){

@@ -2,8 +2,8 @@ GLOBAL getTimeFromRTC
 GLOBAL readFromKeyboard
 GLOBAL picMasterMask
 GLOBAL picSlaveMask
-GLOBAL outb
-GLOBAL inb
+GLOBAL beepASM
+GLOBAL noBeepASM
 
 ; The following function gets the segment of time that is specified by this function's only parameter from the RTC
 ; where the available values are: 0 for seconds, 2 for minutes, 4 for hours, 6 for day of week, 7 for day of month
@@ -59,17 +59,26 @@ picSlaveMask:
     retn
 
 ; puts the desired value into the specified I/O register
-outb:
-	mov rax, rsi
-	mov rdx, rdi
-	out dx, al
+beepASM:
+	mov al, 0xB6
+	out 0x43, al 		;sets the PIT channel 2 corresponding to the beeper.
+						;also sets it as a square wave generator.
+	mov rax, rdi		;sets the frequency of the speaker to that which
+	out 0x42, al 		;was passed as an arguement.
+	mov ah, al
+	out 0x42, al
+
+	in al, 0x61
+	mov al, 0x03
+	out 0x61, al
 
 	ret
 
 ; reads from the desired I/O register
-inb:
-	xor rax, rax
-	mov rdx, rdi
-	in al, dx
+noBeepASM:
+	
+	in al, 0x61
+	mov al, 0
+	out 0x61, al
 
 	ret
