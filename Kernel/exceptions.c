@@ -26,7 +26,7 @@ void exceptionDispatcher(int exception, uint64_t* sp) {
 
 static void errorMessage(char* exception, uint64_t* sp) {
 	ncPrint(exception);
-	ncNewline();
+	//ncNewline();
 	printRegisters(sp);
 }
 

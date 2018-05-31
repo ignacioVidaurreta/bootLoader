@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-MODULE=0001-sampleCodeModule.bin
+MODULE=0000-sampleCodeModule.bin
 SOURCES_ASM=$(wildcard asm/*.asm)
 SOURCES=$(wildcard [^_]*.c)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
