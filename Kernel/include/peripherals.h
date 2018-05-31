@@ -7,7 +7,7 @@ uint8_t getTimeFromRTC(uint8_t time);
 int readFromKeyboard(void);
 void picMasterMask(uint8_t mask);
 void picSlaveMask(uint8_t mask);
-void beepASM(uint16_t address, uint8_t bits);
-uint8_t noBeepASM(uint16_t address);
+void beepASM(uint16_t frequency);
+uint8_t noBeepASM();
 
 #endif

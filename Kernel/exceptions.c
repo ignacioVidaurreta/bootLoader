@@ -26,11 +26,7 @@ void exceptionDispatcher(int exception, uint64_t* sp) {
 
 static void errorMessage(char* exception, uint64_t* sp) {
 	ncPrint(exception);
-<<<<<<< HEAD
 	ncNewLine();
-=======
-	//ncNewline();
->>>>>>> 323bd8199f5f4ae61f2522f678d044089849f238
 	printRegisters(sp);
 }
 

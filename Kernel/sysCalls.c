@@ -9,7 +9,7 @@ void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
 void cleanUser(void);
 int time(uint64_t timeType);
-void beep(uint32_t freq);
+void beep(uint16_t freq);
 void noBeep(void);
 int screenInfo(uint8_t arg1);
 
@@ -109,7 +109,7 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 
 //the following two functions were obtained from
 //https://wiki.osdev.org/PC_Speaker
-void beep(uint32_t freq){
+void beep(uint16_t freq){
 
 	beepASM(freq);
 }
