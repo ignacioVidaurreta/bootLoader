@@ -111,20 +111,12 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 //https://wiki.osdev.org/PC_Speaker
 void beep(uint32_t freq){
 
-	outb(0x43, 0xB6);		//mode register for PIT, thi sets the PIT to channel 2 (the pc speaker), access mode: hibyte/lobyte
-							//and to square wave generator.
-	outb(0x42, freq % 0xFF);//move to 0x42 the lower 8 bits of the frequency.
-	outb(0x42, freq >> 8);	//move to 0x42 the upper 8 bits of the frequency.
-	int temp = inb(0x61);
-	temp = 0x03;
-	outb(0x61, temp);
+	beepASM(freq);
 }
 
 void noBeep(void){
 
-	int tmp = inb(0x61);
-	tmp = 0;
- 	outb(0x61, tmp);
+	noBeepASM();
 }
 
 int screenInfo(uint8_t arg1){

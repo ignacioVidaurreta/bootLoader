@@ -52,10 +52,12 @@ void keyboardHandler(void){
 			shiftl = 0;
 			break;
 	}
-	if((shiftr | shiftl) && (key < 128))
+	if((shiftr | shiftl) && (key < 128)){
 		keyBuffer[bufferIndex++] = asciiShift[key];
-	else if(key < 128)
+	}
+	else if(key < 128){
 		keyBuffer[bufferIndex++] = asciiNonShift[key];
+	}
 	if(bufferIndex == BUFFERSIZE)
 			bufferIndex = 0;
 }
