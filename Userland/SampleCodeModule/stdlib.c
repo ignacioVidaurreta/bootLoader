@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void putChar(char c){
-  int80(1,&c, 1, 0,0,2);
+  int80(1,(uint64_t)&c, 1, 0,0,2);
 }
 
 
@@ -13,6 +13,24 @@ int strlen(const char * str){
 
   return i;
 
+}
+
+// int strcmp(char* str1, char* str2){;
+//     while((*str1 != 0) && (*str1 == *str2)){
+//       str1++;
+//       str2++;
+//     }
+//     return str1 - str2;
+// }
+
+int strcmp(char* str1, char* str2){;
+  int i=0;
+  for (i = 0; str1[i] != 0; i++){
+    if(str1[i] != str2[i]){
+      return (str1[i]>str2[i])?1:-1;
+    }
+  }
+  return str1[i] == str2[i];
 }
 
 void swap(char* numStr, int index1, int index2){
@@ -157,20 +175,19 @@ int scanf(const char* format, ...){
 char* readBuffer(char* read){
   char c;
   int n=0;
-  while(c!= '\n'){
-    c=readChar();
+  while((c=readChar())!= '\n'){
     if (n == BUFFER_SIZE){
       read[n]=0;
       return read;
     }
-    if( c == '\b'){ //TODO hacer que borre en pantalla, mover el cursor para atrás
+    if( c == '\b'){
       if(n !=0){
         n--;
         deleteCharacter();
       }
     }else{
       read[n++]=c;
-      printf("%c", c);
+      putChar(c);
     }
 
     }
@@ -181,7 +198,7 @@ char* readBuffer(char* read){
 char readChar(){
   char c=0;
   while (c == 0){
-    int80(1, &c, 1, 0, 0, 1);
+    int80(1, (uint64_t)&c, 1, 0, 0, 1);
   }
 
   return c;
@@ -191,6 +208,6 @@ int isNum(char c){
   return (c>='0' && c<='9');
 }
 
-deleteCharacter(){
+void deleteCharacter(){
   int80(0,0,0,0,0,9);
 }
