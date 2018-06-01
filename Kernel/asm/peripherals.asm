@@ -58,27 +58,24 @@ picSlaveMask:
     pop     rbp
     retn
 
-; puts the desired value into the specified I/O register
-beepASM:
-	mov al, 0xB6
-	out 0x43, al 		;sets the PIT channel 2 corresponding to the beeper.
-						;also sets it as a square wave generator.
-	mov ax, 1193		;sets the frequency of the speaker to that which
-	out 0x42, al 		;was passed as an arguement.
-	mov ah, al
-	out 0x42, al
+ beepASM: 
 
-	in al, 0x61
-	mov al, 0x03
-	out 0x61, al
+	mov al, 0xB6		;sets the pit to channel 2 which is the PC speaker, as well as setting the square
+						;wave generator and access: lobyte/highbyte
+						;if I'm being honest with you I have no idea why those last two are done but it doesn't
+						;work without them.
+	out 43h,al
+	mov rax, rdi		;frequency passed on as parameter.
+	out 42h,al
+	mov al,ah
+	out 42h,al
+	in al, 61h
+	or al, 03h		
+	out 61h,al
+        ret
+ noBeepASM:
 
-	ret
-
-; reads from the desired I/O register
-noBeepASM:
-	
-	in al, 0x61
-	mov al, 0
-	out 0x61, al
-
-	ret
+    in al, 61h
+	and al, 0xFC		
+	out 61h,al
+        ret

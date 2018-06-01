@@ -9,8 +9,6 @@ void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
 void cleanUser(void);
 int time(uint64_t timeType);
-void beep(uint16_t freq);
-void noBeep(void);
 int screenInfo(uint8_t arg1);
 
 
@@ -33,10 +31,10 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 		case SYS_TIME:
 			return time(arg1);
 		case SYS_BEEP:
-			beep(arg1);
+			beepASM(arg1);
 			return 1;
 		case SYS_NO_BEEP:
-			noBeep();
+			noBeepASM();
 			return 1;
 		case SYS_SCRN_INFO:
 			return screenInfo(arg1);
@@ -105,18 +103,6 @@ void read(uint64_t fd, char* buffer, uint64_t count){
 			readKeyboardBuffer(buffer, count);
 			break;
 	}
-}
-
-//the following two functions were obtained from
-//https://wiki.osdev.org/PC_Speaker
-void beep(uint16_t freq){
-
-	beepASM(freq);
-}
-
-void noBeep(void){
-
-	noBeepASM();
 }
 
 int screenInfo(uint8_t arg1){

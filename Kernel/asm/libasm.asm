@@ -1,9 +1,4 @@
 GLOBAL cpuVendor
-GLOBAL getTimeFromRTC
-GLOBAL readFromKeyboard
-
-; register order when receiving parameters from a C function in 64 bit architecture:
-; RDI, RSI, RDX, R10, R8, R9.
 
 section .text
 	
