@@ -1,0 +1,8 @@
+# Compiled Source #
+###################
+
+*.o
+*.bin
+*.img
+*.qcow2
+*.vmdk

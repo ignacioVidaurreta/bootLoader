@@ -57,11 +57,11 @@ void * initializeKernelBinary()
 int k = 0;
 
 int main()
-{	
+{
 	beepASM(1000);
 	while(secondsElapsed() < 1){;}
 	noBeepASM();
-	//((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;
 }

@@ -1,10 +1,10 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdlib.h>
-extern uint64_t _int80(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
 
 void putChar(char c){
-  _int80(1,&c, 1, 0,0,2);
+  int80(1,&c, 1, 0,0,2);
 }
 
 
@@ -112,10 +112,9 @@ int scanf(const char* format, ...){
 	int i=0;
 	int j=0;
 	int* num;
-	char* line;
+	char line[BUFFER_SIZE];
   char* str;
-  line =readBuffer();
-  printf("FIN");
+  readBuffer(line);
 	while(format[i]!=0){
 		if(format[i]!='%'){
 			if(format[i]==line[j]){ //Si fmt es igual a input lo ignoro
@@ -126,32 +125,30 @@ int scanf(const char* format, ...){
       }
 		}
 		else{
-			if(format[j]=='%'){ //TODO SACARLO DESPUÉS
-				i++;
-				j++;
-				if(format[i]=='d'){
-					num=va_arg(args,int*);
-					*num=0;
-					while(line[j]!=0 && isNum(line[j])){ //TODO hacer isNum
-						*num=(*num)*10+line[j]-'0';
-						j++;
-					}
+			i++; //leo el asterisco
+			if(format[i]=='d'){
+				num=va_arg(args,int*);
+				*num=0;
+				while(line[j]!=0 && isNum(line[j])){
+					*num=(*num)*10+line[j]-'0';
+					j++;
 				}
-        else if(format[i]=='s'){
-  					str=va_arg(args,char*);
-  					while(line[j]!=0){
-  						*str=line[j];
-  						j++;
-  						*str++;
-  					}
-				  }
-          else if(format[i]=='c'){
-  					str=va_arg(args,char*);
-  					*str=line[j];
-  					j++;
-  				}
-				count++;
 			}
+      else if(format[i]=='s'){
+					str=va_arg(args,char*);
+					while(line[j]!=0){
+						*str=line[j];
+						j++;
+						str++;
+					}
+          *str=0;
+			  }
+        else if(format[i]=='c'){
+					str=va_arg(args,char*);
+					*str=line[j];
+					j++;
+				}
+			count++;
 			i++;
 		}
   }
@@ -159,29 +156,43 @@ int scanf(const char* format, ...){
 	return count;
 }
 
-char* readBuffer(){
+char* readBuffer(char* read){
   char c;
   int n=0;
-  char read[BUFFER_SIZE];
-  while(c=readChar()!='\n'){
-    if (n >= BUFFER_SIZE) return read;
-    if (c != 0){
-      read[n++]=c; 
+  while(c!= '\n'){
+    c=readChar();
+    if (n == BUFFER_SIZE){
+      read[n]=0;
+      return read;
     }
-       
+    if( c == '\b'){ //TODO hacer que borre en pantalla, mover el cursor para atrás
+      if(n !=0){
+        n--;
+        deleteCharacter();
+      }
+    }else{
+      read[n++]=c;
+      printf("%c", c);
     }
+
+    }
+  read[n]=0;
   return read;
 }
 
 char readChar(){
-  char c;
-  _int80(1, &c, 1, 0, 0, 1);
-  if( c != 0){
-    printf("%c", c);
+  char c=0;
+  while (c == 0){
+    int80(1, &c, 1, 0, 0, 1);
   }
+
   return c;
 }
 
 int isNum(char c){
   return (c>='0' && c<='9');
+}
+
+deleteCharacter(){
+  int80(0,0,0,0,0,9);
 }

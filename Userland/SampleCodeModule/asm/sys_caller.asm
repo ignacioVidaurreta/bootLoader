@@ -1,8 +1,8 @@
-GLOBAL _int80
+GLOBAL int80
 
 section .text
 
-	_int80:
+	int80:
 		push rbp
 		mov rbp, rsp
 
