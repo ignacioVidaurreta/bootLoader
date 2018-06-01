@@ -1,7 +1,5 @@
 #include <stdarg.h>
-#include <stdint.h>
 #include <stdlib.h>
-extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
 
 void putChar(char c){
   int80(1,&c, 1, 0,0,2);

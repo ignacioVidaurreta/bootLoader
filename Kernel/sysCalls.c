@@ -51,6 +51,7 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return 1;
 		case SYS_SCRL:
 			ncMoveUpOneLine();
+			ncResetPosition();
 			return 1;
 	}
 	return -1;
@@ -79,7 +80,7 @@ int time(uint64_t timeType){
 }
 
 void write(uint64_t fd, char* buffer, uint64_t count){
-	
+
 	char aux[count + 1];
 	int i;
 	Colour error = {.red = 0xFF, .green = 0, .blue = 0};

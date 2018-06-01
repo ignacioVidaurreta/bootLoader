@@ -69,7 +69,7 @@ void ncPrintInColorAt(const char * string, Colour color, Position* p){
 }
 
 void ncPrintCharInColorAt(char character, Colour color, Position* p)
-{	
+{
 	if(p->x >= vbeInfo->width){
 		p->x = 0;
 		if(p->y >= vbeInfo->height - CHAR_HEIGHT)
@@ -83,7 +83,7 @@ void ncPrintCharInColorAt(char character, Colour color, Position* p)
          if(1<<j & letter[i])
             drawPixelWithColour(CHAR_WIDTH - 1 - j + p->x, i + p->y, color);
          else
-            drawPixelWithColour(CHAR_WIDTH - 1 - j + p->x, i + p->y, BLACK);   
+            drawPixelWithColour(CHAR_WIDTH - 1 - j + p->x, i + p->y, BLACK);
       }
     }
     p->x += CHAR_WIDTH;
@@ -138,6 +138,11 @@ void ncMoveUpOneLine(void){
 	for(int y = 0; y < vbeInfo->height; y++)
 		for(int x = 0; x < vbeInfo->width; x++)
 			copyPixel(x, y, x, y + CHAR_HEIGHT);
+}
+
+void ncResetPosition(){
+	position.x = 0;
+	position.y = vbeInfo->height - CHAR_HEIGHT;
 }
 
 void ncPrintDec(uint64_t value)
