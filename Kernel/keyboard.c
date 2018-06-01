@@ -30,7 +30,7 @@ const unsigned char asciiShift[] = {
 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, 0, 0, ' ', 0,
 KF1,   KF2, KF3, KF4, KF5, KF6, KF7, KF8, KF9, KF10, 0, 0,
 KHOME, KUP, KPGUP, '-', KLEFT, '5',   KRIGHT, '+', KEND, KDOWN, KPGDN, KINS, KDEL, 0, 0, 0, KF11, KF12 };
-		
+
 int bufferIndex = 0;
 
 int shiftl = 0;					//flags to know whether shift has been pressed or not.
@@ -71,7 +71,7 @@ void keyboardHandler(void){
 void readKeyboardBuffer(char* buffer, int count){
 	if(count > 0){
 		for(int i = 0; i < count; i++)
-			buffer[i] = keyBuffer[i];	
+			buffer[i] = keyBuffer[i];
 		cleanBuffer(count);
 	}
 }
@@ -82,11 +82,20 @@ int readKeyboardBufferAll(char* buffer){
 	return ret;
 }
 
-void cleanBuffer(int count){
-	for(int i = 0, j = count; i < count, j < bufferIndex; i++, j++)
-		keyBuffer[i] = keyBuffer[j];
-	if(bufferIndex > count)
-		bufferIndex -= count;
-	else
-		bufferIndex = 0;
-}
+// void cleanBuffer(int count){
+// 	for(int i = 0, j = count; i < count, j < bufferIndex; i++, j++)
+// 		keyBuffer[i] = keyBuffer[j];
+// 	if(bufferIndex > count)
+// 		bufferIndex -= count;
+// 	else
+// 		bufferIndex = 0;
+// }
+	void cleanBuffer(int count){
+		for (int i =0; i< count; i++){
+			keyBuffer[i] =0;
+		}
+		if (bufferIndex > count)
+			bufferIndex -= count;
+		else
+			bufferIndex = 0;
+	}

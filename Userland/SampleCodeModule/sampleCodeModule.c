@@ -11,10 +11,6 @@
 int main() {
 	//the following code is here merely as a test to see if this function is indeed called
 	//anything may be added or removed from here.
-	char * str;
-	char * aux= "hola";
-	strcpy(str, aux);
-	scanf("%s", str);
+	shell();
 	return 0xDEADC0DE;
 }
-
