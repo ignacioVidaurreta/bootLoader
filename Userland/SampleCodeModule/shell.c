@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <shell.h>
+#include <time.h>
 
 void shell(){
   int endFlag = 0;
@@ -17,6 +18,9 @@ void shell(){
         break;
       case EXIT:
         endFlag=1;
+        break;
+      case TIME:
+        getTime();
         break;
       default :
         printf("Invalid command: Please try again");
@@ -39,6 +43,8 @@ cmdID execute(char * cmd){
   }else if(strcmp(cmd, "exit ") == 0){
     printf("See you next time!");
     return EXIT;
+  }else if (strcmp(cmd, "time ") == 0){
+    return TIME;
   }
   return NONE;
 }

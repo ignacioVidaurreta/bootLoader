@@ -5,12 +5,22 @@ GLOBAL picSlaveMask
 GLOBAL beepASM
 GLOBAL noBeepASM
 
+RTCConfig:
+	cli
+	mov al,0Bh
+	out 70h,al
+	in al,71h
+	or al, 0100b
+	out 71h,al
+	sti
+	ret
+
 ; The following function gets the segment of time that is specified by this function's only parameter from the RTC
 ; where the available values are: 0 for seconds, 2 for minutes, 4 for hours, 6 for day of week, 7 for day of month
 ; 8 for month and 9 for year.
 
 getTimeFromRTC:
-	
+	call RTCConfig
 	mov rax, rdi
 	out 70h, al
 	in al, 71h
@@ -23,12 +33,12 @@ readFromKeyboard:
 	in al, 64h
 	test al, 1
 	jz exit
-	
+
 	mov rax, 0
 	in al, 60h
 
 	ret
-	
+
 	exit:
 
 		mov al, -1
@@ -58,7 +68,7 @@ picSlaveMask:
     pop     rbp
     retn
 
- beepASM: 
+ beepASM:
 
 	mov al, 0xB6		;sets the pit to channel 2 which is the PC speaker, as well as setting the square
 						;wave generator and access: lobyte/highbyte
@@ -70,12 +80,12 @@ picSlaveMask:
 	mov al,ah
 	out 42h,al
 	in al, 61h
-	or al, 03h		
+	or al, 03h
 	out 61h,al
         ret
  noBeepASM:
 
     in al, 61h
-	and al, 0xFC		
+	and al, 0xFC
 	out 61h,al
         ret
