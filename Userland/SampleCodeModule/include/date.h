@@ -1,5 +1,5 @@
-#ifndef TIME_H
-#define TIME_H
+#ifndef DATE_H
+#define DATE_H
 
   void getDate();
 
