@@ -20,7 +20,6 @@ void halt(void);
 //Termina la ejecución de la cpu.
 void haltCPU(void);
 
-INT_DESCR * getIDTBaseAddress(void);
 void int80Handler();
 
 #endif
