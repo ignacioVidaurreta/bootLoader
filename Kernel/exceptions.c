@@ -1,11 +1,11 @@
 #define ZERO_DIV 0
 #define INV_OPCODE 1
 #define EXCEPTIONS 2
-#define REGS 15
+#define REGS 16
 #include <naiveConsole.h>
 
 char* exceptions[EXCEPTIONS] = {"Zero division exception", "Invalid opcode exception"};
-char* registers[REGS] = {"rax", "rbx", "rcx", "rdx", "rbp", "rdi","rsi","r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"};
+char* registers[REGS] = {"rax", "rbx", "rcx", "rdx", "rbp", "rdi","rsi","r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15", "rip"};
 
 static void errorMessage(char* exception, uint64_t* sp);
 static void printRegisters(uint64_t* sp);
@@ -28,6 +28,7 @@ static void errorMessage(char* exception, uint64_t* sp) {
 	ncPrint(exception);
 	ncNewLine();
 	printRegisters(sp);
+	ncNewLine();
 }
 
 static void printRegisters(uint64_t* sp){

@@ -1,15 +1,14 @@
-/*#include <InvOpcodeTest.h>
-#include <exceptionTest.h>
+#define ZERO_DIV 0
+#define INV_OPCODE 1
+
+extern void invOpcodeException();
+extern void zeroDivException();
 
 void throwException(int exceptionID){
 	switch(exceptionID){
 		case ZERO_DIV:
-			zeroDivTest();
+			zeroDivException();
 		case INV_OPCODE:
-			InvOpcodeTest();
+			invOpcodeException();
 	}
 }
-
-void zeroDivTest(void){
-	int i = 1/0;
-}*/

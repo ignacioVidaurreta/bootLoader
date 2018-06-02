@@ -150,6 +150,7 @@ irq05Handler:
 
 ; Zero Division Exception
 exception0Handler:
+
 	exceptionHandler 0
 
 ; Invalid Opcode exception
@@ -194,20 +195,3 @@ clearI:
 setI:
 	sti
 	ret
-
-getIDTBaseAddress:
-
-	sidt [idtr]
-	mov rax, [idtr + 2]
-	ret
-
-section .bss
-
-idtr db 10		; saved memory for storing the idtr when needed.
-				; Please Recall that the IDTR is 80 bits in size, 
-				; bits 0...15 store the length of the IDT and
-				; bits 16...79 store the base adress
-
-section .data
-
-aux db "ok"

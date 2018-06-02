@@ -1,8 +1,16 @@
-GLOBAL invOpcodeTest
+GLOBAL invOpcodeException
+GLOBAL zeroDivException
 
 section .text
 
-invOpcodeTest:
+invOpcodeException:
 
 	UD2
 	ret
+
+zeroDivException
+	
+	mov rax, 1
+	mov rdx, 0
+
+	div rdx

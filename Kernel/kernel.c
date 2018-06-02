@@ -21,7 +21,6 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
 
-
 void clearBSS(void * bssAddress, uint64_t bssSize)
 {
 	memset(bssAddress, 0, bssSize);
@@ -57,6 +56,7 @@ int k = 0;
 
 int main()
 {	
+	ncResetPosition();
 	((EntryPoint)sampleCodeModuleAddress)();
 	while(1){;}
 	return 0;

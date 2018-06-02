@@ -1,6 +1,7 @@
 #include <time.h>
 #include <peripherals.h>
 #include <stdint.h>
+#include <keyboard.h>
 
 static void int20();
 static void int21();
