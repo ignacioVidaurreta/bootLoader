@@ -1,14 +1,21 @@
 #include <stdlib.h>
 #include <shell.h>
-#include <time.h>
+#include <date.h>
 
 void shell(){
   int endFlag = 0;
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
-    putChar('$'); //prompt
-    putChar(' ');
+    /*
+     * Opciones:
+     *    - snmOS>
+     *    - $
+     *    - $>
+     *    - root>
+     */
+    printf("snmOS> "); //prompt
+    //putChar(' ');
     scanf("%s", command);
     scroll();
     commandID = execute(command);
@@ -19,8 +26,8 @@ void shell(){
       case EXIT:
         endFlag=1;
         break;
-      case TIME:
-        getTime();
+      case DATE:
+        getDate();
         break;
       default :
         printf("Invalid command: Please try again");
@@ -43,8 +50,8 @@ cmdID execute(char * cmd){
   }else if(strcmp(cmd, "exit ") == 0){
     printf("See you next time!");
     return EXIT;
-  }else if (strcmp(cmd, "time ") == 0){
-    return TIME;
+  }else if (strcmp(cmd, "date ") == 0){
+    return DATE;
   }
   return NONE;
 }
@@ -62,7 +69,7 @@ void printHelpMsg(){
   scroll();
   printf("* help: Prints this help message");
   scroll();
-  printf("* time:"); //falta implementar
+  printf("* date: Prints actual date and time ");
   scroll();
   printf("* clock: "); // falta implementar
   scroll();

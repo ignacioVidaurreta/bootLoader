@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
-  void getTime();
+  void getDate();
 
   int getDay();
   int getMonth();
