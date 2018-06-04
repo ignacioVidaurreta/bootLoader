@@ -23,9 +23,9 @@ void startClock(){
   int qtyRead=60;
   int flag=1;
   while(flag){
-    //char * str;
     while(counter <= qtyRead && changed == 0){
-      if ( c=readyChar() == 's'){
+      c=readInput();
+      if ( c == 's'){
         beep();
         color++;
         if (color == 4){
@@ -33,7 +33,8 @@ void startClock(){
         }
         changed = 1;
       }
-      if (c=readyChar() == 'q'){
+
+      if (c == 'q'){
         flag=0;
       }
       counter++;
@@ -46,6 +47,7 @@ void startClock(){
     posLim2 = writeNumwColor(posMin, posY, color, getMinutes());
     posSec = writeNumwColor(posLim2, posY, color, ':');
     writeNumwColor(posSec, posY, color, getSeconds());
+    stopBeep();
   }
 }
 
@@ -79,18 +81,15 @@ void clearScreen(){
   int80(0,0,0,0,0,3);
 }
 
-int readInput(char* str){
-  int num;
-  num = int80((uint64_t)str,1 , 1, 0, 0, 4);
-  return num;
-
-}
-
 void beep(){
   int80(1000, 0, 0, 0, 0, 6);
 }
 
-char readyChar(){
+void stopBeep(){
+  int80(0, 0, 0, 0, 0, 7);
+}
+
+char readInput(){
   char c=0;
   int80(1, (uint64_t)&c, 1, 0, 0, 1);
 

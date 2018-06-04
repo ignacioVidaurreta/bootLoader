@@ -40,6 +40,9 @@ void shell(){
       case ECHO:
         echo(arg);
         break;
+      case CLEAR:
+        clear();
+        break;
       default :
         printf("Invalid command: Please try again");
         scroll();
@@ -68,7 +71,11 @@ cmdID execute(char * cmd){
   }else if(strcmp(cmd, "div ") == 0){
     int i = 3/0;
     return DIV;
-  }else{
+  }
+  else if(strcmp(cmd, "clear ")==0){
+    return CLEAR;
+  }
+  else{
     char* aux="echo ";
     if(strncmp(aux, cmd, 5) == 0){
       strncpy(arg, &cmd[5],strlen(cmd)-5);
@@ -87,17 +94,23 @@ void printHelpMsg(){
   scroll();
   printf("* exit: Exit the OS");
   scroll();
-  printf("* echo [msg]: Print [msg] in the shell"); //falta implementar
+  printf("* echo [msg]: Print [msg] in the shell");
   scroll();
   printf("* help: Prints this help message");
   scroll();
   printf("* date: Prints actual date and time ");
   scroll();
-  printf("* clock: "); // falta implementar
+  printf("* clock: Opens the clock application"); 
+  scroll();
+  printf("* clear: clears the screen");
   scroll();
 }
 
 void echo(char*arg){
   printf("%s\n", arg);
   scroll();
+}
+
+void clear(){
+  int80(0,0,0,0,0,3);
 }
