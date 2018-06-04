@@ -50,5 +50,20 @@ int getSeconds(){
 }
 
 void printTime(int hr, int min, int sec){
-  printf("%d:%d:%d", hr, min, sec );
+  if(hr >= 10 && min >= 10 && sec >= 10)
+    printf("%d:%d:%d (GMT)", hr, min, sec );
+  else if(hr >= 10 && min >= 10)
+    printf("%d:%d:0%d (GMT)", hr, min, sec );
+  else if(hr >= 10 && sec >= 10)
+    printf("%d:0%d:%d (GMT)", hr, min, sec );
+  else if(min >= 10 && sec >= 10)
+    printf("0%d:%d:%d (GMT)", hr, min, sec );
+  else if(hr >= 10)
+    printf("%d:0%d:0%d (GMT)", hr, min, sec );
+  else if(min >= 10)
+    printf("0%d:%d:0%d (GMT)", hr, min, sec );
+  else if(sec >= 10)
+    printf("0%d:0%d:%d (GMT)", hr, min, sec );
+  else
+    printf("0%d:0%d:0%d (GMT)", hr, min, sec );
 }
