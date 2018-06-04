@@ -6,6 +6,7 @@
 #include <math.h>
 #include <time.h>
 #include <idtLoader.h>
+#include <interrupts.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -58,6 +59,6 @@ int main()
 {	
 	ncResetPosition();
 	((EntryPoint)sampleCodeModuleAddress)();
-	while(1){;}
+	haltCPU();
 	return 0;
 }
