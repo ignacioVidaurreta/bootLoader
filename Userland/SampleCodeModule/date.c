@@ -34,7 +34,7 @@ int getYear(){
 void printDate(int day, int month, int year){
   char months[][13] = {"-", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
                     "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-  printf("%d de %s del %d", day, months[month], year);
+  printf("%d de %s del %d", day, months[month], 2000 + year);
 }
 
 int getHour(){

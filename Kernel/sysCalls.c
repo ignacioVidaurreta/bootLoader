@@ -15,7 +15,7 @@ int screenInfo(uint8_t arg1);
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
 	Colour c;
-
+	Position p;
 	switch(sysCallID){
 		case SYS_READ:
 			read(arg1, (char*)arg2, arg3);
@@ -51,6 +51,12 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			ncMoveUpOneLine();
 			ncResetPosition();
 			return 1;
+		case DRAW_NUM:
+      //arg3: Color num, arg4: número a imprimir
+          p.x = arg1;
+          p.y = arg2;
+          ncPrintNumberParser(arg4, arg3, &p);
+          return 1;
 	}
 	return -1;
 }

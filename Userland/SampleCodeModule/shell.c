@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <shell.h>
 #include <date.h>
+char arg[BUFFER_SIZE - 5];
 
 void shell(){
   int endFlag = 0;
@@ -29,6 +30,16 @@ void shell(){
       case DATE:
         getDate();
         break;
+      case CLOCK:
+        startClock();
+        break;
+      case DIV:
+        printf("No tiro excepción");
+        int j = 10/0;
+        break;
+      case ECHO:
+        echo(arg);
+        break;
       default :
         printf("Invalid command: Please try again");
         scroll();
@@ -52,6 +63,17 @@ cmdID execute(char * cmd){
     return EXIT;
   }else if (strcmp(cmd, "date ") == 0){
     return DATE;
+  }else if (strcmp(cmd, "clock ")== 0){
+    return CLOCK;
+  }else if(strcmp(cmd, "div ") == 0){
+    int i = 3/0;
+    return DIV;
+  }else{
+    char* aux="echo ";
+    if(strncmp(aux, cmd, 5) == 0){
+      strncpy(arg, &cmd[5],strlen(cmd)-5);
+      return ECHO;
+    }
   }
   return NONE;
 }
@@ -72,5 +94,10 @@ void printHelpMsg(){
   printf("* date: Prints actual date and time ");
   scroll();
   printf("* clock: "); // falta implementar
+  scroll();
+}
+
+void echo(char*arg){
+  printf("%s\n", arg);
   scroll();
 }

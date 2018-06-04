@@ -211,3 +211,26 @@ int isNum(char c){
 void deleteCharacter(){
   int80(0,0,0,0,0,9);
 }
+
+
+char* strncpy(char *destination, const char *source, int n){
+  char* aux;
+  aux = destination;
+  for (; n>0 && *source!=0; n--){
+    *destination = *source;
+    destination++;
+    source++;
+  }
+  *destination='\0';
+  return aux;
+}
+
+int strncmp(const char* str1, const char* str2, int n){
+  int i;
+  for (i = 0; n>0; i++, n--){
+    if(str1[i] != str2[i]){
+      return (str1[i]>str2[i])?1:-1;
+    }
+  }
+  return 0;
+}

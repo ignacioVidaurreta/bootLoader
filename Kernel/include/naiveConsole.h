@@ -73,6 +73,9 @@ void ncResetPosition();
 
 void initializeScreen(void);
 
+void ncPrintNumberParser(int num, int color, Position* p);
+void ncPrintNumber( int num, Colour c, Position* p);
+
 int width();
 int height();
 int cwidth();

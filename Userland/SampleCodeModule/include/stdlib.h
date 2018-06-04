@@ -49,5 +49,8 @@
 
    void deleteCharacter();
 
+   char* strncpy(char *destination, const char *source, int n);
+   int strncmp(const char* str1, const char* str2, int n);
+
 
 #endif

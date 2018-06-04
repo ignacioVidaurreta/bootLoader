@@ -5,7 +5,7 @@
 #include <keyboard.h>
 
 //Sys call IDs:
-#define SYS_READ 1			
+#define SYS_READ 1
 #define SYS_WRITE 2
 #define SYS_CLR_SCRN 3		//fills all the screen, except for the command line with blank spaces.
 #define SYS_READ_KEYA 4		//reads the totality of the keyboard buffer. Returns in rax the total ammount of characters read.
@@ -16,13 +16,14 @@
 #define SYS_DEL_CHAR 9		//deletes the last user character.
 #define SYS_DRAW_PXL 10		//draws a pixel at the specified location and with the specified colour. Information expanded in the arguements section.
 #define SYS_SCRL 11			//scrawls the screen up by one line.
+#define DRAW_NUM 12     //Prints in ascii art a number (used to print the clock)
 
 
 
 
 
 //there are special characters which do not have an ascii representation
-//however they are stored in the keyboard buffer and returned this are: 
+//however they are stored in the keyboard buffer and returned this are:
 //backspace which is represented by an 8 and ESC which is represented by a 27.
 //arguements for read: 1 file descriptor
 //					   2 buffer to be read into
@@ -84,11 +85,16 @@
 //									   arg3: red, intensity of the color red in the pixel.
 //									   arg4: green, intensity of the color green in the pixel.
 //									   arg5: blue, intensity of the color blue in the pixel.
-//please be aware colors must be of an 8 bit value, that is, they should go from 0 to 0xFF. 
+//please be aware colors must be of an 8 bit value, that is, they should go from 0 to 0xFF.
 //For example passing red, green and blue as 0, 0, 0 will paint the pixel black. Passing them as 0xFF, 0xFF, 0xFF will create a white pixel.
 
 
-
+// arguments for the DRAW_NUM syscall.
+//                         arg1: x position, distance in pixels from the left edge of the screen of the pixel to draw.
+//                                           arg2: y position, distance in pixels from the top edge of the screen of the pixel to draw.
+//                         arg3: number that represents the color we will print the number
+//                         arg4: The number (si no recibe un número imprime el separador : )
+// In arg3: 0-> white, 1-> red, 2-> green, 3-> blue 
 
 
 

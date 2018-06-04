@@ -203,3 +203,122 @@ int width(){return vbeInfo->width;}
 int height(){return vbeInfo->height;}
 int cwidth(){return CHAR_WIDTH;}
 int cheight(){return CHAR_HEIGHT;}
+
+char * nums[][11] = {
+    {
+        "  ###   ",
+        "  # #   ",
+        "  # #   ",
+        "  # #   ",
+        "  ###   ",
+        0
+    },
+    {
+        "   #    ",
+        "  ##    ",
+        "   #    ",
+        "   #    ",
+        "  ###   ",
+        0
+    },
+    {
+        "  ###  ",
+        "    #  ",
+        "  ###  ",
+        "  #    ",
+        "  ###  ",
+        0
+    },
+    {
+        "  ###  ",
+        "    #  ",
+        "   ##  ",
+        "    #  ",
+        "  ###  ",
+        0
+    },
+    {
+        "  # #  ",
+        "  # #  ",
+        "  ###  ",
+        "    #  ",
+        "    #  ",
+        0
+    },
+    {
+        "  ###  ",
+        "  #    ",
+        "  ###  ",
+        "    #  ",
+        "  ###  ",
+        0
+    },
+    {
+        "  ###  ",
+        "  #    ",
+        "  ###  ",
+        "  # #  ",
+        "  ###  ",
+        0
+    },
+    {
+        "  ###  ",
+        "    #  ",
+        "    #  ",
+        "    #  ",
+        "    #  ",
+        0
+    },
+    {
+        "  ###  ",
+        "  # #  ",
+        "  ###  ",
+        "  # #  ",
+        "  ###  ",
+        0
+    },
+    {
+        "  ###  ",
+        "  # #  ",
+        "  ###  ",
+        "    #  ",
+        "  ###  ",
+        0
+    },
+    {
+        "       ",
+        "   #   ",
+        "       ",
+        "   #   ",
+        "       ",
+ 				0
+    }
+
+};
+
+void ncPrintNumberParser(int num, int color, Position* p){
+    if (color == 0){
+        ncPrintNumber(num, WHITE, p);
+    }
+    else if(color == 1){
+        ncPrintNumber(num, RED, p);
+    }
+    else if (color ==2){
+        ncPrintNumber(num, GREEN, p);
+    }
+    else if(color ==3){
+        ncPrintNumber(num, BLUE, p);
+    }
+}
+    void ncPrintNumber(int num, Colour c, Position* p){
+    Position * initPos = p;
+    int runs = 1;
+    int rec = p->x;
+    for (int i = 0; nums[num][i]!= 0; i++){
+        p->x=rec;
+        ncPrintInColorAt(nums[num][i], c, p);
+        p->x=rec;
+        p->y = initPos->y + CHAR_HEIGHT + runs;
+        runs++;
+        }
+}
