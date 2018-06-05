@@ -27,6 +27,12 @@ void startClock(){
       c=readInput();
       if ( c == 's'){
         beep();
+        for(int i = 0; i<100; i++){
+          for(int j = 0; j<100000;){
+            j++;
+          }
+        }
+        stopBeep();
         color++;
         if (color == 4){
           color =0;
@@ -44,11 +50,9 @@ void startClock(){
     int posHr = getScreenHeight()/3;
     posLim1 = writeNumwColor(posHr, posY, color, getHour());
     posMin = writeNumwColor(posLim1, posY, color, SEPARADOR);
-    //posLim2 = writeNumwColor(posMin, posY, color, getMinutes());
-    posLim2 = writeNumwColor(posMin, posY, color, 58);
+    posLim2 = writeNumwColor(posMin, posY, color, getMinutes());
     posSec = writeNumwColor(posLim2, posY, color, SEPARADOR);
     writeNumwColor(posSec, posY, color, getSeconds());
-    stopBeep();
   }
 }
 
