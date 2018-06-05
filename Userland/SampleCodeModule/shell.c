@@ -35,8 +35,10 @@ void shell(){
         startClock();
         break;
       case DIV:
-        exception = 10/0;
-        scroll();
+        zeroDivException();
+        break;
+      case INVOPC:
+        invOpcodeException();
         break;
       case ECHO:
         echo(arg);
@@ -70,6 +72,8 @@ cmdID execute(char * cmd){
     return CLOCK;
   }else if(strcmp(cmd, "divByZero ") == 0){
     return DIV;
+  }else if(strcmp(cmd, "invOpcode ") == 0){
+    return INVOPC;
   }
   else if(strcmp(cmd, "clear ")==0){
     return CLEAR;
@@ -104,6 +108,8 @@ void printHelpMsg(){
   printf("* clear: clears the screen");
   scroll();
   printf("* divByZero: Generates a division by zero exception");
+  scroll();
+  printf("* invOpcode: Generates an invalid opcode exception");
   scroll();
 }
 
