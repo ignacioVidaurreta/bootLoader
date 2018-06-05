@@ -70,7 +70,7 @@ cmdID execute(char * cmd){
     return CLOCK;
   }else if(strcmp(cmd, "divByZero") == 0){
     return DIV;
-  }else if(strcmp(cmd, "invOpcode") == 0){
+  }else if(strcmp(cmd, "i") == 0){
     return INVOPC;
   }
   else if(strcmp(cmd, "clear")==0){

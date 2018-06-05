@@ -53,8 +53,6 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-int k = 1;
-
 int main(){
 	ncResetPosition();
 	((EntryPoint)sampleCodeModuleAddress)();
