@@ -43,9 +43,10 @@ void startClock(){
     changed = 0;
     int posHr = getScreenHeight()/3;
     posLim1 = writeNumwColor(posHr, posY, color, getHour());
-    posMin = writeNumwColor(posLim1, posY, color, ':');
-    posLim2 = writeNumwColor(posMin, posY, color, getMinutes());
-    posSec = writeNumwColor(posLim2, posY, color, ':');
+    posMin = writeNumwColor(posLim1, posY, color, SEPARADOR);
+    //posLim2 = writeNumwColor(posMin, posY, color, getMinutes());
+    posLim2 = writeNumwColor(posMin, posY, color, 58);
+    posSec = writeNumwColor(posLim2, posY, color, SEPARADOR);
     writeNumwColor(posSec, posY, color, getSeconds());
     stopBeep();
   }
@@ -61,7 +62,7 @@ int getScreenWidth(){
 }
 
 int writeNumwColor(int x, int y, int color, int num){
-  if (num == ':'){
+  if (num == SEPARADOR){
     int80(x,y, color, 10, 0, 12); //imprime el separador
     return x + (5*8);
   }

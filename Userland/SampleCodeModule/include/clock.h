@@ -1,6 +1,7 @@
 #ifndef CLOCK_H
 #define CLOCK_H
-
+  #define SEPARADOR 100
+  
   void clearScreen();
   void startClock();
   int getScreenHeight();
@@ -9,4 +10,4 @@
   char readInput();
   void clearScreen();
   void stopBeep();
-#endif 
+#endif
