@@ -30,7 +30,7 @@ int strcmp(char* str1, char* str2){;
       return (str1[i]>str2[i])?1:-1;
     }
   }
-  return str1[i] == str2[i];
+  return str1[i] - str2[i];
 }
 
 void swap(char* numStr, int index1, int index2){

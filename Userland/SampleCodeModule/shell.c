@@ -58,24 +58,22 @@ void scroll(){
 }
 
 cmdID execute(char * cmd){
-  if(strcmp(cmd, " ")== 0){
-    return NONE;
-  }
-  if(strcmp(cmd, "help ")== 0){
+
+  if(strcmp(cmd, "help")== 0){
     return HELP;
-  }else if(strcmp(cmd, "exit ") == 0){
+  }else if(strcmp(cmd, "exit") == 0){
     printf("See you next time!");
     return EXIT;
-  }else if (strcmp(cmd, "date ") == 0){
+  }else if (strcmp(cmd, "date") == 0){
     return DATE;
-  }else if (strcmp(cmd, "clock ")== 0){
+  }else if (strcmp(cmd, "clock")== 0){
     return CLOCK;
-  }else if(strcmp(cmd, "divByZero ") == 0){
+  }else if(strcmp(cmd, "divByZero") == 0){
     return DIV;
-  }else if(strcmp(cmd, "invOpcode ") == 0){
+  }else if(strcmp(cmd, "invOpcode") == 0){
     return INVOPC;
   }
-  else if(strcmp(cmd, "clear ")==0){
+  else if(strcmp(cmd, "clear")==0){
     return CLEAR;
   }
   else{
