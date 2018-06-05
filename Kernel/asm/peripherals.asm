@@ -62,18 +62,18 @@ picMasterMask:
 picSlaveMask:
 
 	push    rbp
-    mov     rbp, rsp
-    mov     ax, di  ; ax = mascara de 16 bits
-    out		0A1h,al
-    pop     rbp
-    retn
+  mov     rbp, rsp
+  mov     ax, di  ; ax = mascara de 16 bits
+  out		0A1h,al
+  pop     rbp
+  retn
 
  beepASM:
 
 	mov al, 0xB6		;sets the pit to channel 2 which is the PC speaker, as well as setting the square
-						;wave generator and access: lobyte/highbyte
-						;if I'm being honest with you I have no idea why those last two are done but it doesn't
-						;work without them.
+									;wave generator and access: lobyte/highbyte
+									;if I'm being honest with you I have no idea why those last two are done but it doesn't
+									;work without them.
 	out 43h,al
 	mov rax, rdi		;frequency passed on as parameter.
 	out 42h,al
@@ -82,10 +82,11 @@ picSlaveMask:
 	in al, 61h
 	or al, 03h
 	out 61h,al
-        ret
+  ret
+
  noBeepASM:
 
-    in al, 61h
+  in al, 61h
 	and al, 0xFC
 	out 61h,al
-        ret
+  ret

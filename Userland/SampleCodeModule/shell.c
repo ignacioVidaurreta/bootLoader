@@ -1,16 +1,16 @@
 #include <stdlib.h>
 #include <shell.h>
 #include <date.h>
+#include <clock.h>
+
 char arg[BUFFER_SIZE - 5];
 
 void shell(){
   int endFlag = 0;
-  int exception;
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
-    printf("master> "); //prompt
-    //putChar(' ');
+    printf("master> "); //prompts
     scanf("%s", command);
     scroll();
     commandID = execute(command);
