@@ -1,7 +1,7 @@
-#include <clock.h>
 #include <date.h>
 #include <stdlib.h>
 #include <shell.h>
+#include <clock.h>
 
 /*
  *  Blanco : 0
