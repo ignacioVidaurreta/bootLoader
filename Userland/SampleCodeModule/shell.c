@@ -9,13 +9,6 @@ void shell(){
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
-    /*
-     * Opciones:
-     *    - snmOS>
-     *    - $
-     *    - $>
-     *    - root>
-     */
     printf("snmOS> "); //prompt
     //putChar(' ');
     scanf("%s", command);
