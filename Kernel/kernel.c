@@ -48,7 +48,7 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
-	//initializeScreen();
+	initializeScreen();
 
 	return getStackBase();
 }
