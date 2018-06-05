@@ -9,14 +9,7 @@ void shell(){
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
-    /*
-     * Opciones:
-     *    - snmOS>
-     *    - $
-     *    - $>
-     *    - root>
-     */
-    printf("snmOS> "); //prompt
+    printf("master> "); //prompt
     //putChar(' ');
     scanf("%s", command);
     scroll();
@@ -47,7 +40,7 @@ void shell(){
         clear();
         break;
       default :
-        printf("Invalid command: Please try again");
+        printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
   }
@@ -62,7 +55,7 @@ cmdID execute(char * cmd){
   if(strcmp(cmd, "help")== 0){
     return HELP;
   }else if(strcmp(cmd, "exit") == 0){
-    printf("See you next time!");
+    printf("Thank you, come again ;)");
     return EXIT;
   }else if (strcmp(cmd, "date") == 0){
     return DATE;
@@ -70,16 +63,22 @@ cmdID execute(char * cmd){
     return CLOCK;
   }else if(strcmp(cmd, "divByZero") == 0){
     return DIV;
-  }else if(strcmp(cmd, "i") == 0){
+  }else if(strcmp(cmd, "invOpcode") == 0){
     return INVOPC;
   }
   else if(strcmp(cmd, "clear")==0){
     return CLEAR;
   }
   else{
-    char* aux="echo ";
-    if(strncmp(aux, cmd, 5) == 0){
-      strncpy(arg, &cmd[5],strlen(cmd)-5);
+    char* aux="echo";
+    if(strncmp(aux, cmd, 4) == 0){
+      int len = strlen(cmd);
+      if (len > BUFFER_SIZE){
+        strncpy(arg, &cmd[5],BUFFER_SIZE-5);
+      }else{
+        strncpy(arg, &cmd[5],strlen(cmd)-5);
+      }
+
       return ECHO;
     }
   }
