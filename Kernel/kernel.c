@@ -48,17 +48,21 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
-	initializeScreen();
+	//initializeScreen();
 
 	return getStackBase();
 }
 
-int k = 0;
+int k = 1;
 
 int main()
 {	
-	ncResetPosition();
-	((EntryPoint)sampleCodeModuleAddress)();
-	haltCPU();
+	//((EntryPoint)sampleCodeModuleAddress)();
+	if(k){
+		k = 0;
+		int i = 1/0;
+	}
+	initializeScreen();
+	//haltCPU();
 	return 0;
 }
