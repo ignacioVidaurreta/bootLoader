@@ -176,7 +176,7 @@ char* readBuffer(char* read){
   char c;
   int n=0;
   while((c=readChar())!= '\n'){
-    if (n == BUFFER_SIZE){
+    if (n == BUFFER_SIZE-1){
       read[n]=0;
       return read;
     }

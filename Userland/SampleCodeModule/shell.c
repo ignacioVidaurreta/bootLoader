@@ -76,7 +76,7 @@ cmdID execute(char * cmd){
       if (len > BUFFER_SIZE){
         strncpy(arg, &cmd[5],BUFFER_SIZE-5);
       }else{
-        strncpy(arg, &cmd[5],strlen(cmd)-5);
+        strncpy(arg, &cmd[5],len-5);
       }
 
       return ECHO;
