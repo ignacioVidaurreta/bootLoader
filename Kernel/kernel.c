@@ -55,14 +55,9 @@ void * initializeKernelBinary()
 
 int k = 1;
 
-int main()
-{	
-	//((EntryPoint)sampleCodeModuleAddress)();
-	if(k){
-		k = 0;
-		int i = 1/0;
-	}
-	initializeScreen();
-	//haltCPU();
+int main(){
+	ncResetPosition();
+	((EntryPoint)sampleCodeModuleAddress)();
+	haltCPU();
 	return 0;
 }

@@ -28,7 +28,7 @@ static void errorMessage(char* exception, uint64_t* sp) {
 	ncPrint(exception);
 	ncNewLine();
 	printRegisters(sp);
-	ncNewLine();
+	ncMoveUpOneLine();
 }
 
 static void printRegisters(uint64_t* sp){

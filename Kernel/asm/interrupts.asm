@@ -179,10 +179,10 @@ halt:
 
 ; halts CPU forever
 
-haltcpu:
+haltCPU:
 	cli
 	hlt
-	ret
+	jmp haltCPU
 
 ; disables hardware interruptions.
 

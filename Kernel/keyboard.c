@@ -84,7 +84,7 @@ int readKeyboardBufferAll(char* buffer){
 
 void cleanBuffer(int count){
     int j;
-    for(int i = 0, j = count;j < bufferIndex; i++, j++)
+    for(int i = 0, j=count;j < bufferIndex; i++, j++)
         keyBuffer[i] = keyBuffer[j];
     keyBuffer[j] =0;
     if(bufferIndex > count)
