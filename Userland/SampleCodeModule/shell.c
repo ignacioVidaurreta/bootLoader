@@ -5,6 +5,7 @@ char arg[BUFFER_SIZE - 5];
 
 void shell(){
   int endFlag = 0;
+  int exception;
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
@@ -34,8 +35,8 @@ void shell(){
         startClock();
         break;
       case DIV:
-        printf("No tiro excepción");
-        int j = 10/0;
+        exception = 10/0;
+        scroll();
         break;
       case ECHO:
         echo(arg);
@@ -55,11 +56,10 @@ void scroll(){
 }
 
 cmdID execute(char * cmd){
-  /*
-   * NO TENGO NI IDEA POR QUÉ NO FUNCIONA SIN EL ESPACIO AL FINAL
-   * TODO arreglar
-   */
-  if(strcmp(cmd, "help ")==0){
+  if(strcmp(cmd, " ")== 0){
+    return NONE;
+  }
+  if(strcmp(cmd, "help ")== 0){
     return HELP;
   }else if(strcmp(cmd, "exit ") == 0){
     printf("See you next time!");
@@ -68,8 +68,7 @@ cmdID execute(char * cmd){
     return DATE;
   }else if (strcmp(cmd, "clock ")== 0){
     return CLOCK;
-  }else if(strcmp(cmd, "div ") == 0){
-    int i = 3/0;
+  }else if(strcmp(cmd, "divByZero ") == 0){
     return DIV;
   }
   else if(strcmp(cmd, "clear ")==0){
@@ -100,9 +99,11 @@ void printHelpMsg(){
   scroll();
   printf("* date: Prints actual date and time ");
   scroll();
-  printf("* clock: Opens the clock application"); 
+  printf("* clock: Opens the clock application");
   scroll();
   printf("* clear: clears the screen");
+  scroll();
+  printf("* divByZero: Generates a division by zero exception");
   scroll();
 }
 
