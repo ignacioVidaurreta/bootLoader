@@ -27,4 +27,7 @@ $(LOADEROBJECT):
 clean:
 	rm -rf asm/*.o *.o *.bin
 
-.PHONY: all clean
+gdb:
+	gdb kernel.bin
+	
+.PHONY: all clean gdb

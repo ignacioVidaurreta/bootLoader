@@ -1,22 +1,44 @@
+IMAGE = Image/x64BareBonesImage.qcow2
+
+QEMU = /usr/bin/qemu-system-x86_64
+QEMUOPTS = -hda $(IMAGE) -m 512 -soundhw pcspk
+QEMU_GDB = -s -S
+QEMU_NO_GRAPH = -nographic 
+
+.PHONY: bootloader image collections kernel userland all clean go kill gdb 
 
 all:  bootloader kernel userland image
 
+# Run and wait for gdb in terminal mode
+run: 
+	$(QEMU) $(QEMUOPTS) $(QEMU_GDB) 
+
+# Run without waiting
+go: 
+	$(QEMU) $(QEMUOPTS) 
+
+# Close qemu
+kill:
+	killall $(QEMU)
+
+# gdb launching
+gdb:
+	$(MAKE) -C Kernel/ gdb
+
 bootloader:
-	cd Bootloader; make all
+	$(MAKE) -C Bootloader/ all
 
 kernel:
-	cd Kernel; make all
+	$(MAKE) -C Kernel/ all
 
 userland:
-	cd Userland; make all
+	$(MAKE) -C Userland/ all
 
 image: kernel bootloader userland
-	cd Image; make all
+	$(MAKE) -C Image/ all
 
 clean:
-	cd Bootloader; make clean
-	cd Image; make clean
-	cd Kernel; make clean
-	cd Userland; make clean
-
-.PHONY: bootloader image collections kernel userland all clean
+	$(MAKE) clean -C Bootloader/ 
+	$(MAKE) clean -C Image/ 
+	$(MAKE) clean -C Kernel/ 
+	$(MAKE) clean -C Userland/ 

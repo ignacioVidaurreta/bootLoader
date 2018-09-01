@@ -6,3 +6,6 @@
 *.img
 *.qcow2
 *.vmdk
+*.sys
+
+*.pdf
