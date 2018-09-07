@@ -7,6 +7,7 @@
 #include <time.h>
 #include <idtLoader.h>
 #include <interrupts.h>
+#include <memoryAllocator.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -48,6 +49,7 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
+	initializeMemoryAllocation(getStackBase());
 	initializeScreen();
 
 	return getStackBase();
