@@ -86,11 +86,18 @@ void testAddMultipleElementsToHeader(){
     node1 = mymalloc(sizeof(tNode));
     node2 = mymalloc(sizeof(tNode));
 
-
     node1->num=3;
     node2->num = 5;
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
+
+    if(node1->num == queue_header->first->num && node2->num == queue_header->last->num){
+      ncPrint("Test02: PASSED");
+        return 1;
+    }else{
+        ncPrint("Test02: FAILED!");
+        return 0;
+    }
 
     myfree(node1);
     myfree(node2);
@@ -113,6 +120,23 @@ void testAddALotOfElementsToQueue(){
         add_to_queue(queue, nodes[i]);
     }
 
+    int equals = 1;
+    tNode* aux;
+       aux = queue->first;
+       int j =0;
+       while(aux != NULL){
+           if(j++ != aux->num)
+            equals = 0;
+           aux = aux->next;
+       }
+
+    if(equals){
+      ncPrint("Test03: PASSED");
+        return 1;
+    }else{
+        ncPrint("Test03: FAILED!");
+        return 0;
+    }
 
     for (int i=0; i<100; i++){
         myfree(nodes[i]);
@@ -132,6 +156,13 @@ void testRoundRobin(){
 
     round_robin(process_queue, 5);
 
+    if( 5 == process_queue->first->num){
+      ncPrint("Test04: PASSED");
+        return 1;
+    }else{
+        ncPrint("Test04: FAILED!");
+        return 0;
+    }
 
     free_queue_nodes(process_queue->first);
     myfree(process_queue);
@@ -152,6 +183,14 @@ void testNotFinishedProcessGoesToTail(){
     add_to_queue(process_queue, node);
 
     round_robin(process_queue, 1);
+
+    if(node->num == process_queue->last->num){
+      ncPrint("Test05: PASSED");
+        return 1;
+    }else{
+        ncPrint("Test05: FAILED!");
+        return 0;
+    }
 
     free_queue_nodes(process_queue->first);
     myfree(process_queue);

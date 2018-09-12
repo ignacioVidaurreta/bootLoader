@@ -63,6 +63,10 @@ int main(){
 
 	if(testing){
 		testAddElementToHeader();
+		testAddMultipleElementsToHeader();
+		testAddALotOfElementsToQueue();
+		testRoundRobin();
+		testNotFinishedProcessGoesToTail();
 	}else{
 		((EntryPoint)sampleCodeModuleAddress)();
 	}
