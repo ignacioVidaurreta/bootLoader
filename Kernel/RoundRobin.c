@@ -51,9 +51,7 @@
      tHeader* queue_header;
      tNode * node;
 
-     ncPrint("PRE");
      node = mymalloc(sizeof(tNode));
-     ncPrint(" POST");
 
      queue_header = mymalloc(sizeof(tHeader));
      queue_header->first = NULL;
@@ -62,10 +60,10 @@
      node->num=3;
      add_to_queue(queue_header, node);
      if (node->num == queue_header->first->num){
-        //ncPrint("Test01: PASSED");
+        ncPrint("Test01: PASSED");
         return 1;
     }else{
-        //ncPrint("Test01: FAILED!");
+        ncPrint("Test01: FAILED!");
         return 0;
     }
 

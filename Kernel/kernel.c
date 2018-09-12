@@ -58,14 +58,15 @@ void * initializeKernelBinary()
 
 int main(){
 	ncResetPosition();
-	if (testAddElementToHeader()){
-		ncPrint("Sos un capo");
-		haltCPU();
+
+	int testing = 1;
+
+	if(testing){
+		testAddElementToHeader();
 	}else{
-		ncPrint("Sos un gil");
-		haltCPU();
+		((EntryPoint)sampleCodeModuleAddress)();
 	}
-	//((EntryPoint)sampleCodeModuleAddress)();
+
 	haltCPU();
 	return 0;
 }

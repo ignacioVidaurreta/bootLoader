@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <buddy.h>
 
-#define MAX_MEM_SIZE 128*4096 /* Defining a Max Memory size of 16 MB*/
+#define MAX_MEM_SIZE 128*4096
 #define MAX_MEM_POWER 19
 
 static BUDDYLIST AVAIL[32];
@@ -243,8 +243,3 @@ int buddy(int k,int x){
     return (((x - (int)pool)^(1<<k)) + (int)pool);
 
 }
-
-/*
- *For debugging purposes malloced memory can
- * be checked using the printBuddy Lists
- */
