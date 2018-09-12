@@ -8,6 +8,7 @@
 #include <idtLoader.h>
 #include <interrupts.h>
 #include <memoryAllocator.h>
+#include <RoundRobin.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -49,7 +50,7 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
-//	initializeMemoryAllocation(getStackBase());
+	initializeMemoryAllocation(getStackBase());
 	initializeScreen();
 
 	return getStackBase();
@@ -57,6 +58,7 @@ void * initializeKernelBinary()
 
 int main(){
 	ncResetPosition();
+
 	((EntryPoint)sampleCodeModuleAddress)();
 	haltCPU();
 	return 0;

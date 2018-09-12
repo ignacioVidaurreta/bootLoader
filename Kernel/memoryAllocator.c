@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #define PAGE_SIZE 4096
-#define MEMORY_SIZE 0xDEADBEEF	//placeholder number
+#define MEMORY_SIZE 100*4096	//placeholder number
 #define NUMBER_OF_PAGES 32768	//placeholder number
 
 uint64_t roundToPageSizeMultiple(uint64_t memory);
@@ -13,7 +13,7 @@ void freeMemory(uint64_t startingAdress, uint64_t finalAdress);
 
 uint64_t baseAddress;
 uint64_t firstAvailableMemoryAdress;
-uint8_t freeAddresses[NUMBER_OF_PAGES];	
+uint8_t freeAddresses[NUMBER_OF_PAGES];
 
 void initializeMemoryAllocation(uint64_t baseAd){
 	baseAddress = roundToPageSizeMultiple((uint64_t)baseAd);
