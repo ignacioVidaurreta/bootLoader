@@ -49,7 +49,7 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
-	initializeMemoryAllocation(getStackBase());
+//	initializeMemoryAllocation(getStackBase());
 	initializeScreen();
 
 	return getStackBase();
