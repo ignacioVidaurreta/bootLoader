@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <keyboard.h>
 
-static void int20();
+static uint64_t int20();
 static void int21();
 
 uint64_t irqDispatcher(uint64_t irq, uint64_t rsp) {
@@ -17,7 +17,7 @@ uint64_t irqDispatcher(uint64_t irq, uint64_t rsp) {
 	return rsp;
 }
 
-void int20(uint64_t rsp) {
+uint64_t int20(uint64_t rsp) {
 	timerHandler();
 	return contextSwitch(rsp);
 }
