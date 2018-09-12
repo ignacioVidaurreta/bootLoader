@@ -1,7 +1,3 @@
-//
-// Created by elodin on 04/09/18.
-//
-
 #ifndef ROUNDROBIN_ROUNDROBIN_H
 #define ROUNDROBIN_ROUNDROBIN_H
 

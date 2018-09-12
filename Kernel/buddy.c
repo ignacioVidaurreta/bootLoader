@@ -1,14 +1,8 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <math.h>
-#include "buddy.h"
+#include <buddy.h>
 
-#define MAX_MEM_SIZE 1<<24 /* Defining a Max Memory size of 16 MB*/
-#define MAX_MEM_POWER 24
-#define STRUCT_BUDDY_SIZE 16
+#define MAX_MEM_SIZE 128*4096 /* Defining a Max Memory size of 16 MB*/
+#define MAX_MEM_POWER 19
 
 static BUDDYLIST AVAIL[32];
 void *pool = NULL;
@@ -31,8 +25,10 @@ void initBuddySystem(mysize_t initSize){
             pool = allocateMemory(initSize);
 
         if (pool < 0) {
+            /*
             perror("Could not allocate memory pool!");
             exit(1);
+            */
         }
 
         //printf(" Allocated Memory of size %d\n", initSize);
@@ -81,7 +77,7 @@ void *mymalloc(mysize_t a){
     BUDDYLIST *L=NULL,*P=NULL;
 
     // Size that needs to be malloce'd would also contain HEADER info
-    int size = a + STRUCT_BUDDY_SIZE;
+    int size = a + sizeof(BUDDYLIST);
 
     // Finding the next power of size to reserve a block of 2^k
     k = nextPower(size);
@@ -113,7 +109,7 @@ void *mymalloc(mysize_t a){
              */
             while(j != k){
                 j--;
-                P = L + (1<<j)/STRUCT_BUDDY_SIZE; // 1<<j == 2**j
+                P = L + (1<<j)/sizeof(BUDDYLIST); // 1<<j == 2**j
                 P->available = 1;
                 P->order = j;
                 P->next = P->prev = &AVAIL[j];

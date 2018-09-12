@@ -1,8 +1,8 @@
 #include <stdint.h>
 
 #define PAGE_SIZE 4096
-#define MEMORY_SIZE 100*4096	//placeholder number
-#define NUMBER_OF_PAGES 32768	//placeholder number
+#define MEMORY_SIZE 128*4096	//placeholder number
+#define NUMBER_OF_PAGES 128 //32768	//placeholder number
 
 uint64_t roundToPageSizeMultiple(uint64_t memory);
 int isFree(uint64_t page);

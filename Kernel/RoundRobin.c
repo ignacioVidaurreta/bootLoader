@@ -71,6 +71,7 @@
 
      myfree(node);
      myfree(queue_header);
+
 }
 
 void testAddMultipleElementsToHeader(){
