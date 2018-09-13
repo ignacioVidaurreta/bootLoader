@@ -1,7 +1,7 @@
 #ifndef ROUNDROBIN_ROUNDROBIN_H
 #define ROUNDROBIN_ROUNDROBIN_H
 
-#define QUANTUM 10
+#define QUANTUM 5
 
 typedef struct node {
     struct node* next;
@@ -21,10 +21,10 @@ void add_to_queue(tHeader *queue_header, tNode *node);
 void free_queue_nodes(tNode* queue);
 
 int testAddElementToHeader();
-void testAddMultipleElementsToHeader();
-void testAddALotOfElementsToQueue();
-void testRoundRobin();
-void testNotFinishedProcessGoesToTail();
+int testAddMultipleElementsToHeader();
+int testAddALotOfElementsToQueue();
+int testRoundRobin();
+int testNotFinishedProcessGoesToTail();
 
 
 

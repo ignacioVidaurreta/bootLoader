@@ -72,12 +72,11 @@
 
 }
 
-void testAddMultipleElementsToHeader(){
+int testAddMultipleElementsToHeader(){
     tHeader* queue_header;
     tNode * node1;
     tNode * node2;
 
-    ncPrint("PRE");
     queue_header = mymalloc(sizeof(tHeader));
 
     queue_header->first = NULL;
@@ -105,7 +104,7 @@ void testAddMultipleElementsToHeader(){
 
 }
 
-void testAddALotOfElementsToQueue(){
+int testAddALotOfElementsToQueue(){
     //Create queue
     tHeader* queue;
     queue = mymalloc(sizeof(tHeader));
@@ -148,8 +147,9 @@ void testAddALotOfElementsToQueue(){
 
 
 
-void testRoundRobin(){
+int testRoundRobin(){
     //Create Queue
+    int num=3;
     tHeader *process_queue = mymalloc(sizeof(tHeader));
     process_queue->first = NULL;
     process_queue->last = NULL;
@@ -170,7 +170,7 @@ void testRoundRobin(){
 
 }
 
-void testNotFinishedProcessGoesToTail(){
+int testNotFinishedProcessGoesToTail(){
 
     tHeader *process_queue = mymalloc(sizeof(tHeader));
     process_queue->first = NULL;
