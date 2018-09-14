@@ -100,14 +100,12 @@ section .text
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
-	mov rsi, rsp ; passing the stack pointer for context switch
 	call irqDispatcher
 
 	; signal pic EOI (End of Interrupt)
 	mov al, 20h
 	out 20h, al
 
-	mov rsp, rax ; return to new stack pointer
 	popState
 	iretq
 %endmacro
