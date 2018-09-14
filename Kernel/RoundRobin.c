@@ -149,14 +149,14 @@ int testAddALotOfElementsToQueue(){
 
 int testRoundRobin(){
     //Create Queue
-    int num=3;
+    int num=5;
     tHeader *process_queue = mymalloc(sizeof(tHeader));
     process_queue->first = NULL;
     process_queue->last = NULL;
 
-    round_robin(process_queue, 5);
+    round_robin(process_queue, num);
 
-    if( 5 == process_queue->first->num){
+    if( num == process_queue->first->num){
       ncPrint("Test04: PASSED");
         return 1;
     }else{

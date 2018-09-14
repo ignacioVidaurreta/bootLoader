@@ -7,7 +7,6 @@
 #include <time.h>
 #include <idtLoader.h>
 #include <interrupts.h>
-#include <memoryAllocator.h>
 #include <RoundRobin.h>
 
 extern uint8_t text;
@@ -50,7 +49,6 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
 	loadIDT();
-	initializeMemoryAllocation(getStackBase());
 	initializeScreen();
 
 	return getStackBase();
@@ -59,7 +57,7 @@ void * initializeKernelBinary()
 int main(){
 	ncResetPosition();
 
-	int testing = 1;
+	int testing = 0;
 
 	if(testing){
 		testAddElementToHeader();

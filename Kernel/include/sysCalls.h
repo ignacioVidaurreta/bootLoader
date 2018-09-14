@@ -17,7 +17,6 @@
 #define SYS_DRAW_PXL 10		//draws a pixel at the specified location and with the specified colour. Information expanded in the arguements section.
 #define SYS_SCRL 11			//scrawls the screen up by one line.
 #define DRAW_NUM 12     	//Prints in ascii art a number (used to print the clock).
-#define SYS_ALLOC 13		//Returns a pointer with enough free memory to store the desired memory which is given as arg1.
 
 
 
@@ -95,7 +94,7 @@
 //                                           arg2: y position, distance in pixels from the top edge of the screen of the pixel to draw.
 //                         arg3: number that represents the color we will print the number
 //                         arg4: The number (si no recibe un número imprime el separador : )
-// In arg3: 0-> white, 1-> red, 2-> green, 3-> blue 
+// In arg3: 0-> white, 1-> red, 2-> green, 3-> blue
 
 
 

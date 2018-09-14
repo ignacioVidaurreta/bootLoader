@@ -13,25 +13,13 @@ static int flag=0; // To check if buddy system is initialized or not.
  *initBuddy System initializes the buddy system.
  *
  */
-void initBuddySystem(mysize_t initSize){
+void initBuddySystem(){
 
     int i;
     BUDDYLIST *myList;
     if(flag == 0)
     {
-        if(initSize < MAX_MEM_SIZE)
-            pool = allocateMemory(MAX_MEM_SIZE);
-        else
-            pool = allocateMemory(initSize);
-
-        if (pool < 0) {
-            /*
-            perror("Could not allocate memory pool!");
-            exit(1);
-            */
-        }
-
-        //printf(" Allocated Memory of size %d\n", initSize);
+        pool = 0x1000000;
 
         for(i=0; i< MAX_MEM_POWER; i++)
         {

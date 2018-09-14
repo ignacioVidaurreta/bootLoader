@@ -31,7 +31,7 @@ typedef struct buddyList BUDDYLIST;
     };
 
 
-    void initBuddySystem(mysize_t);
+    void initBuddySystem();
     void *mycalloc(mysize_t,mysize_t);
     void *mymalloc(mysize_t);
     void myfree(void *);
