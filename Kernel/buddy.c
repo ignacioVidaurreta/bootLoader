@@ -23,7 +23,7 @@ void * mymalloc( int size )
         return NULL;
     } else if (i == sizes && freelists[i] == NULL) {
         return (void*)0x1000000; //Caso inicial
-    }else if (freelists[i] != NULL) {
+    } else if (freelists[i] != NULL) {
 
             /* we already have the right size block on hand */
             void * block;
@@ -31,7 +31,7 @@ void * mymalloc( int size )
             freelists[i] = *(void * *)freelists[i];
             return block;
 
-        }else {
+    } else {
 
         /* we need to split a bigger block */
         void * block,*buddy;
@@ -45,7 +45,7 @@ void * mymalloc( int size )
         }
 
         return block;
-    }
+  }
 }
 
 void myfree( void * block, int size )
