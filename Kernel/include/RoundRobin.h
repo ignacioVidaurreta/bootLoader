@@ -20,11 +20,11 @@ void round_robin();
 void add_to_queue(tHeader *queue_header, tNode *node);
 void free_queue_nodes(tNode* queue);
 
-int testAddElementToHeader();
-int testAddMultipleElementsToHeader();
-int testAddALotOfElementsToQueue();
-int testRoundRobin();
-int testNotFinishedProcessGoesToTail();
+void testAddElementToHeader();
+void testAddMultipleElementsToHeader();
+void testAddALotOfElementsToQueue();
+void testRoundRobin();
+void testNotFinishedProcessGoesToTail();
 
 
 
