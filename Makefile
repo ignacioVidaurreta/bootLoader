@@ -8,6 +8,7 @@ QEMU_NO_GRAPH = -nographic
 .PHONY: bootloader image collections kernel userland all clean go kill gdb 
 
 all:  bootloader kernel userland image
+	chmod a+rwx Image/*
 
 # Run and wait for gdb in terminal mode
 run: 
@@ -23,7 +24,7 @@ kill:
 
 # gdb launching
 gdb:
-	$(MAKE) -C Kernel/ gdb
+	gdb
 
 bootloader:
 	$(MAKE) -C Bootloader/ all

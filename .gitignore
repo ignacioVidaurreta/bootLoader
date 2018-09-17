@@ -7,5 +7,5 @@
 *.qcow2
 *.vmdk
 *.sys
-
+*.elf
 *.pdf

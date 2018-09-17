@@ -54,10 +54,21 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
+void idle1() {
+    ncPrint("Hola soy el uno");
+    haltCPU();
+}
+
+void idle2() {
+    ncPrint("Hola soy el dos");
+    haltCPU();
+}
+
+
 int main(){
 	ncResetPosition();
 
-	int testing = 0;
+	int testing = 1;
 
 	if(testing){
 		testAddElementToHeader();
@@ -66,8 +77,11 @@ int main(){
 		testRoundRobin();
 		testNotFinishedProcessGoesToTail();
 	}else{
-		((EntryPoint)sampleCodeModuleAddress)();
+  	    ((EntryPoint)sampleCodeModuleAddress)();
 	}
+
+    //start_proc(idle1);
+    //start_proc(idle2);
 
 	haltCPU();
 	return 0;
