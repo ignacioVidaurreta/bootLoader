@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <buddy.h>
 
-#define sizes 5
+#define sizes 20
 /* pointers to the free space lists */
 void * freelists[sizes];
 

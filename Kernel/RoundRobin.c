@@ -84,12 +84,6 @@ void testAddMultipleElementsToHeader(){
     node2->num = 5;
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
-    if(node1->num == queue_header->first->num){
-        ncPrint("IGUAL 1");
-    }
-    if (node2->num == queue_header->last->num){
-        ncPrint("IGUAL 2");
-    }
     if(node1->num == queue_header->first->num && node2->num == queue_header->last->num){
         ncPrint("Test02: PASSED! ");
     }else{
