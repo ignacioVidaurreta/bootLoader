@@ -17,7 +17,7 @@ struct process {
     uint8_t occupied;
 };
 
-struct process process_table[NUM_PROCESS];
+extern struct process process_table[NUM_PROCESS];
 
 void start_proc();
 int get_new_index();

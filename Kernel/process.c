@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "process.h"
+#include "include/RoundRobin.h"
 
 proc current_proc;
 int max_pid;
+struct process process_table[NUM_PROCESS];
+tHeader * ready_queue;
 
 void start_proc(void (*function)(int argc, char *argv[])) {
     int index_proc = get_new_index();
@@ -38,7 +41,7 @@ proc get_current_proc() {
 
 uint64_t contextSwitch(uint64_t rsp) {
     current_proc->rsp = rsp;
-    
+
     scheduler_test();
 
     return current_proc->rsp;

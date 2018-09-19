@@ -2,6 +2,7 @@
 #include "RoundRobin.h"
 #include "buddy.h"
 #include "include/naiveConsole.h"
+#include "process.h"
 
 void round_robin(tHeader* process_queue, int max_rounds) {
 
@@ -10,17 +11,31 @@ void round_robin(tHeader* process_queue, int max_rounds) {
 
    for (int round = 0; round < max_rounds; ticks++) {
 
+       /*
        //El agregado de nodos es para simular la llegada de procesos.
        tNode *node = mymalloc(sizeof(tNode));
        node->num = i++;
+       add_to_queue(process_queue, node);
+       */
+       proc p1 = mymalloc(sizeof(struct process));
+       p1->pid = i++;
+       tNode* node = mymalloc(sizeof(tNode));
+       node->p = p1;
+
        add_to_queue(process_queue, node);
 
        if (ticks == QUANTUM) {
            ticks = 0;
            round++;
            if (process_queue->first != NULL) {
+               /*
                process_queue->first->quantum_duration--;
                if (process_queue->first->quantum_duration >0){
+                   process_queue->last = process_queue->first;
+               }
+               */
+               if(process_queue->first->p->state == READY){
+                   //habría que esperar con un semáforo?
                    process_queue->last = process_queue->first;
                }
                process_queue->first = process_queue->first->next;
@@ -49,14 +64,17 @@ void round_robin(tHeader* process_queue, int max_rounds) {
      tHeader* queue_header;
      tNode * node;
      node = mymalloc(sizeof(tNode));
+     proc p1 = mymalloc(sizeof(struct process));
+     p1->state = READY;
+     node->p = p1;
 
      queue_header = mymalloc(sizeof(tHeader));
      queue_header->first = NULL;
      queue_header->last = NULL;
 
-     node->num=3;
+     node->p->pid = 5;
      add_to_queue(queue_header, node);
-     if (node->num == queue_header->first->num){
+     if (node->p->pid == queue_header->first->p->pid){
          ncPrint("Test01: PASSED! ");
      }else{
          ncPrint("Test01: FAILED! ");
@@ -64,7 +82,9 @@ void round_robin(tHeader* process_queue, int max_rounds) {
 
      myfree(node, sizeof(*node));
      myfree(queue_header, sizeof(*queue_header));
+     myfree(p1, sizeof(struct process));
 }
+
 
 void testAddMultipleElementsToHeader(){
     tHeader* queue_header;
@@ -79,12 +99,20 @@ void testAddMultipleElementsToHeader(){
     node1 = mymalloc(sizeof(tNode));
     node2 = mymalloc(sizeof(tNode));
 
+    proc p1 = mymalloc(sizeof(struct process));
+    p1->state = READY;
+    node1->p = p1;
 
-    node1->num = 3;
-    node2->num = 5;
+    proc p2 = mymalloc(sizeof(struct process));
+    p2->state = READY;
+    node2->p = p2;
+
+
+    node1->p->pid = 3;
+    node2->p->pid= 5;
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
-    if(node1->num == queue_header->first->num && node2->num == queue_header->last->num){
+    if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->last->p->pid){
         ncPrint("Test02: PASSED! ");
     }else{
         ncPrint("Test02: FAILED! ");
@@ -93,7 +121,10 @@ void testAddMultipleElementsToHeader(){
     myfree(node2, sizeof(*node2));
     myfree(queue_header, sizeof(*queue_header));
 
+    myfree(p1, sizeof(struct process));
+    myfree(p2, sizeof(struct process));
  }
+
 
  void testAddALotOfElementsToQueue(){
 
@@ -105,9 +136,12 @@ void testAddMultipleElementsToHeader(){
 
      //Create nodes
      tNode* nodes[100];
+     proc ps[100];
      for (int i =0; i<100; i++){
          nodes[i] = mymalloc(sizeof(tNode));
-         nodes[i]->num = i;
+         ps[i] = mymalloc(sizeof(struct process));
+         ps[i]->pid = i;
+         nodes[i]->p = ps[i];
          add_to_queue(queue, nodes[i]);
      }
 
@@ -116,7 +150,7 @@ void testAddMultipleElementsToHeader(){
      aux = queue->first;
      int j =0;
      while(aux != NULL){
-         if(j++ != aux->num)
+         if(aux->p->pid!= j++)
              equals = 0;
          aux = aux->next;
      }
@@ -133,8 +167,13 @@ void testAddMultipleElementsToHeader(){
          myfree(nodes[i], sizeof(*nodes[i]));
      }
 
+     for( int i=0; i<100; i++){
+         myfree(ps[i], sizeof(*ps[i]));
+     }
+
      myfree(queue, sizeof(*queue));
  }
+
 
 
  void testRoundRobin(){
@@ -145,7 +184,7 @@ void testAddMultipleElementsToHeader(){
      process_queue->last = NULL;
 
      round_robin(process_queue, num);
-     if( num == process_queue->first->num){
+     if( num == process_queue->first->p->pid){
          ncPrint("Test04: PASSED! ");
      }else{
          ncPrint("Test04: FAILED! ");
@@ -153,7 +192,9 @@ void testAddMultipleElementsToHeader(){
 
      free_queue_nodes(process_queue->first);
      myfree(process_queue,sizeof(*process_queue));
+
 }
+
 
 void testNotFinishedProcessGoesToTail(){
 
@@ -161,27 +202,30 @@ void testNotFinishedProcessGoesToTail(){
     process_queue->first = NULL;
     process_queue->last = NULL;
 
+    proc p1 = mymalloc(sizeof(struct process));
+    p1->pid = -1;
+    p1->state = READY;
+
     tNode* node = mymalloc(sizeof(tNode));
-    node->num = -1;
-    node->quantum_duration = 2;
+    node->p  = p1;
 
     add_to_queue(process_queue, node);
 
     round_robin(process_queue, 1);
 
-    if(node->num == process_queue->last->num){
+    if(node->p->pid == process_queue->last->p->pid){
       ncPrint("Test05: PASSED");
-        return 1;
     }else{
-        ncPrint("Test05: FAILED!");
-        return 0;
+      ncPrint("Test05: FAILED!");
     }
 
     free_queue_nodes(process_queue->first);
     myfree(process_queue, sizeof(*process_queue));
     myfree(node, sizeof(*node));
+    myfree(p1, sizeof(struct process));
 
 }
+
 
 void free_queue_nodes(tNode* node) {
     if (node == NULL){
