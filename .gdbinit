@@ -1,3 +1,4 @@
+set arch i386:x86-64:intel
 target remote :1234
 add-symbol-file Kernel/kernel.elf 0x100000
 dir Kernel/
