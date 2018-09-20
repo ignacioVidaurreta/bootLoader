@@ -1,5 +1,6 @@
 GCC=gcc
 LD=ld
+OBJCOPY=objcopy
 AR=ar
 ASM=nasm
 

@@ -13,13 +13,13 @@ OBJECTS=$(SOURCES:.c=.o)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 
-all: $(MODULE).bin $(MODULE).elf
+all: $(MODULE).bin 
 
-$(MODULE).bin: $(OBJECTS_ASM) $(OBJECTS)
-	$(LD) -T sampleCodeModule.ld _loader.o $(OBJECTS) $(OBJECTS_ASM) -o ../$@
+$(MODULE).bin: $(MODULE).elf
+	$(OBJCOPY) -O binary ../$< ../$@
 
 $(MODULE).elf: $(OBJECTS_ASM) $(OBJECTS)
-	$(LD) -T sampleCodeModule-elf.ld _loader.o $(OBJECTS) $(OBJECTS_ASM) -o ../$@
+	$(LD) -T sampleCodeModule.ld _loader.o $(OBJECTS) $(OBJECTS_ASM) -o ../$@
 
 clean:
 	rm -rf *.o
