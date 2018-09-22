@@ -17,6 +17,8 @@
 #define SYS_DRAW_PXL 10		//draws a pixel at the specified location and with the specified colour. Information expanded in the arguements section.
 #define SYS_SCRL 11			//scrawls the screen up by one line.
 #define DRAW_NUM 12     	//Prints in ascii art a number (used to print the clock).
+#define SYS_NEW_PROC 13     //Creates a new process
+#define SYS_PRINT_PROC 14   //Prints every running process
 
 
 

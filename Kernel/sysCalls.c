@@ -49,8 +49,7 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			drawPixelWithColour(arg1, arg2, c);
 			return 1;
 		case SYS_SCRL:
-			ncMoveUpOneLine();
-			ncResetPosition();
+			ncScroll();
 			return 1;
 		case DRAW_NUM:
       		//arg3: Color num, arg4: número a imprimir
@@ -58,6 +57,15 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			p.y = arg2;
 			ncPrintNumberParser(arg4, arg3, &p);
 			return 1;
+		case SYS_NEW_PROC:
+			ncPrint("Created");
+			start_proc(arg1, arg2); //Name and pointer to the function
+			ncScroll();
+			return 1;
+		case SYS_PRINT_PROC:
+			print_proc();
+			return 1;
+
 	}
 	return -1;
 }

@@ -15,6 +15,7 @@ struct process {
     uint64_t rsp;
     uint64_t stack[STACK_SIZE];
     uint8_t occupied;
+    char* name;
 };
 
 extern struct process process_table[NUM_PROCESS];

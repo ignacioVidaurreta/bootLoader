@@ -70,6 +70,7 @@ void ncMoveUpOneLine();
 void ncDeleteChar();
 void ncClear();
 void ncResetPosition();
+void ncScroll();
 
 void initializeScreen(void);
 
