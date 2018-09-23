@@ -21,6 +21,7 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN int80
 EXTERN main
+EXTERN contextSwitch
 section .text
 
 %macro pushState 0
@@ -125,7 +126,18 @@ section .text
 
 ; 8254 Timer (Timer Tick)
 irq00Handler:
-	irqHandlerMaster 0
+	;irqHandlerMaster 0
+    pushState
+
+    mov rdi, rsp
+    call contextSwitch
+    mov rsp, rax
+
+    popState
+
+    mov al, 20h
+    out 20h, al 
+    iretq
 
 ; Keyboard
 irq01Handler:

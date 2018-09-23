@@ -4,23 +4,51 @@
 #include "process.h"
 #include "include/RoundRobin.h"
 #include <naiveConsole.h>
+#include "time.h"
 
 proc current_proc;
 int max_pid;
 struct process process_table[NUM_PROCESS];
 tHeader * ready_queue;
 
-void start_proc(char* proc_name, void (*function)(int argc, char *argv[])) {
+void init_process() {
+    process_table[0].pid = 0;
+    process_table[0].state = READY;
+    process_table[0].parent = NULL;
+    process_table[0].rsp = 0;
+    process_table[0].occupied = 1;
+    current_proc = &process_table[0];
+}
+
+void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     int index_proc = get_new_index();
 
     proc process = &process_table[index_proc];
-    process->occupied = 1;
-    process->stack[2] = function;
-    process->rsp = process->stack[17];
+    //SS Stack Segment
+    process->stack[STACK_SIZE - 1] = 0x0;
+    //RSP
+    process->stack[STACK_SIZE - 2] = &process->stack[STACK_SIZE - 1];
+    //RFLAGS
+    //bit 1 : always 1 (EFLAGS)
+    //bit 2 : Parity bit
+    //bit 9 : Interrupt enable
+    process->stack[STACK_SIZE - 3] = 0x206;
+    //CS (code segment)
+    //I'm not sure of this one but 8 is the value before interrupt was called
+    //CS hasn't a weird signification in 64 bit mode let's say it'll work for now
+    process->stack[STACK_SIZE - 4] = 0x8;
+    //RIP
+    process->stack[STACK_SIZE - 5] = function;
+    //RBP
+    process->stack[STACK_SIZE - 16] = &process->stack[STACK_SIZE - 1];
+    //16 registers previously push
+    //5 registers that will be poped by IRETQ
+    process->rsp = &process->stack[STACK_SIZE - 20];
     process->pid = get_new_pid();
     process->state = READY;
     process->parent = get_current_proc();
     process->name= proc_name;
+    process->occupied = 1;
 }
 
 int get_new_index() {
@@ -41,22 +69,17 @@ proc get_current_proc() {
     return current_proc;
 }
 
-uint64_t contextSwitch(uint64_t rsp) {
-    current_proc->rsp = rsp;
-
-    scheduler_test();
-
-    return current_proc->rsp;
-}
-
 int test = 0;
-void scheduler_test() {
-    if (test) {
+uint64_t contextSwitch(uint64_t rsp) {
+    timerHandler();
+    current_proc->rsp = rsp;
+    if (test && process_table[1].occupied) {
         current_proc = &process_table[1];
-    } else {
-        current_proc = &process_table[0];
+    } else if (!test && process_table[2].occupied) {
+        current_proc = &process_table[2];
     }
     test = !test;
+    return current_proc->rsp;
 }
 
 void print_proc(){

@@ -8,6 +8,7 @@
 #include <idtLoader.h>
 #include <interrupts.h>
 #include <RoundRobin.h>
+#include "process.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -48,41 +49,43 @@ void * initializeKernelBinary()
 
 	clearBSS(&bss, &endOfKernel - &bss);
 
+    init_process();
+	//initializeScreen();
 	loadIDT();
-	initializeScreen();
 
 	return getStackBase();
 }
 
 void idle1() {
-    ncPrint("Hola soy el uno");
-    haltCPU();
+    ncPrint("Hola soy el uno\n");
+    halt();
 }
 
 void idle2() {
-    ncPrint("Hola soy el dos");
-    haltCPU();
+    ncPrint("Hola soy el dos\n");
+    halt();
 }
 
 
 int main(){
+
 	ncResetPosition();
 
-	int testing = 1;
+//	int testing = 1;
+//
+//	if(testing){
+//		testAddElementToHeader();
+//		testAddMultipleElementsToHeader();
+//		testAddALotOfElementsToQueue();
+//		testRoundRobin();
+//		testNotFinishedProcessGoesToTail();
+//	}else{
+//  	    ((EntryPoint)sampleCodeModuleAddress)();
+//	}
+//
+    start_proc("idle1", idle1);
+    start_proc("idle2", idle2);
 
-	if(testing){
-		testAddElementToHeader();
-		testAddMultipleElementsToHeader();
-		testAddALotOfElementsToQueue();
-		testRoundRobin();
-		testNotFinishedProcessGoesToTail();
-	}else{
-  	    ((EntryPoint)sampleCodeModuleAddress)();
-	}
-
-    //start_proc(idle1);
-    //start_proc(idle2);
-
-	haltCPU();
+	halt();
 	return 0;
 }
