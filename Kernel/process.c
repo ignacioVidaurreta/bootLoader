@@ -5,11 +5,14 @@
 #include "include/RoundRobin.h"
 #include <naiveConsole.h>
 #include "time.h"
+#include <sysCalls.h>
 
 proc current_proc;
 int max_pid;
 struct process process_table[NUM_PROCESS];
 tHeader * ready_queue;
+
+int time(uint64_t timeType);
 
 void init_process() {
     process_table[0].pid = 0;
