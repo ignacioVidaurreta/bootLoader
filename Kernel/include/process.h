@@ -12,7 +12,7 @@ struct process {
     uint64_t priority;
     enum p_state state;
     proc parent;
-    void *rsp;
+    uint64_t rsp;
     uint64_t stack[STACK_SIZE];
     uint8_t occupied;
     char *name;
@@ -21,9 +21,11 @@ struct process {
 extern struct process process_table[NUM_PROCESS];
 
 void start_proc(char *proc_name, void (*function)(int argc, char *argv[]));
+void init_process();
 int get_new_index();
 int get_new_pid();
 proc get_current_proc();
 void scheduler_test();
 uint64_t contextSwitch(uint64_t rsp);
+void print_proc();
 #endif

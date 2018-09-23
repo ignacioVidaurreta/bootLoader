@@ -30,7 +30,7 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     //SS Stack Segment
     process->stack[STACK_SIZE - 1] = 0x0;
     //RSP
-    process->stack[STACK_SIZE - 2] = &process->stack[STACK_SIZE - 1];
+    process->stack[STACK_SIZE - 2] = (uint64_t) &process->stack[STACK_SIZE - 1];
     //RFLAGS
     //bit 1 : always 1 (EFLAGS)
     //bit 2 : Parity bit
@@ -41,12 +41,12 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     //CS hasn't a weird signification in 64 bit mode let's say it'll work for now
     process->stack[STACK_SIZE - 4] = 0x8;
     //RIP
-    process->stack[STACK_SIZE - 5] = function;
+    process->stack[STACK_SIZE - 5] = (uint64_t) function;
     //RBP
-    process->stack[STACK_SIZE - 16] = &process->stack[STACK_SIZE - 1];
+    process->stack[STACK_SIZE - 16] = (uint64_t) &process->stack[STACK_SIZE - 1];
     //16 registers previously push
     //5 registers that will be poped by IRETQ
-    process->rsp = &process->stack[STACK_SIZE - 20];
+    process->rsp = (uint64_t) &process->stack[STACK_SIZE - 20];
     process->pid = get_new_pid();
     process->state = READY;
     process->parent = get_current_proc();

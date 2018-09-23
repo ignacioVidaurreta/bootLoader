@@ -4,7 +4,7 @@
 #include <time.h>
 #include <peripherals.h>
 #include <bitMap.h>
-
+#include "process.h"
 
 void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
@@ -59,7 +59,7 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return 1;
 		case SYS_NEW_PROC:
 			ncPrint("Created");
-			start_proc(arg1, arg2); //Name and pointer to the function
+			start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
 			ncScroll();
 			return 1;
 		case SYS_PRINT_PROC:

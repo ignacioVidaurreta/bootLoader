@@ -125,6 +125,6 @@ void clear(){
   int80(0,0,0,0,0,3);
 }
 void print_process(char* proc_name){
-    int80(proc_name,&print_process,0,0,0,13); //Creates the process
-    int80(0,0,0,0,0,14); //Prints processes
+    int80((uint64_t) proc_name, (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
+    int80(0, 0, 0, 0, 0, 14); //Prints processes
 }

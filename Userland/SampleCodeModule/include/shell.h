@@ -11,6 +11,7 @@
   void clear();
   void invOpcodeException();
   void zeroDivException();
+  void print_process(char *proc_name);
 
 
 #endif
