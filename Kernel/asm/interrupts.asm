@@ -126,7 +126,6 @@ section .text
 
 ; 8254 Timer (Timer Tick)
 irq00Handler:
-	;irqHandlerMaster 0
     pushState
 
     mov rdi, rsp

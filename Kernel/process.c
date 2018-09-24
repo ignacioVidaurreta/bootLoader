@@ -5,6 +5,7 @@
 #include "include/RoundRobin.h"
 #include <naiveConsole.h>
 #include "time.h"
+#include "buddy.h"
 #include <sysCalls.h>
 
 proc current_proc;
@@ -15,12 +16,14 @@ tHeader * ready_queue;
 int time(uint64_t timeType);
 
 void init_process() {
+    ready_queue = mymalloc(sizeof(tHeader));
+    process_table[0].name = "init";
     process_table[0].pid = 0;
-    process_table[0].state = READY;
+    process_table[0].state = RUN;
     process_table[0].parent = NULL;
     process_table[0].rsp = 0;
-    process_table[0].occupied = 1;
     current_proc = &process_table[0];
+    process_table[0].occupied = 1;
 }
 
 void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
@@ -51,6 +54,11 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     process->state = READY;
     process->parent = get_current_proc();
     process->name= proc_name;
+
+    tNode *node = mymalloc(sizeof(tNode));
+    node-> p = process;
+    add_to_queue(ready_queue, node);
+
     process->occupied = 1;
 }
 

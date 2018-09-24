@@ -48,9 +48,8 @@ void * initializeKernelBinary()
 	loadModules(&endOfKernelBinary, moduleAddresses);
 
 	clearBSS(&bss, &endOfKernel - &bss);
-
+    
     init_process();
-	//initializeScreen();
 	loadIDT();
 
 	return getStackBase();
@@ -68,7 +67,7 @@ void idle2() {
 
 
 int main(){
-
+	//initializeScreen();
 	ncResetPosition();
 
 //	int testing = 1;
