@@ -9,6 +9,7 @@
 #include <interrupts.h>
 #include <RoundRobin.h>
 #include "process.h"
+#include "mutex.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -48,7 +49,7 @@ void * initializeKernelBinary()
 	loadModules(&endOfKernelBinary, moduleAddresses);
 
 	clearBSS(&bss, &endOfKernel - &bss);
-    
+
     init_process();
 	loadIDT();
 
@@ -70,18 +71,22 @@ int main(){
 	//initializeScreen();
 	ncResetPosition();
 
-//	int testing = 1;
-//
-//	if(testing){
-//		testAddElementToHeader();
-//		testAddMultipleElementsToHeader();
-//		testAddALotOfElementsToQueue();
-//		testRoundRobin();
-//		testNotFinishedProcessGoesToTail();
-//	}else{
-//  	    ((EntryPoint)sampleCodeModuleAddress)();
-//	}
-//
+	int testing = 1;
+
+	if(testing){
+		// testAddElementToHeader();
+		// ncScroll();
+		// testAddMultipleElementsToHeader();
+		// ncScroll();
+		// testAddALotOfElementsToQueue();
+		// ncScroll();
+		// testRoundRobin();
+		// ncScroll();
+		// testNotFinishedProcessGoesToTail();
+	}else{
+ 	    ((EntryPoint)sampleCodeModuleAddress)();
+	}
+
     start_proc("idle1", idle1);
     start_proc("idle2", idle2);
 

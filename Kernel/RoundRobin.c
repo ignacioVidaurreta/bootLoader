@@ -79,7 +79,7 @@ void round_robin(tHeader* process_queue, int max_rounds) {
      }else{
          ncPrint("Test01: FAILED! ");
      }
-
+     //no hacer doble free, ver que
      myfree(node, sizeof(*node));
      myfree(queue_header, sizeof(*queue_header));
      myfree(p1, sizeof(struct process));
@@ -214,7 +214,7 @@ void testNotFinishedProcessGoesToTail(){
     round_robin(process_queue, 1);
 
     if(node->p->pid == process_queue->last->p->pid){
-      ncPrint("Test05: PASSED");
+      ncPrint("Test05: PASSED!");
     }else{
       ncPrint("Test05: FAILED!");
     }
