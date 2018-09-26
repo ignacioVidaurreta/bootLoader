@@ -71,6 +71,7 @@ void ncDeleteChar();
 void ncClear();
 void ncResetPosition();
 void ncScroll();
+void ncPrintTest(const char* string);
 
 void initializeScreen(void);
 

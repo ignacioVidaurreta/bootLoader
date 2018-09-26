@@ -10,6 +10,8 @@
 #include "process.h"
 #include "mutex.h"
 #include "include/messageQueue.h"
+#include "tests.h"
+#include "buddy.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -56,66 +58,25 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-void idle1() {
+uint64_t idle1() {
     ncPrint("Hola soy el uno\n");
-    halt();
+    return 0;
 }
+
 
 void idle2() {
     ncPrint("Hola soy el dos\n");
-    halt();
 }
 
 
-//Test suites START
-void roundRobinTestSuite(){
-	testAddElementToHeader();
-	ncScroll();
-	testAddMultipleElementsToHeader();
-	ncScroll();
-	testAddALotOfElementsToQueue();
-	ncScroll();
-	testRoundRobin();
-	ncScroll();
-	testNotFinishedProcessGoesToTail();
 
-}
-void mutexTestSuite(){
-	initMutexTest();
-	ncScroll();
-	createMutexCreatesAMutexTest();
-	ncScroll();
-	lockofLockedMutexClaimsMutexTest();
-	ncScroll();
-	lockOfLockedMutexAddsToWaitingListTest();
-	ncScroll();
-	unlockOfLockedMutexChangesOwnerTest();
-	ncScroll();
-	unlockWithoutWaitingChangesStatusToUnlockTest();
-	ncScroll();
-	terminateMutexEliminatesTheMutexTest();
-	ncScroll();
-}
 
-void messageQueueTestSuite(){
-	initMessageQueueCreatesMutexTest();
-}
 int main(){
-	//initializeScreen();
+
+	initializeScreen();
 	ncResetPosition();
 
-	int testing = 0;
-
-	if(testing){
-
-	//	roundRobinTestSuite();
-		mutexTestSuite();
-		messageQueueTestSuite();
-
-	}else{
- 	    start_proc("shell", sampleCodeModuleAddress);
-	}
-
+	start_proc("shell", sampleCodeModuleAddress);
 
 	halt();
 	return 0;

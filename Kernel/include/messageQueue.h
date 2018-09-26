@@ -58,6 +58,11 @@ tmailbox * newMailbox(const char *mailboxId);
 
 //TESTS
 void initMessageQueueCreatesMutexTest();
-
+void createMailBoxCreatesMailBoxTest();
+void getMailboxFindsExistingMailboxTest();
+void sendSendsMessageTest();
+void receiveReceivesMessageTest();
+void closeMailboxClosesMailboxTest();
+void containsMailboxTest();
 
 #endif

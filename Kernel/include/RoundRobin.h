@@ -37,6 +37,9 @@ void testRoundRobin();
 void testNotFinishedProcessGoesToTail();
 
 
+void proc_cascade();
+
+
 
 
 

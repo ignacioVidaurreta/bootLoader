@@ -8,7 +8,6 @@
 #include "lib.h"
 
 static tmailbox_list * mailboxes;
-extern tmutex_list* mutexes; //for testing purposes
 
 void initMessageQueue(){
   mailboxes = mymalloc(sizeof(tmailbox_list));
@@ -28,12 +27,10 @@ void send(const char *mailboxId, const void *message, const unsigned int message
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	tmailbox * mailbox = getMailbox(mailboxId);
 	addMessage(mailbox->messageQueue,message,messageSize);
-	//semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 }
 
 void * receive(const char *mailboxId) {
-	//semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 
 	tmailbox * mailbox = getMailbox(mailboxId);
@@ -213,7 +210,6 @@ tmailbox * newMailbox(const char *mailboxId) {
 	newMailbox->mailboxId = mymalloc(strlen(mailboxId) + 1);
 	strcpy(newMailbox->mailboxId,mailboxId);
 	newMailbox->messageQueue = mymalloc(sizeof(tmessageQueue_list));
-	//createSemaphore(stringConcatenation(SEMAPHORE_NAME,mailboxId),0,getProcessId());
 	createMutex(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	return newMailbox;
 }
@@ -228,6 +224,72 @@ void initMessageQueueCreatesMutexTest(){
     tmutex* mut = containMutex(MUTEX_NAME);
 
     if (mut != NULL){
-        ncPrint("Test passed");
+        ncPrint("initMessageQueueCreatesMutexTest: PASSED!");
+    }else{
+        ncPrint("initMessageQueueCreatesMutexTest: FAILED!");
+    }
+}
+
+void createMailBoxCreatesMailBoxTest(){
+    createMailBox("__MAILBOXTEST__");
+
+    if(strcmp(mailboxes->head->mailbox->mailboxId, "__MAILBOXTEST__") == 0){
+        ncPrint("createMailBoxCreatesMailBoxTest: PASSED");
+    }else{
+        ncPrint("createMailBoxCreatesMailBoxTest: FAILED");
+    }
+}
+
+void getMailboxFindsExistingMailboxTest(){
+    tmailbox* mb = getMailbox("__MAILBOXTEST__");
+    if (mb != NULL && strcmp(mb->mailboxId, "__MAILBOXTEST__") == 0){
+        ncPrint("getMailboxFindsExistingMailboxTest: PASSED!");
+    }else{
+        ncPrint("getMailboxFindsExistingMailboxTest: FAILED!");
+    }
+}
+
+void sendSendsMessageTest(){
+    send("__MAILBOXTEST__", "Soy un test", (unsigned int)strlen("Soy un test"));
+    tmailbox* mb = getMailbox("__MAILBOXTEST__");
+    if (strcmp(mb->messageQueue->head->message, "Soy un test") == 0){
+        ncPrint("sendSendsMessageTest: PASSED!");
+    }else{
+        ncPrint("sendSendsMessageTest: FAILED!");
+    }
+}
+
+void receiveReceivesMessageTest(){
+    char * msg = receive("__MAILBOXTEST__");
+
+    if (strcmp(msg, "Soy un test") == 0){
+        ncPrint("receiveReceivesMessageTest: PASSED!");
+    }else{
+        ncPrint("receiveReceivesMessageTest: FAILED!");
+    }
+}
+
+void closeMailboxClosesMailboxTest(){
+    closeMailbox("__MAILBOXTEST__");
+
+    if (getMailbox("__MAILBOXTEST__") == NULL){
+        ncPrint("closeMailboxClosesMailboxTest: PASSED!");
+    }else{
+        ncPrint("closeMailboxClosesMailboxTest: FAILED!");
+    }
+}
+
+void containsMailboxTest(){
+    int failed = 1;
+    if (containsMailbox("__MAILBOXTEST__") == FALSE){
+        createMailBox("__MAILBOXTEST__");
+        if (containsMailbox("__MAILBOXTEST__") == TRUE){
+            failed = 0;
+            ncPrint("containsMailboxTest: PASSED!");
+        }
+    }
+
+    if (failed){
+        ncPrint("containsMailboxTest: FAILED!");
     }
 }

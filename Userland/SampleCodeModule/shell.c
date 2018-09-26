@@ -16,16 +16,16 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        printHelpMsg();
+        start_proc_user("help", (void *) printHelpMsg);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        getDate();
+        start_proc_user("getDate", (void *) getDate);
         break;
       case CLOCK:
-        startClock();
+        start_proc_user("start clock", (void *) startClock);
         break;
       case DIV:
         zeroDivException();
@@ -37,16 +37,28 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        clear();
+        start_proc_user("clear", (void *) clear);
         break;
       case PS:
-        int80((uint64_t) "ps", (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
+        start_proc_user("ps", (void *) print_process);
+        break;
+      case TEST:
+        int80(0, 0, 0, 0, 0, 26);
+        break;
+      case PRINT_MEM:
+        int80(0, 0, 0, 0, 0, 27);
+        break;
+      case PROC_CASCADE:
+        int80(0, 0, 0, 0, 0, 28);
         break;
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
   }
+}
+void start_proc_user(char *name, void *function) {
+    int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
 }
 
 void scroll(){
@@ -73,6 +85,12 @@ cmdID execute(char * cmd){
       return CLEAR;
   }else if(strcmp(cmd, "ps") == 0){
       return PS;
+  }else if(strcmp(cmd, "test") == 0){
+      return TEST;
+  }else if(strcmp(cmd, "freeMem") == 0){
+      return PRINT_MEM;
+  }else if(strcmp(cmd, "procCascade") == 0){
+      return PROC_CASCADE;
   }else{
     char* aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
@@ -113,6 +131,12 @@ void printHelpMsg(){
     printf("* invOpcode: Generates an invalid opcode exception");
     scroll();
     printf("* ps: Prints all current processes (UNDER CONSTRUCTION)");
+    scroll();
+    printf("* test: Runs all the test suites");
+    scroll();
+    printf("* freeMem: Prints free memory blocks and sizes");
+    scroll();
+    printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
 }
 
