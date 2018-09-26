@@ -58,14 +58,14 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-void idle1() {
+uint64_t idle1() {
     ncPrint("Hola soy el uno\n");
-    halt();
+    return 0;
 }
+
 
 void idle2() {
     ncPrint("Hola soy el dos\n");
-    halt();
 }
 
 
@@ -77,7 +77,6 @@ int main(){
 	ncResetPosition();
 
 	start_proc("shell", sampleCodeModuleAddress);
-
 
 	halt();
 	return 0;

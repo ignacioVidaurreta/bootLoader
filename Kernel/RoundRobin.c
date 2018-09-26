@@ -7,7 +7,7 @@ proc round_robin(tHeader *process_queue) {
     proc temp = get_current_proc();
     if (process_queue->first != NULL) {
         tNode *node = pop_queue_node(process_queue);
-        if (temp->pid) {
+        if (temp->pid && temp->state != DEAD) {
             temp = node->p;
             node->p = get_current_proc();
             add_to_queue(process_queue, node);

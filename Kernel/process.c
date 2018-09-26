@@ -30,26 +30,29 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     int index_proc = get_new_index();
 
     proc process = &process_table[index_proc];
+    //Exit address
+    process->stack[STACK_SIZE - 1] = (uint64_t) myexit;
     //SS Stack Segment
-    process->stack[STACK_SIZE - 1] = 0x0;
+    process->stack[STACK_SIZE - 2] = 0x0;
     //RSP
-    process->stack[STACK_SIZE - 2] = (uint64_t) &process->stack[STACK_SIZE - 1];
+    process->stack[STACK_SIZE - 3] = (uint64_t) &process->stack[STACK_SIZE - 1];
     //RFLAGS
     //bit 1 : always 1 (EFLAGS)
     //bit 2 : Parity bit
     //bit 9 : Interrupt enable
-    process->stack[STACK_SIZE - 3] = 0x206;
+    process->stack[STACK_SIZE - 4] = 0x206;
     //CS (code segment)
     //I'm not sure of this one but 8 is the value before interrupt was called
     //CS hasn't a weird signification in 64 bit mode let's say it'll work for now
-    process->stack[STACK_SIZE - 4] = 0x8;
+    process->stack[STACK_SIZE - 5] = 0x8;
     //RIP
-    process->stack[STACK_SIZE - 5] = (uint64_t) function;
+    process->stack[STACK_SIZE - 6] = (uint64_t) function;
     //RBP
-    process->stack[STACK_SIZE - 16] = (uint64_t) &process->stack[STACK_SIZE - 1];
+    process->stack[STACK_SIZE - 17] = (uint64_t) &process->stack[STACK_SIZE - 1];
     //16 registers previously push
     //5 registers that will be poped by IRETQ
-    process->rsp = (uint64_t) &process->stack[STACK_SIZE - 20];
+    //Return address of exit
+    process->rsp = (uint64_t) &process->stack[STACK_SIZE - 21];
     process->pid = get_new_pid();
     process->state = READY;
     process->parent = get_current_proc();
@@ -60,6 +63,17 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     add_to_queue(ready_queue, node);
 
     process->occupied = 1;
+}
+
+void myexit(uint64_t retval) {
+    end_process();
+
+    while(1) {}
+}
+
+void end_process() {
+    current_proc->state = DEAD;
+    current_proc->occupied = 0;
 }
 
 int get_new_index() {
@@ -80,7 +94,6 @@ proc get_current_proc() {
     return current_proc;
 }
 
-int test = 0;
 uint64_t contextSwitch(uint64_t rsp) {
     timerHandler();
     current_proc->rsp = rsp;

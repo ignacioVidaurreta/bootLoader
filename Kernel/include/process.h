@@ -28,4 +28,6 @@ proc get_current_proc();
 void scheduler_test();
 uint64_t contextSwitch(uint64_t rsp);
 void print_proc();
+void myexit(uint64_t retval);
+void end_process();
 #endif
