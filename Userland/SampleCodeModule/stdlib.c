@@ -15,14 +15,6 @@ int strlen(const char * str){
 
 }
 
-// int strcmp(char* str1, char* str2){;
-//     while((*str1 != 0) && (*str1 == *str2)){
-//       str1++;
-//       str2++;
-//     }
-//     return str1 - str2;
-// }
-
 int strcmp(char* str1, char* str2){;
   int i=0;
   for (i = 0; str1[i] != 0; i++){

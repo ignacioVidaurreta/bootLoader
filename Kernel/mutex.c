@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <stdlib.h>
 #include "naiveConsole.h"
 #include "mutex.h"
 #include "buddy.h"
@@ -40,7 +39,6 @@ int createMutex(char* mutexId, uint64_t processId){
         unlock(MUTEX_MASTER_ID, processId);
         return -1;
     }
-
 
 
     tmutex* mutex = mymalloc(sizeof(tmutex));
@@ -144,24 +142,6 @@ int unlock(char* mutexId, uint64_t processId){
     return -1;
 
 }
-
-int lockIfUnlocked(char * mutexId, uint64_t processId){
-    if (mutexes == NULL || mutexes->head == NULL){
-        return -1;
-    }
-    tmutex* mutex = containMutex(mutexId);
-    if (mutex == NULL){
-        return -1;
-    }
-    int was_locked= mutex_lock(&mutex->status);
-
-    if (!was_locked){
-        mutex->ownerpid = processId;
-        return 1; //Puede ser lockeado
-    }
-    return 0; //No puede ser lockeado
-}
-
 int terminateMutex(char * mutexId, uint64_t processId){
     lock(MUTEX_MASTER_ID, processId); //Para que el borrado sea atómico
 
@@ -267,6 +247,7 @@ void initMutexTest(){
   else
     ncPrint("initMutexTest PASSED!");
 }
+
 void createMutexCreatesAMutexTest(){
     int value = createMutex("HOLA_SOY_UN_TEST", 1);
     if (value == -1){
@@ -286,6 +267,7 @@ void createMutexCreatesAMutexTest(){
         ncPrint("createMutexCreatesAMutexTest FAILED! ");
     }
 }
+
 
 void lockofLockedMutexClaimsMutexTest(){
     createMutex("LOCKEO_EL_MUTEX", 2);
@@ -312,6 +294,7 @@ void lockOfLockedMutexAddsToWaitingListTest(){
     tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
+        return;
     }
     if (mutex->waitingPIDs->head != NULL && mutex->waitingPIDs->head->pid == 3){
         ncPrint("lockOfLockedMutexAddsToWaitingListTest: PASSED!");
@@ -326,6 +309,7 @@ void unlockOfLockedMutexChangesOwnerTest(){
     tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
+        return;
     }
 
     if (mutex->ownerpid == 3){
@@ -341,6 +325,7 @@ void unlockWithoutWaitingChangesStatusToUnlockTest(){
     tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
+        return;
     }
 
     if( mutex->status == UNLOCKED){

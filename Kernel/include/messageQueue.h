@@ -14,7 +14,6 @@
 #define SIZE_ERROR 2
 
 
-
 typedef struct messageQueue_node{
   void * message;
   int size;

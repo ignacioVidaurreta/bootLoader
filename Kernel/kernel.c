@@ -10,7 +10,6 @@
 #include "process.h"
 #include "mutex.h"
 #include "include/messageQueue.h"
-#include "tests.h"
 #include "buddy.h"
 
 extern uint8_t text;
@@ -69,15 +68,69 @@ void idle2() {
 }
 
 
+void roundRobinTestSuite(){
+	ncScroll();
+	testAddElementToHeader();
+	ncScroll();
+	testAddMultipleElementsToHeader();
+	ncScroll();
+	testAddALotOfElementsToQueue();
+	ncScroll();
+
+}
+void mutexTestSuite(){
+	ncScroll();
+	initMutexTest();
+	ncScroll();
+	createMutexCreatesAMutexTest();
+	ncScroll();
+	lockofLockedMutexClaimsMutexTest();
+	ncScroll();
+	lockOfLockedMutexAddsToWaitingListTest();
+	ncScroll();
+	unlockOfLockedMutexChangesOwnerTest();
+	ncScroll();
+	unlockWithoutWaitingChangesStatusToUnlockTest();
+	ncScroll();
+	terminateMutexEliminatesTheMutexTest();
+	ncScroll();
+}
+
+void messageQueueTestSuite(){
+	ncScroll();
+	initMessageQueueCreatesMutexTest();
+	ncScroll();
+	createMailBoxCreatesMailBoxTest();
+	ncScroll();
+	getMailboxFindsExistingMailboxTest();
+	ncScroll();
+	sendSendsMessageTest();
+	ncScroll();
+	receiveReceivesMessageTest();
+	ncScroll();
+	closeMailboxClosesMailboxTest();
+	ncScroll();
+	containsMailboxTest();
+	ncScroll();
+}
+
 
 
 int main(){
 
 	initializeScreen();
 	ncResetPosition();
-
-	start_proc("shell", sampleCodeModuleAddress);
-
+	int test=0;
+	if (test){
+		ncPrintTest("------------ Round Robin Test Suite: ------------");
+	    roundRobinTestSuite();
+	    ncPrintTest("------------ Mutex Test Suite: ------------");
+	    mutexTestSuite();
+	    ncPrintTest("------------ Message Queue Test Suite: ------------");
+	    messageQueueTestSuite();
+	}else{
+		start_proc("shell", sampleCodeModuleAddress);
+	}
 	halt();
 	return 0;
 }

@@ -33,8 +33,6 @@ tNode *pop_queue_node(tHeader *queue_header);
 void testAddElementToHeader();
 void testAddMultipleElementsToHeader();
 void testAddALotOfElementsToQueue();
-void testRoundRobin();
-void testNotFinishedProcessGoesToTail();
 
 
 void proc_cascade();

@@ -26,7 +26,7 @@
 #define CREATE_MUTEX	19  //arg1: char* mutexId
 #define LOCK_MUTEX	20
 #define UNLOCK_MUTEX	21
-#define LOCK_IF_UNLOCKED_MUTEX 22
+//Hay un 22 para agregar una syscall
 #define TERMINATE_MUTEX	23
 #define ALLOCATE_MEMORY 24
 #define FREE 25
