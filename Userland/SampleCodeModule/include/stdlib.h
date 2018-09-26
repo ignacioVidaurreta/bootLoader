@@ -3,8 +3,22 @@
 
   #include <stdint.h>
   #define BUFFER_SIZE 80
+  #define MSG_QUEUE_CLOSE_SYS_CALL 1
+  #define MSG_QUEUE_OPEN_SYS_CALL 2
+  #define MSG_QUEUE_SEND_SYS_CALL 3
+  #define MSG_QUEUE_RECEIVE_SYS_CALL 4
+  #define MUTEX_OPEN_SYS_CALL 5
+  #define MUTEX_CLOSE_SYS_CALL 6
+  #define MUTEX_POST_SYS_CALL 7
+  #define MUTEX_WAIT_SYS_CALL 8
 
   extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
+
+  void createMessageQueue(char *id);
+  void closeMessageQueue(char *id);
+  void sendMessage(char *id, void *msg, int *msgSize);
+  void* receiveMessage(char *id);
+  void startProcess(char *procName, void *procPointer);
 
   /*
   ** turns the given integer into a string and stores it in

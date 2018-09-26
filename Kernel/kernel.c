@@ -100,7 +100,7 @@ int main(){
 	//initializeScreen();
 	ncResetPosition();
 
-	int testing = 0;
+	int testing = 1;
 
 	if(testing){
 

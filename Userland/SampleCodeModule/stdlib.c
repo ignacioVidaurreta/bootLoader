@@ -234,3 +234,23 @@ int strncmp(const char* str1, const char* str2, int n){
   }
   return 0;
 }
+
+void createMessageQueue(char *id){
+  int80((uint64_t)id, 0, 0, 0, 0, MSG_QUEUE_OPEN_SYS_CALL);
+}
+
+void closeMessageQueue(char *id){
+  int80((uint64_t)id, 0, 0, 0, 0, MSG_QUEUE_CLOSE_SYS_CALL);
+}
+
+void sendMessage(char *id, void *msg, int msgSize){
+  int80((uint64_t)id, (uint64_t)msg, (uint64_t)msgSize, 0, 0, MSG_QUEUE_SEND_SYS_CALL);
+}
+
+void* receiveMessage(char *id){
+  return (void*) int80((uint64_t)id, 0, 0, 0, 0, MSG_QUEUE_RECEIVE_SYS_CALL);
+}
+
+void startProcess(char *procName, void *procPointer){
+  int80((uint64_t)procName, (uint64_t)procPointer, 0, 0, 0, 13);
+}
