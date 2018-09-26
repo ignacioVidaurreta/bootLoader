@@ -94,6 +94,11 @@ void ncPrint(const char * string)
 	ncPrintInColor(string, WHITE);
 }
 
+void ncPrintTest(const char* string)
+{
+	ncPrintInColor(string, GREEN);
+}
+
 void ncNewLine(){
 	ncNewLineAt(&position);
 }

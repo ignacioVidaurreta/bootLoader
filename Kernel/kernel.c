@@ -81,6 +81,7 @@ void roundRobinTestSuite(){
 
 }
 void mutexTestSuite(){
+	ncScroll();
 	initMutexTest();
 	ncScroll();
 	createMutexCreatesAMutexTest();
@@ -98,18 +99,34 @@ void mutexTestSuite(){
 }
 
 void messageQueueTestSuite(){
+	ncScroll();
 	initMessageQueueCreatesMutexTest();
+	ncScroll();
+	createMailBoxCreatesMailBoxTest();
+	ncScroll();
+	getMailboxFindsExistingMailboxTest();
+	ncScroll();
+	sendSendsMessageTest();
+	ncScroll();
+	receiveReceivesMessageTest();
+	ncScroll();
+	closeMailboxClosesMailboxTest();
+	ncScroll();
+	containsMailboxTest();
+	ncScroll();
 }
 int main(){
-	//initializeScreen();
+	initializeScreen();
 	ncResetPosition();
 
-	int testing = 0;
+	int testing = 1;
 
 	if(testing){
 
-	//	roundRobinTestSuite();
+		//roundRobinTestSuite();
+		ncPrintTest("Mutex Test Suite: ------------");
 		mutexTestSuite();
+		ncPrintTest("Message Queue Test Suite: ------------");
 		messageQueueTestSuite();
 
 	}else{
