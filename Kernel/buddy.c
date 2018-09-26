@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <buddy.h>
+#include "naiveConsole.h"
 
 #define sizes 20
 /* pointers to the free space lists */
@@ -80,4 +81,23 @@ void myfree( void * block, int size )
             myfree( block, BLOCKSIZE( i + 1 ));
         }
     }
+}
+
+void print_free_memory(){
+  ncPrint("Free memory blocks of order 2^N available, starting address: 0x1000000");
+  ncScroll();
+  ncPrint("N");
+  ncPrint("          ");
+  ncPrint("first available at");
+  ncScroll();
+  int i=0;
+  while(i < sizes){
+    if(freelists[i]!=NULL){
+      ncPrintDec(i);
+      ncPrint(":         ");
+      ncPrintDec((uint64_t)freelists[i]);
+      ncScroll();
+    }
+    i++;
+  }
 }

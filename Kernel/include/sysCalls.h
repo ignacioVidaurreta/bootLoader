@@ -31,7 +31,7 @@
 #define ALLOCATE_MEMORY 24
 #define FREE 25
 #define RUN_TESTS 26 //Syscalls that runs the test
-
+#define PRINT_MEM 27 //Prints free memory blocks and sizes
 
 
 

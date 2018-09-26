@@ -11,6 +11,7 @@
 #include "mutex.h"
 #include "include/messageQueue.h"
 #include "tests.h"
+#include "buddy.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -71,6 +72,7 @@ void idle2() {
 
 
 int main(){
+
 	initializeScreen();
 	ncResetPosition();
 

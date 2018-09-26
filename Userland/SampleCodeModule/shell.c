@@ -45,6 +45,9 @@ void shell(){
       case TEST:
         int80(0, 0, 0, 0, 0, 26);
         break;
+      case PRINT_MEM:
+        int80(0, 0, 0, 0, 0, 27);
+        break;
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
@@ -78,6 +81,8 @@ cmdID execute(char * cmd){
       return PS;
   }else if(strcmp(cmd, "test") == 0){
       return TEST;
+  }else if(strcmp(cmd, "freeMem") == 0){
+      return PRINT_MEM;
   }else{
     char* aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
@@ -120,6 +125,8 @@ void printHelpMsg(){
     printf("* ps: Prints all current processes (UNDER CONSTRUCTION)");
     scroll();
     printf("* test: Runs all the test suites");
+    scroll();
+    printf("* freeMem: Prints free memory blocks and sizes");
     scroll();
 }
 
