@@ -19,7 +19,17 @@
 #define DRAW_NUM 12     	//Prints in ascii art a number (used to print the clock).
 #define SYS_NEW_PROC 13     //Creates a new process
 #define SYS_PRINT_PROC 14   //Prints every running process
-
+#define SEND_MAILBOX  15
+#define RECEIVE_MAILBOX 16
+#define CREATE_MAILBOX  17
+#define DESTROY_MAILBOX 18
+#define CREATE_MUTEX	19
+#define LOCK_MUTEX	20
+#define UNLOCK_MUTEX	21
+#define LOCK_IF_UNLOCKED_MUTEX 22
+#define TERMINATE_MUTEX	23
+#define ALLOCATE_MEMORY 24
+#define FREE 25
 
 
 
