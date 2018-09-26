@@ -4,53 +4,55 @@
 #include "buddy.h"
 #include "process.h"
 #include "naiveConsole.h"
+#include "mutex.h"
 #include "lib.h"
 
 static tmailbox_list * mailboxes;
+extern tmutex_list* mutexes; //for testing purposes
 
-void initMessaageQueue(){
+void initMessageQueue(){
   mailboxes = mymalloc(sizeof(tmailbox_list));
   mailboxes->head = NULL;
-  //createMutex()
+  createMutex(MUTEX_NAME, 0);
 }
 
 int createMailBox(char * mailboxId){
-  //lock()
+  lock(MUTEX_NAME, get_current_proc()->pid);
   if(!containsMailbox(mailboxId))
     addMailbox(newMailbox(mailboxId));
-  //unlock()
+  unlock(MUTEX_NAME, get_current_proc()->pid);
   return 0;
 }
 
 void send(const char *mailboxId, const void *message, const unsigned int messageSize) {
-	//lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	tmailbox * mailbox = getMailbox(mailboxId);
 	addMessage(mailbox->messageQueue,message,messageSize);
 	//semaphorePost(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
-	//unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 }
 
 void * receive(const char *mailboxId) {
 	//semaphoreWait(stringConcatenation(SEMAPHORE_NAME,mailboxId),getProcessId());
-	//lock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 
 	tmailbox * mailbox = getMailbox(mailboxId);
 	void * message = getMessage(mailbox->messageQueue);
-  removeFirst(mailbox->messageQueue);
-	//unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+    removeFirst(mailbox->messageQueue);
+	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	return message;
 }
 
 void closeMailbox(const char *mailboxId) {
-	//lock(MUTEX_NAME,getProcessId());
-	//lock(stringConcatenation(MUTEX_NAME,mailboxId), getProcessId());
+	lock(MUTEX_NAME,get_current_proc()->pid);
+	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 
 	tmailbox * mailbox = getMailbox(mailboxId);
 	removeAndFreeAllMessages(mailbox->messageQueue);
 	removeAndFreeMailbox(mailboxId);
 
-	//unlock(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
-	//unlock(MUTEX_NAME,getProcessId());
+	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
+	unlock(MUTEX_NAME,get_current_proc()->pid);
 }
 
 
@@ -205,21 +207,27 @@ int addMailbox(tmailbox * mailbox){
     return INSERTION_OK;
 }
 
-static tmailbox * newMailbox(const char *mailboxId) {
+//static tmailbox * newMailbox(const char *mailboxId) {
+tmailbox * newMailbox(const char *mailboxId) {
 	tmailbox * newMailbox = mymalloc(sizeof(tmailbox));
 	newMailbox->mailboxId = mymalloc(strlen(mailboxId) + 1);
 	strcpy(newMailbox->mailboxId,mailboxId);
 	newMailbox->messageQueue = mymalloc(sizeof(tmessageQueue_list));
 	//createSemaphore(stringConcatenation(SEMAPHORE_NAME,mailboxId),0,getProcessId());
-	//createMutualExclusion(stringConcatenation(MUTEX_NAME,mailboxId),getProcessId());
+	createMutex(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	return newMailbox;
 }
 
-int strlen(const char * str){
-  int i;
-  for (i= 0; str[i] != 0; i++){
-  }
 
-  return i;
 
+//TESTS
+
+void initMessageQueueCreatesMutexTest(){
+    initMessageQueue();
+
+    tmutex* mut = containMutex(MUTEX_NAME);
+
+    if (mut != NULL){
+        ncPrint("Test passed");
+    }
 }

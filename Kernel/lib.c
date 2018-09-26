@@ -1,5 +1,5 @@
 #include <stdint.h>
-
+#include "buddy.h"
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;
@@ -71,4 +71,33 @@ int strcmp(const char* str1,const char* str2){;
     }
   }
   return str1[i] - str2[i];
+}
+
+int strlen(const char* str){
+
+	int i = 0;
+	while( str[i] != 0){
+		i++;
+	}
+
+	return i;
+
+}
+
+char* concat(const char* str1, const char* str2){
+
+	int s1 = strlen(str1);
+	int s2 = strlen(str2);
+	char * aux = (char*) mymalloc(s1 +s2 +1);
+	int i;
+	for (i=0; str1[i] != 0; i++)
+	{
+		aux[i] = str1[i];
+	}
+	for (int j = 0; str2[j] != 0; j++){
+		aux[i++] = str2[j];
+	}
+	aux[i] = 0;
+
+	return aux;
 }

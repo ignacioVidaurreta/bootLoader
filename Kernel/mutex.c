@@ -7,7 +7,7 @@
 #include "process.h"
 
 
-static tmutex_list * mutexes;
+static tmutex_list* mutexes;
 
 void initMutex(){
   static int initialized;
@@ -36,7 +36,7 @@ void initMutex(){
 
 int createMutex(char* mutexId, uint64_t processId){
     lock(MUTEX_MASTER_ID, processId);
-    if (containMutex(mutexes->head, mutexId)!= NULL){ //Ya existe el mutex
+    if (containMutex(mutexId)!= NULL){ //Ya existe el mutex
         unlock(MUTEX_MASTER_ID, processId);
         return -1;
     }
@@ -73,7 +73,7 @@ int lock(char* mutexId, uint64_t processId){
     if (mutexes == NULL || mutexes->head == NULL){
         return -1;
     }
-    tmutex* mutex = containMutex(mutexes->head, mutexId);
+    tmutex* mutex = containMutex(mutexId);
     if (mutex == NULL){
         return -1;
     }
@@ -105,7 +105,7 @@ int unlock(char* mutexId, uint64_t processId){
     if (mutexes == NULL || mutexes->head == NULL){
         return -1;
     }
-    tmutex* mutex = containMutex(mutexes->head, mutexId);
+    tmutex* mutex = containMutex(mutexId);
     if (mutex == NULL){
         return -1;
     }
@@ -149,7 +149,7 @@ int lockIfUnlocked(char * mutexId, uint64_t processId){
     if (mutexes == NULL || mutexes->head == NULL){
         return -1;
     }
-    tmutex* mutex = containMutex(mutexes->head, mutexId);
+    tmutex* mutex = containMutex(mutexId);
     if (mutex == NULL){
         return -1;
     }
@@ -165,7 +165,7 @@ int lockIfUnlocked(char * mutexId, uint64_t processId){
 int terminateMutex(char * mutexId, uint64_t processId){
     lock(MUTEX_MASTER_ID, processId); //Para que el borrado sea atómico
 
-    tmutex* mutex = containMutex(mutexes->head, mutexId);
+    tmutex* mutex = containMutex(mutexId);
     if (mutex == NULL){ //No existe el mutex
         unlock(MUTEX_MASTER_ID, processId);
         return -1;
@@ -176,15 +176,20 @@ int terminateMutex(char * mutexId, uint64_t processId){
     return 1;
 
 }
-tmutex* containMutex(tmutex_node* node, char* mutexId){
+tmutex* containMutexR(tmutex_node* node, char* mutexId){
     if (strcmp(node->mutex->id, mutexId) == 0){
         return node->mutex;
     }
     if (node->next == NULL){
         return NULL;
     }
-    return containMutex(node->next, mutexId);
+    return containMutexR(node->next, mutexId);
 }
+
+tmutex* containMutex(char* mutexId){
+    return containMutexR(mutexes->head, mutexId);
+}
+
 
 void addWaitingProc(int pid, tproc_node* node){
     if (node->next == NULL){
@@ -286,7 +291,7 @@ void lockofLockedMutexClaimsMutexTest(){
     createMutex("LOCKEO_EL_MUTEX", 2);
     lock("LOCKEO_EL_MUTEX", 2);
 
-    tmutex * mutex = containMutex(mutexes->head, "LOCKEO_EL_MUTEX");
+    tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
     }
@@ -304,7 +309,7 @@ void lockOfLockedMutexAddsToWaitingListTest(){
 
     lock("LOCKEO_EL_MUTEX", 3);
 
-    tmutex * mutex = containMutex(mutexes->head, "LOCKEO_EL_MUTEX");
+    tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
     }
@@ -318,7 +323,7 @@ void lockOfLockedMutexAddsToWaitingListTest(){
 
 void unlockOfLockedMutexChangesOwnerTest(){
     unlock("LOCKEO_EL_MUTEX", 2);
-    tmutex * mutex = containMutex(mutexes->head, "LOCKEO_EL_MUTEX");
+    tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
     }
@@ -333,7 +338,7 @@ void unlockOfLockedMutexChangesOwnerTest(){
 void unlockWithoutWaitingChangesStatusToUnlockTest(){
     unlock("LOCKEO_EL_MUTEX", 3);
 
-    tmutex * mutex = containMutex(mutexes->head, "LOCKEO_EL_MUTEX");
+    tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("TEST ERROR: Couldn't find mutex");
     }
@@ -348,7 +353,7 @@ void unlockWithoutWaitingChangesStatusToUnlockTest(){
 void terminateMutexEliminatesTheMutexTest(){
     terminateMutex("LOCKEO_EL_MUTEX", 4);
 
-    tmutex * mutex = containMutex(mutexes->head, "LOCKEO_EL_MUTEX");
+    tmutex * mutex = containMutex("LOCKEO_EL_MUTEX");
     if(mutex == NULL){
         ncPrint("terminateMutexEliminatesTheMutexTest: PASSED!");
     }else{

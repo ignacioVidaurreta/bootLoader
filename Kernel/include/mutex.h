@@ -49,7 +49,8 @@ int unlock(char* mutexId, uint64_t processId);
 int lockIfUnlocked(char* mutexId, uint64_t processId);
 
 int terminateMutex(char* mutexId, uint64_t processId);
-tmutex* containMutex(tmutex_node* node, char* mutexId);
+tmutex* containMutex(char* mutexId);
+tmutex* containMutexR(tmutex_node* node, char* mutexId);
 void addWaitingProc(int pid, tproc_node* node);
 void removeMutex(char* mutexId, tmutex* mutex);
 void removeAndFreeWaitingProc(tproc_node* node);
