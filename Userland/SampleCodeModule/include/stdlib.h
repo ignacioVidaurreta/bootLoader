@@ -2,15 +2,19 @@
 #define _STDLIB_H
 
   #include <stdint.h>
-  #define BUFFER_SIZE 80
-  #define MSG_QUEUE_CLOSE_SYS_CALL 1
-  #define MSG_QUEUE_OPEN_SYS_CALL 2
-  #define MSG_QUEUE_SEND_SYS_CALL 3
-  #define MSG_QUEUE_RECEIVE_SYS_CALL 4
-  #define MUTEX_OPEN_SYS_CALL 5
-  #define MUTEX_CLOSE_SYS_CALL 6
-  #define MUTEX_POST_SYS_CALL 7
-  #define MUTEX_WAIT_SYS_CALL 8
+  #define SYS_NEW_PROC 13
+  #define SEND_MAILBOX  15
+  #define RECEIVE_MAILBOX 16
+  #define CREATE_MAILBOX  17
+  #define DESTROY_MAILBOX 18
+  #define CREATE_MUTEX  19
+  #define LOCK_MUTEX  20
+  #define UNLOCK_MUTEX  21
+  #define LOCK_IF_UNLOCKED_MUTEX 22
+  #define TERMINATE_MUTEX 23
+  #define ALLOCATE_MEMORY 24
+  #define FREE 25
+  
 
   extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
 
