@@ -2,48 +2,38 @@
 #include "RoundRobin.h"
 #include "buddy.h"
 #include "include/naiveConsole.h"
-#include "process.h"
 
-void round_robin(tHeader* process_queue, int max_rounds) {
+proc round_robin(tHeader *process_queue) {
+    proc temp = get_current_proc();
+    if (process_queue->first != NULL) {
+        tNode *node = pop_queue_node(process_queue);
+        if (temp->pid) {
+            temp = node->p;
+            node->p = get_current_proc();
+            add_to_queue(process_queue, node);
+        } else {
+            temp = node->p;
+        }
+    }
+    return temp;
+}
 
-   int ticks = 0;
-   int i=0;
 
-   for (int round = 0; round < max_rounds; ticks++) {
+tNode *pop_queue_node(tHeader *queue_header) {
+    tNode *node = queue_header->first;
+    if (node != NULL) {
+        if (node->next == NULL) {
+            queue_header->last = NULL;
+        }
+        queue_header->first = node->next;
+    }
+    return node;
+}
 
-       /*
-       //El agregado de nodos es para simular la llegada de procesos.
-       tNode *node = mymalloc(sizeof(tNode));
-       node->num = i++;
-       add_to_queue(process_queue, node);
-       */
-       proc p1 = mymalloc(sizeof(struct process));
-       p1->pid = i++;
-       tNode* node = mymalloc(sizeof(tNode));
-       node->p = p1;
-
-       add_to_queue(process_queue, node);
-
-       if (ticks == QUANTUM) {
-           ticks = 0;
-           round++;
-           if (process_queue->first != NULL) {
-               /*
-               process_queue->first->quantum_duration--;
-               if (process_queue->first->quantum_duration >0){
-                   process_queue->last = process_queue->first;
-               }
-               */
-               if(process_queue->first->p->state == READY){
-                   //habría que esperar con un semáforo?
-                   process_queue->last = process_queue->first;
-               }
-               process_queue->first = process_queue->first->next;
-           }
-
-       }
-   }
-
+void add_proc_to_queue(tHeader *queue_header, proc p) {
+    tNode *node = mymalloc(sizeof(tNode));
+    node->p = p;
+    add_to_queue(queue_header, node);
 }
 
 
@@ -183,7 +173,7 @@ void testAddMultipleElementsToHeader(){
      process_queue->first = NULL;
      process_queue->last = NULL;
 
-     round_robin(process_queue, num);
+     round_robin(process_queue);
      if( num == process_queue->first->p->pid){
          ncPrint("Test04: PASSED! ");
      }else{
@@ -211,7 +201,7 @@ void testNotFinishedProcessGoesToTail(){
 
     add_to_queue(process_queue, node);
 
-    round_robin(process_queue, 1);
+    round_robin(process_queue);
 
     if(node->p->pid == process_queue->last->p->pid){
       ncPrint("Test05: PASSED!");

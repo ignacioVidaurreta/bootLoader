@@ -40,7 +40,7 @@ void shell(){
         clear();
         break;
       case PS:
-        print_process("ps");
+        int80((uint64_t) "ps", (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
         break;
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
@@ -124,7 +124,6 @@ void echo(char*arg){
 void clear(){
   int80(0,0,0,0,0,3);
 }
-void print_process(char* proc_name){
-    int80((uint64_t) proc_name, (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
+void print_process(){
     int80(0, 0, 0, 0, 0, 14); //Prints processes
 }

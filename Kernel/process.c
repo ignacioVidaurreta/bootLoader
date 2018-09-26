@@ -8,10 +8,10 @@
 #include "buddy.h"
 #include <sysCalls.h>
 
-proc current_proc;
 int max_pid;
 struct process process_table[NUM_PROCESS];
 tHeader * ready_queue;
+proc current_proc;
 
 int time(uint64_t timeType);
 
@@ -84,12 +84,9 @@ int test = 0;
 uint64_t contextSwitch(uint64_t rsp) {
     timerHandler();
     current_proc->rsp = rsp;
-    if (test && process_table[1].occupied) {
-        current_proc = &process_table[1];
-    } else if (!test && process_table[2].occupied) {
-        current_proc = &process_table[2];
-    }
-    test = !test;
+    
+    current_proc = round_robin(ready_queue);
+
     return current_proc->rsp;
 }
 

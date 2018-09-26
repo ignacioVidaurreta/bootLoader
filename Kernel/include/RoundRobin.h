@@ -1,6 +1,7 @@
 #ifndef ROUNDROBIN_ROUNDROBIN_H
 #define ROUNDROBIN_ROUNDROBIN_H
 
+#include "process.h"
 #define QUANTUM 5
 
 typedef struct node {
@@ -21,9 +22,11 @@ typedef struct{
 
 extern tHeader * ready_queue;
 
-void round_robin();
+proc round_robin(tHeader *process_queue);
 void add_to_queue(tHeader *queue_header, tNode *node);
+void add_proc_to_queue(tHeader *queue_header, proc p);
 void free_queue_nodes(tNode* queue);
+tNode *pop_queue_node(tHeader *queue_header);
 
 
 /* TESTS */

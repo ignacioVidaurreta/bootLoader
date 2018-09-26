@@ -100,7 +100,7 @@ int main(){
 	//initializeScreen();
 	ncResetPosition();
 
-	int testing = 1;
+	int testing = 0;
 
 	if(testing){
 
@@ -108,11 +108,9 @@ int main(){
 		mutexTestSuite();
 
 	}else{
- 	    ((EntryPoint)sampleCodeModuleAddress)();
+ 	    start_proc("shell", sampleCodeModuleAddress);
 	}
 
-    start_proc("idle1", idle1);
-    start_proc("idle2", idle2);
 
 	halt();
 	return 0;
