@@ -7,6 +7,7 @@
 #include "process.h"
 #include "messageQueue.h"
 #include "mutex.h"
+#include "tests.h"
 
 void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
@@ -87,6 +88,9 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return lockIfUnlocked((char *)arg1, get_current_proc()->pid);
 		case TERMINATE_MUTEX:
 			return terminateMutex((char *)arg1, get_current_proc()->pid);
+		case RUN_TESTS:
+			runTests();
+			return 1;
 
 	}
 	return -1;

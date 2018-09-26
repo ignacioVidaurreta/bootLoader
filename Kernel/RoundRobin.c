@@ -65,9 +65,9 @@ void add_proc_to_queue(tHeader *queue_header, proc p) {
      node->p->pid = 5;
      add_to_queue(queue_header, node);
      if (node->p->pid == queue_header->first->p->pid){
-         ncPrint("Test01: PASSED! ");
+         ncPrint("testAddElementToHeader: PASSED! ");
      }else{
-         ncPrint("Test01: FAILED! ");
+         ncPrint("testAddElementToHeader: FAILED! ");
      }
      //no hacer doble free, ver que
      myfree(node, sizeof(*node));
@@ -103,9 +103,9 @@ void testAddMultipleElementsToHeader(){
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
     if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->last->p->pid){
-        ncPrint("Test02: PASSED! ");
+        ncPrint("testAddMultipleElementsToHeader: PASSED!");
     }else{
-        ncPrint("Test02: FAILED! ");
+        ncPrint("testAddMultipleElementsToHeader: FAILED!");
     }
     myfree(node1, sizeof(*node1));
     myfree(node2, sizeof(*node2));
@@ -146,9 +146,9 @@ void testAddMultipleElementsToHeader(){
      }
 
      if(equals){
-         ncPrint("Test03: PASSED! ");
+         ncPrint("testAddALotOfElementsToQueue: PASSED! ");
      }else{
-         ncPrint("Test03: FAILED! ");
+         ncPrint("testAddALotOfElementsToQueue: FAILED! ");
      }
 
 
@@ -175,9 +175,9 @@ void testAddMultipleElementsToHeader(){
 
      round_robin(process_queue);
      if( num == process_queue->first->p->pid){
-         ncPrint("Test04: PASSED! ");
+         ncPrint("testRoundRobin: PASSED! ");
      }else{
-         ncPrint("Test04: FAILED! ");
+         ncPrint("testRoundRobin: FAILED! ");
      }
 
      free_queue_nodes(process_queue->first);
@@ -204,9 +204,9 @@ void testNotFinishedProcessGoesToTail(){
     round_robin(process_queue);
 
     if(node->p->pid == process_queue->last->p->pid){
-      ncPrint("Test05: PASSED!");
+      ncPrint("testNotFinishedProcessGoesToTail: PASSED!");
     }else{
-      ncPrint("Test05: FAILED!");
+      ncPrint("testNotFinishedProcessGoesToTail: FAILED!");
     }
 
     free_queue_nodes(process_queue->first);

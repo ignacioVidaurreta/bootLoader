@@ -42,6 +42,9 @@ void shell(){
       case PS:
         int80((uint64_t) "ps", (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
         break;
+      case TEST:
+        int80(0, 0, 0, 0, 0, 26);
+        break;
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
@@ -73,6 +76,8 @@ cmdID execute(char * cmd){
       return CLEAR;
   }else if(strcmp(cmd, "ps") == 0){
       return PS;
+  }else if(strcmp(cmd, "test") == 0){
+      return TEST;
   }else{
     char* aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
@@ -113,6 +118,8 @@ void printHelpMsg(){
     printf("* invOpcode: Generates an invalid opcode exception");
     scroll();
     printf("* ps: Prints all current processes (UNDER CONSTRUCTION)");
+    scroll();
+    printf("* test: Runs all the test suites");
     scroll();
 }
 

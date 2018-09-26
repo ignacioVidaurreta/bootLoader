@@ -10,6 +10,7 @@
 #include "process.h"
 #include "mutex.h"
 #include "include/messageQueue.h"
+#include "tests.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -67,71 +68,13 @@ void idle2() {
 }
 
 
-//Test suites START
-void roundRobinTestSuite(){
-	testAddElementToHeader();
-	ncScroll();
-	testAddMultipleElementsToHeader();
-	ncScroll();
-	testAddALotOfElementsToQueue();
-	ncScroll();
-	testRoundRobin();
-	ncScroll();
-	testNotFinishedProcessGoesToTail();
 
-}
-void mutexTestSuite(){
-	ncScroll();
-	initMutexTest();
-	ncScroll();
-	createMutexCreatesAMutexTest();
-	ncScroll();
-	lockofLockedMutexClaimsMutexTest();
-	ncScroll();
-	lockOfLockedMutexAddsToWaitingListTest();
-	ncScroll();
-	unlockOfLockedMutexChangesOwnerTest();
-	ncScroll();
-	unlockWithoutWaitingChangesStatusToUnlockTest();
-	ncScroll();
-	terminateMutexEliminatesTheMutexTest();
-	ncScroll();
-}
 
-void messageQueueTestSuite(){
-	ncScroll();
-	initMessageQueueCreatesMutexTest();
-	ncScroll();
-	createMailBoxCreatesMailBoxTest();
-	ncScroll();
-	getMailboxFindsExistingMailboxTest();
-	ncScroll();
-	sendSendsMessageTest();
-	ncScroll();
-	receiveReceivesMessageTest();
-	ncScroll();
-	closeMailboxClosesMailboxTest();
-	ncScroll();
-	containsMailboxTest();
-	ncScroll();
-}
 int main(){
 	initializeScreen();
 	ncResetPosition();
 
-	int testing = 1;
-
-	if(testing){
-
-		//roundRobinTestSuite();
-		ncPrintTest("Mutex Test Suite: ------------");
-		mutexTestSuite();
-		ncPrintTest("Message Queue Test Suite: ------------");
-		messageQueueTestSuite();
-
-	}else{
- 	    start_proc("shell", sampleCodeModuleAddress);
-	}
+	start_proc("shell", sampleCodeModuleAddress);
 
 
 	halt();
