@@ -71,7 +71,7 @@ int main(){
 	//initializeScreen();
 	ncResetPosition();
 
-	int testing = 1;
+	int testing = 0;
 
 	if(testing){
 		// testAddElementToHeader();
