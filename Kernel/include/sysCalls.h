@@ -33,7 +33,7 @@
 #define PRINT_MEM 27 //Prints free memory blocks and sizes
 #define PROC_CASCADE 28
 #define SYS_KILL 29 		//kills a process given a pid as its first arguement.
-
+#define SYS_WAIT 30
 
 //there are special characters which do not have an ascii representation
 //however they are stored in the keyboard buffer and returned this are:

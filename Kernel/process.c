@@ -6,6 +6,7 @@
 #include <naiveConsole.h>
 #include "time.h"
 #include "buddy.h"
+#include "wait.h"
 #include <sysCalls.h>
 
 int max_pid;
@@ -17,6 +18,7 @@ int time(uint64_t timeType);
 
 void init_process() {
     ready_queue = mymalloc(sizeof(tHeader));
+    init_wait_queue();
     process_table[0].name = "init";
     process_table[0].pid = 0;
     process_table[0].state = RUN;
@@ -74,6 +76,11 @@ void myexit(uint64_t retval) {
 }
 
 void end_process() {
+    if (current_proc->parent->waitpid == current_proc->pid) {
+        current_proc->parent->state = READY;
+        delete_from_wait(current_proc->parent);
+        add_proc_to_queue(ready_queue, current_proc->parent);
+    }
     current_proc->state = DEAD;
     current_proc->occupied = 0;
 }

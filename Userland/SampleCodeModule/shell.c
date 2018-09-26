@@ -19,7 +19,8 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        startProcUser("help", (void *) printHelpMsg);
+        uint64_t pid = start_proc_user("help", (void *) printHelpMsg);
+        int80(pid, 0, 0, 0, 0, 30);
         break;
       case EXIT:
         endFlag=1;
@@ -61,6 +62,10 @@ void shell(){
         scroll();
     }
   }
+}
+uint64_t start_proc_user(char *name, void *function) {
+    uint64_t pid = int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
+    return pid;
 }
 
 void scroll(){
