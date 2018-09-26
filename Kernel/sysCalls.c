@@ -9,6 +9,7 @@
 #include "mutex.h"
 #include "tests.h"
 #include "buddy.h"
+#include "RoundRobin.h"
 
 void write(uint64_t fd, char* buffer, uint64_t count);
 void read(uint64_t fd, char* buffer, uint64_t count);
@@ -94,6 +95,9 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return 1;
 		case PRINT_MEM:
 			print_free_memory();
+			return 1;
+		case PROC_CASCADE:
+			proc_cascade();
 			return 1;
 
 	}

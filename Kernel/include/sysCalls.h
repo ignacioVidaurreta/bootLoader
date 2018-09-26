@@ -32,7 +32,7 @@
 #define FREE 25
 #define RUN_TESTS 26 //Syscalls that runs the test
 #define PRINT_MEM 27 //Prints free memory blocks and sizes
-
+#define PROC_CASCADE 28
 
 
 //there are special characters which do not have an ascii representation

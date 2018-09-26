@@ -86,9 +86,13 @@ void myfree( void * block, int size )
 void print_free_memory(){
   ncPrint("Free memory blocks of order 2^N available, starting address: 0x1000000");
   ncScroll();
+  ncPrint("-----------------------------");
+  ncScroll();
   ncPrint("N");
   ncPrint("          ");
   ncPrint("first available at");
+  ncScroll();
+  ncPrint("-----------------------------");
   ncScroll();
   int i=0;
   while(i < sizes){

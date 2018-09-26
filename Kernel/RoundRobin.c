@@ -224,3 +224,43 @@ void free_queue_nodes(tNode* node) {
     free_queue_nodes(node->next);
     myfree(node, sizeof(*node));
 }
+
+
+void proc_cascade(){
+
+       //Create queue
+       tHeader* queue;
+       queue = mymalloc(sizeof(tHeader));
+       queue->first = NULL; //sentinels
+       queue->last = NULL;
+
+       //Create nodes
+       tNode* nodes[100];
+       proc ps[100];
+       for (int i =0; i<100; i++){
+           nodes[i] = mymalloc(sizeof(tNode));
+           ps[i] = mymalloc(sizeof(struct process));
+
+           for(int j=0;j<i;j++){
+             ncPrint("+");
+           }
+           ncScroll();
+           ps[i]->pid = i;
+           nodes[i]->p = ps[i];
+           add_to_queue(queue, nodes[i]);
+       }
+
+       for (int i=0; i<100; i++){
+           for(int j=0;j<100-i;j++){
+             ncPrint("-");
+           }
+           ncScroll();
+           myfree(nodes[i], sizeof(*nodes[i]));
+       }
+
+       for( int i=0; i<100; i++){
+           myfree(ps[i], sizeof(*ps[i]));
+       }
+
+       myfree(queue, sizeof(*queue));
+   }

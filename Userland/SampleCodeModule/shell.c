@@ -48,6 +48,9 @@ void shell(){
       case PRINT_MEM:
         int80(0, 0, 0, 0, 0, 27);
         break;
+      case PROC_CASCADE:
+        int80(0, 0, 0, 0, 0, 28);
+        break;
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
@@ -83,6 +86,8 @@ cmdID execute(char * cmd){
       return TEST;
   }else if(strcmp(cmd, "freeMem") == 0){
       return PRINT_MEM;
+  }else if(strcmp(cmd, "procCascade") == 0){
+      return PROC_CASCADE;
   }else{
     char* aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
@@ -127,6 +132,8 @@ void printHelpMsg(){
     printf("* test: Runs all the test suites");
     scroll();
     printf("* freeMem: Prints free memory blocks and sizes");
+    scroll();
+    printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
 }
 

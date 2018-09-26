@@ -1,7 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, TEST, PRINT_MEM} cmdID;
+  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, TEST, PRINT_MEM, PROC_CASCADE} cmdID;
 
   void shell();
   void scroll();
