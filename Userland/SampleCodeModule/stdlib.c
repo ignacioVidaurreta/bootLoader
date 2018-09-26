@@ -251,6 +251,6 @@ void* receiveMessage(char *id){
   return (void*) int80((uint64_t)id, 0, 0, 0, 0, RECEIVE_MAILBOX);
 }
 
-void startProcess(char *procName, void *procPointer){
-  int80((uint64_t)procName, (uint64_t)procPointer, 0, 0, 0, SYS_NEW_PROC);
+int startProcess(char *procName, void *procPointer){
+  return int80((uint64_t)procName, (uint64_t)procPointer, 0, 0, 0, SYS_NEW_PROC);
 }

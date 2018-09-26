@@ -2,6 +2,7 @@
 #define _STDLIB_H
 
   #include <stdint.h>
+  #define BUFFER_SIZE 80
   #define SYS_NEW_PROC 13
   #define SEND_MAILBOX  15
   #define RECEIVE_MAILBOX 16
@@ -20,9 +21,9 @@
 
   void createMessageQueue(char *id);
   void closeMessageQueue(char *id);
-  void sendMessage(char *id, void *msg, int *msgSize);
+  void sendMessage(char *id, void *msg, int msgSize);
   void* receiveMessage(char *id);
-  void startProcess(char *procName, void *procPointer);
+  int startProcess(char *procName, void *procPointer);
   int waitMutex(char *id);
   int createMutex(char *id);
   int closeMutex(char *id);

@@ -26,7 +26,7 @@ void init_process() {
     process_table[0].occupied = 1;
 }
 
-void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
+int start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     int index_proc = get_new_index();
 
     proc process = &process_table[index_proc];
@@ -63,6 +63,8 @@ void start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     add_to_queue(ready_queue, node);
 
     process->occupied = 1;
+
+    return process->pid;
 }
 
 void myexit(uint64_t retval) {
