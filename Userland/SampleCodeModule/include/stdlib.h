@@ -23,6 +23,11 @@
   void sendMessage(char *id, void *msg, int *msgSize);
   void* receiveMessage(char *id);
   void startProcess(char *procName, void *procPointer);
+  int waitMutex(char *id);
+  int createMutex(char *id);
+  int closeMutex(char *id);
+  int lockMutex(char *id);
+  int unlockMutex(char *id);
 
   /*
   ** turns the given integer into a string and stores it in
