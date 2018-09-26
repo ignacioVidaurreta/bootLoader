@@ -2,7 +2,7 @@
 #define PROCESS_H
 #define NUM_PROCESS 100
 #define STACK_SIZE 512
-
+#include <stdint.h>
 typedef struct process *proc;
 
 enum p_state {RUN, WAIT, READY, ZOMBIE, DEAD};

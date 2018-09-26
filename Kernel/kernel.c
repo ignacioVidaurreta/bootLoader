@@ -9,6 +9,7 @@
 #include <RoundRobin.h>
 #include "process.h"
 #include "mutex.h"
+#include "include/messageQueue.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -96,23 +97,25 @@ void mutexTestSuite(){
 	ncScroll();
 }
 
+void messageQueueTestSuite(){
+	initMessageQueueCreatesMutexTest();
+}
 int main(){
 	//initializeScreen();
 	ncResetPosition();
 
-	int testing = 1;
+	int testing = 0;
 
 	if(testing){
 
 	//	roundRobinTestSuite();
 		mutexTestSuite();
+		messageQueueTestSuite();
 
 	}else{
- 	    ((EntryPoint)sampleCodeModuleAddress)();
+ 	    start_proc("shell", sampleCodeModuleAddress);
 	}
 
-    start_proc("idle1", idle1);
-    start_proc("idle2", idle2);
 
 	halt();
 	return 0;

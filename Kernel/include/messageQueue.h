@@ -1,5 +1,8 @@
 #ifndef MESSAGEQUEUE_H
 #define MESSAGEQUEUE_H
+
+#define MUTEX_NAME "__MessegeQueueMutex__"
+
 #define TRUE 1
 #define FALSE 0
 #define INSERTION_OK 0
@@ -37,7 +40,7 @@ typedef struct mailbox_list{
 
 }tmailbox_list;
 
-void initMessaageQueue();
+void initMessageQueue();
 int createMailBox(char * mailboxId);
 void send(const char *mailboxId, const void *message, const unsigned int messageSize);
 void * receive(const char *mailboxId);
@@ -51,8 +54,10 @@ int removeAndFreeFirstMessage(tmessageQueue_list * messageQueue);
 int removeAndFreeMailbox(const char *mailboxId);
 int addMessage(tmessageQueue_list * messageQueue, const void *message, const unsigned int size);
 int addMailbox(tmailbox * mailbox);
-static tmailbox * newMailbox(const char *mailboxId);
-int strlen(const char * str);
+tmailbox * newMailbox(const char *mailboxId);
+
+//TESTS
+void initMessageQueueCreatesMutexTest();
 
 
 #endif
