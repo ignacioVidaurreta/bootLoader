@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
@@ -67,6 +66,36 @@ void idle2() {
 }
 
 
+//Test suites START
+void roundRobinTestSuite(){
+	testAddElementToHeader();
+	ncScroll();
+	testAddMultipleElementsToHeader();
+	ncScroll();
+	testAddALotOfElementsToQueue();
+	ncScroll();
+	testRoundRobin();
+	ncScroll();
+	testNotFinishedProcessGoesToTail();
+
+}
+void mutexTestSuite(){
+	initMutexTest();
+	ncScroll();
+	createMutexCreatesAMutexTest();
+	ncScroll();
+	lockofLockedMutexClaimsMutexTest();
+	ncScroll();
+	lockOfLockedMutexAddsToWaitingListTest();
+	ncScroll();
+	unlockOfLockedMutexChangesOwnerTest();
+	ncScroll();
+	unlockWithoutWaitingChangesStatusToUnlockTest();
+	ncScroll();
+	terminateMutexEliminatesTheMutexTest();
+	ncScroll();
+}
+
 int main(){
 	//initializeScreen();
 	ncResetPosition();
@@ -74,15 +103,10 @@ int main(){
 	int testing = 0;
 
 	if(testing){
-		// testAddElementToHeader();
-		// ncScroll();
-		// testAddMultipleElementsToHeader();
-		// ncScroll();
-		// testAddALotOfElementsToQueue();
-		// ncScroll();
-		// testRoundRobin();
-		// ncScroll();
-		// testNotFinishedProcessGoesToTail();
+
+	//	roundRobinTestSuite();
+		mutexTestSuite();
+
 	}else{
  	    ((EntryPoint)sampleCodeModuleAddress)();
 	}

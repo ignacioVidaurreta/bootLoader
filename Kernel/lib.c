@@ -48,3 +48,27 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 
 	return destination;
 }
+
+char* strcpy(char* dest,const char* src){
+  if (src == 0){
+    return 0;
+  }
+  int i=0;
+  for (; src[i] != 0; i++){
+    dest[i] = src[i];
+  }
+  dest[i] = 0;
+  return dest;
+}
+
+
+
+int strcmp(const char* str1,const char* str2){;
+  int i=0;
+  for (i = 0; str1[i] != 0; i++){
+    if(str1[i] != str2[i]){
+      return (str1[i]>str2[i])?1:-1;
+    }
+  }
+  return str1[i] - str2[i];
+}
