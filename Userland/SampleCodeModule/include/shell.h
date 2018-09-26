@@ -4,6 +4,7 @@
   typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, TEST, PRINT_MEM, PROC_CASCADE} cmdID;
 
   void shell();
+  void start_proc_user(char *name, void *function);
   void scroll();
   cmdID execute(char * cmd);
   void printHelpMsg();

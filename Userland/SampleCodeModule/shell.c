@@ -16,16 +16,16 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        printHelpMsg();
+        start_proc_user("help", (void *) printHelpMsg);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        getDate();
+        start_proc_user("getDate", (void *) getDate);
         break;
       case CLOCK:
-        startClock();
+        start_proc_user("start clock", (void *) startClock);
         break;
       case DIV:
         zeroDivException();
@@ -37,10 +37,10 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        clear();
+        start_proc_user("clear", (void *) clear);
         break;
       case PS:
-        int80((uint64_t) "ps", (uint64_t) &print_process, 0, 0, 0, 13); //Creates the process
+        start_proc_user("ps", (void *) print_process);
         break;
       case TEST:
         int80(0, 0, 0, 0, 0, 26);
@@ -56,6 +56,9 @@ void shell(){
         scroll();
     }
   }
+}
+void start_proc_user(char *name, void *function) {
+    int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
 }
 
 void scroll(){
