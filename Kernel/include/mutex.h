@@ -47,7 +47,6 @@ void addMutex(tmutex_node* node, tmutex* mutex);
 
 int lock(char* mutexId, uint64_t processId);
 int unlock(char* mutexId, uint64_t processId);
-int lockIfUnlocked(char* mutexId, uint64_t processId);
 
 int terminateMutex(char* mutexId, uint64_t processId);
 tmutex* containMutex(char* mutexId);

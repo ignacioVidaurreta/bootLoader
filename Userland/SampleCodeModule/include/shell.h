@@ -1,7 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, TEST, PRINT_MEM, PROC_CASCADE, PRODCONS, END_PRODCONS} cmdID;
+  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, PRINT_MEM, PROC_CASCADE, PRODCONS, END_PRODCONS} cmdID;
 
   void shell();
   void start_proc_user(char *name, void *function);

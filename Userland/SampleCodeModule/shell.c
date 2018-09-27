@@ -45,9 +45,6 @@ void shell(){
       case PS:
         startProcUser("ps", (void *) print_process);
         break;
-      case TEST:
-        int80(0, 0, 0, 0, 0, 26);
-        break;
       case PRINT_MEM:
         int80(0, 0, 0, 0, 0, 27);
         break;
@@ -90,8 +87,6 @@ cmdID execute(char * cmd){
       return CLEAR;
   }else if(strcmp(cmd, "ps") == 0){
       return PS;
-  }else if(strcmp(cmd, "test") == 0){
-      return TEST;
   }else if(strcmp(cmd, "freeMem") == 0){
       return PRINT_MEM;
   }else if(strcmp(cmd, "procCascade") == 0){
@@ -160,19 +155,17 @@ void printHelpMsg(){
     scroll();
     printf("* ps: Prints all current processes (UNDER CONSTRUCTION)");
     scroll();
-    printf("* test: Runs all the test suites");
-    scroll();
     printf("* freeMem: Prints free memory blocks and sizes");
     scroll();
     printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
-    printf("* prodcons: starts the demonstration of the prodcons problem");
+    printf("* ![UNDER CONSTRUCTION]! prodcons: starts the demonstration of the prodcons problem");
     scroll();
-    printf("* addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
+    printf("* ![UNDER CONSTRUCTION]! addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
     scroll();
-    printf("* addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
+    printf("* ![UNDER CONSTRUCTION]! addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
     scroll();
-    printf("* endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
+    printf("* ![UNDER CONSTRUCTION]! endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
 }
 
 void echo(char*arg){

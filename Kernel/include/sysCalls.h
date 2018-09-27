@@ -30,7 +30,6 @@
 #define TERMINATE_MUTEX	23
 #define ALLOCATE_MEMORY 24
 #define FREE 25
-#define RUN_TESTS 26 //Syscalls that runs the test
 #define PRINT_MEM 27 //Prints free memory blocks and sizes
 #define PROC_CASCADE 28
 #define SYS_KILL 29 		//kills a process given a pid as its first arguement.
