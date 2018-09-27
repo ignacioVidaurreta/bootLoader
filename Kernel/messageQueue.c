@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdint.h>
 #include "messageQueue.h"
 #include "buddy.h"
@@ -7,7 +6,7 @@
 #include "mutex.h"
 #include "lib.h"
 
-static tmailbox_list * mailboxes;
+tmailbox_list * mailboxes;
 
 void initMessageQueue(){
   mailboxes = mymalloc(sizeof(tmailbox_list));
@@ -17,8 +16,10 @@ void initMessageQueue(){
 
 int createMailBox(char * mailboxId){
   lock(MUTEX_NAME, get_current_proc()->pid);
+
   if(!containsMailbox(mailboxId))
     addMailbox(newMailbox(mailboxId));
+
   unlock(MUTEX_NAME, get_current_proc()->pid);
   return 0;
 }
@@ -64,8 +65,9 @@ int containsMailbox(const char * mailboxId) {
 	}else {
 		aux = mailboxes->head;
 		while(aux != NULL){
-			if(strcmp(mailboxId,aux->mailbox->mailboxId)==0)
-        return TRUE;
+			if(strcmp(mailboxId,aux->mailbox->mailboxId)==0){
+                return TRUE;
+            }
 			aux = aux->next;
 		}
 	}
@@ -204,7 +206,6 @@ int addMailbox(tmailbox * mailbox){
     return INSERTION_OK;
 }
 
-//static tmailbox * newMailbox(const char *mailboxId) {
 tmailbox * newMailbox(const char *mailboxId) {
 	tmailbox * newMailbox = mymalloc(sizeof(tmailbox));
 	newMailbox->mailboxId = mymalloc(strlen(mailboxId) + 1);
@@ -218,6 +219,7 @@ tmailbox * newMailbox(const char *mailboxId) {
 
 //TESTS
 
+
 void initMessageQueueCreatesMutexTest(){
     initMessageQueue();
 
@@ -230,9 +232,9 @@ void initMessageQueueCreatesMutexTest(){
     }
 }
 
+
 void createMailBoxCreatesMailBoxTest(){
     createMailBox("__MAILBOXTEST__");
-
     if(strcmp(mailboxes->head->mailbox->mailboxId, "__MAILBOXTEST__") == 0){
         ncPrint("createMailBoxCreatesMailBoxTest: PASSED");
     }else{
@@ -250,19 +252,21 @@ void getMailboxFindsExistingMailboxTest(){
 }
 
 void sendSendsMessageTest(){
-    send("__MAILBOXTEST__", "Soy un test", (unsigned int)strlen("Soy un test"));
+    send("__MAILBOXTEST__", "a_test", strlen("a_test"));
     tmailbox* mb = getMailbox("__MAILBOXTEST__");
-    if (strcmp(mb->messageQueue->head->message, "Soy un test") == 0){
+
+    if (strcmp(mb->messageQueue->head->message, "a_test") == 0){
         ncPrint("sendSendsMessageTest: PASSED!");
     }else{
         ncPrint("sendSendsMessageTest: FAILED!");
     }
+
 }
 
 void receiveReceivesMessageTest(){
     char * msg = receive("__MAILBOXTEST__");
 
-    if (strcmp(msg, "Soy un test") == 0){
+    if (strcmp(msg, "a_test") == 0){
         ncPrint("receiveReceivesMessageTest: PASSED!");
     }else{
         ncPrint("receiveReceivesMessageTest: FAILED!");

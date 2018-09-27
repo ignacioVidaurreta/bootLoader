@@ -166,57 +166,6 @@ void testAddMultipleElementsToHeader(){
 
 
 
- void testRoundRobin(){
-     //Create Queue
-     int num=5;
-     tHeader *process_queue = mymalloc(sizeof(tHeader));
-     process_queue->first = NULL;
-     process_queue->last = NULL;
-
-     round_robin(process_queue);
-     if( num == process_queue->first->p->pid){
-         ncPrint("testRoundRobin: PASSED! ");
-     }else{
-         ncPrint("testRoundRobin: FAILED! ");
-     }
-
-     free_queue_nodes(process_queue->first);
-     myfree(process_queue,sizeof(*process_queue));
-
-}
-
-
-void testNotFinishedProcessGoesToTail(){
-
-    tHeader *process_queue = mymalloc(sizeof(tHeader));
-    process_queue->first = NULL;
-    process_queue->last = NULL;
-
-    proc p1 = mymalloc(sizeof(struct process));
-    p1->pid = -1;
-    p1->state = READY;
-
-    tNode* node = mymalloc(sizeof(tNode));
-    node->p  = p1;
-
-    add_to_queue(process_queue, node);
-
-    round_robin(process_queue);
-
-    if(node->p->pid == process_queue->last->p->pid){
-      ncPrint("testNotFinishedProcessGoesToTail: PASSED!");
-    }else{
-      ncPrint("testNotFinishedProcessGoesToTail: FAILED!");
-    }
-
-    free_queue_nodes(process_queue->first);
-    myfree(process_queue, sizeof(*process_queue));
-    myfree(node, sizeof(*node));
-    myfree(p1, sizeof(struct process));
-
-}
-
-
 void free_queue_nodes(tNode* node) {
     if (node == NULL){
         return;

@@ -7,7 +7,6 @@
 #include "process.h"
 #include "messageQueue.h"
 #include "mutex.h"
-#include "tests.h"
 #include "buddy.h"
 #include "RoundRobin.h"
 
@@ -86,12 +85,10 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return lock((char *)arg1, get_current_proc()->pid);
 		case UNLOCK_MUTEX:
 			return unlock((char *)arg1, get_current_proc()->pid);
-		case LOCK_IF_UNLOCKED_MUTEX:
-			return lockIfUnlocked((char *)arg1, get_current_proc()->pid);
 		case TERMINATE_MUTEX:
 			return terminateMutex((char *)arg1, get_current_proc()->pid);
 		case RUN_TESTS:
-			runTests();
+			//runTests();
 			return 1;
 		case PRINT_MEM:
 			print_free_memory();

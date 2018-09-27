@@ -14,6 +14,7 @@ typedef struct proc_node{
 
 typedef struct proc_list{
   tproc_node * head;
+  char offset;
 }tproc_list;
 
 typedef struct mutex{
