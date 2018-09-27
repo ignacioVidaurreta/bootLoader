@@ -17,8 +17,8 @@
 #define SYS_DRAW_PXL 10		//draws a pixel at the specified location and with the specified colour. Information expanded in the arguements section.
 #define SYS_SCRL 11			//scrawls the screen up by one line.
 #define DRAW_NUM 12     	//Prints in ascii art a number (used to print the clock).
-#define SYS_NEW_PROC 13     //Creates a new process
-#define SYS_PRINT_PROC 14   //Prints every running process
+#define SYS_NEW_PROC 13     //Creates a new process.
+#define SYS_PRINT_PROC 14   //Prints every running process.
 #define SEND_MAILBOX  15
 #define RECEIVE_MAILBOX 16
 #define CREATE_MAILBOX  17
@@ -33,6 +33,7 @@
 #define RUN_TESTS 26 //Syscalls that runs the test
 #define PRINT_MEM 27 //Prints free memory blocks and sizes
 #define PROC_CASCADE 28
+#define SYS_KILL 29 		//kills a process given a pid as its first arguement.
 
 
 //there are special characters which do not have an ascii representation

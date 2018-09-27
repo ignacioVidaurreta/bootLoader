@@ -2,8 +2,11 @@
 #include <shell.h>
 #include <date.h>
 #include <clock.h>
+#include <prodcons.h>
 
 char arg[BUFFER_SIZE - 5];
+int prodconsPid = 0;
+
 
 void shell(){
   int endFlag = 0;
@@ -16,16 +19,16 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        start_proc_user("help", (void *) printHelpMsg);
+        startProcUser("help", (void *) printHelpMsg);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        start_proc_user("getDate", (void *) getDate);
+        startProcUser("getDate", (void *) getDate);
         break;
       case CLOCK:
-        start_proc_user("start clock", (void *) startClock);
+        startProcUser("start clock", (void *) startClock);
         break;
       case DIV:
         zeroDivException();
@@ -37,10 +40,10 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        start_proc_user("clear", (void *) clear);
+        startProcUser("clear", (void *) clear);
         break;
       case PS:
-        start_proc_user("ps", (void *) print_process);
+        startProcUser("ps", (void *) print_process);
         break;
       case TEST:
         int80(0, 0, 0, 0, 0, 26);
@@ -51,14 +54,16 @@ void shell(){
       case PROC_CASCADE:
         int80(0, 0, 0, 0, 0, 28);
         break;
+      case PRODCONS:
+        prodconsPid = startProcUser("prodcons", (void*) prodcons);
+      case END_PRODCONS:
+        if(prodconsPid != 0)
+          sendMessage(CREATION_MSG_QUEUE_ID, "exit", strlen("exit"));
       default :
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
   }
-}
-void start_proc_user(char *name, void *function) {
-    int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
 }
 
 void scroll(){
@@ -91,7 +96,14 @@ cmdID execute(char * cmd){
       return PRINT_MEM;
   }else if(strcmp(cmd, "procCascade") == 0){
       return PROC_CASCADE;
-  }else{
+  }
+  else if(strcmp(cmd, "prodcons") == 0){
+      return PRODCONS;
+  }
+  else if(strcmp(cmd, "endProdcons") == 0){
+    return END_PRODCONS;
+  }
+  else{
     char* aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
       int len = strlen(cmd);
@@ -102,6 +114,22 @@ cmdID execute(char * cmd){
       }
 
       return ECHO;
+    }
+    aux = "addReaders";
+    if(strncmp(aux, cmd, 10) == 0){
+      int readers = stringToInt(&cmd[10]);
+      if(prodconsPid != 0 && readers < 1000){
+        sendMessage(CREATION_MSG_QUEUE_ID, "reader", strlen("reader"));
+        sendMessage(CREATION_MSG_QUEUE_ID, (void*)(&readers), sizeof(int));
+      }
+    }
+    aux = "addWrters";
+    if(strncmp(aux, cmd, 10) == 0){
+      int writers = stringToInt(&cmd[10]);
+      if(prodconsPid != 0 && writers < 1000){
+        sendMessage(CREATION_MSG_QUEUE_ID, "writer", strlen("writer"));
+        sendMessage(CREATION_MSG_QUEUE_ID, (void*)(&writers), sizeof(int));
+      }
     }
   }
   return NONE;
@@ -138,6 +166,13 @@ void printHelpMsg(){
     scroll();
     printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
+    printf("* prodcons: starts the demonstration of the prodcons problem");
+    scroll();
+    printf("* addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
+    scroll();
+    printf("* addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
+    scroll();
+    printf("* endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
 }
 
 void echo(char*arg){

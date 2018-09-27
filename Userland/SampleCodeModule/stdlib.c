@@ -60,6 +60,20 @@ char * intToString(int num, char * numStr){
   return numStr;
 }
 
+int stringToInt(char *string){
+  int ret = 0;
+  int digits = 1;
+  for(int i = strlen(string); i > 0; i--){
+    if(isNum(string[i])){
+      ret += digits*(string[i] - 48);
+      digits *= 10;
+    }
+    else
+      return 1000;   //ya sé, re choto, por ahora el valor de error es 1000
+  }
+  return 1000;
+}
+
 /*
  *  https://bobobobo.wordpress.com/2008/01/28/how-to-use-variable-argument-lists-va_list/
  *  Imprime el string dado cambiando el:
@@ -251,6 +265,10 @@ void* receiveMessage(char *id){
   return (void*) int80((uint64_t)id, 0, 0, 0, 0, RECEIVE_MAILBOX);
 }
 
-int startProcess(char *procName, void *procPointer){
-  return int80((uint64_t)procName, (uint64_t)procPointer, 0, 0, 0, SYS_NEW_PROC);
+int startProcUser(char *name, void *function) {
+    return int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
+}
+
+void kill(int pid){
+  int80(pid, 0, 0, 0, 0, KILL);
 }

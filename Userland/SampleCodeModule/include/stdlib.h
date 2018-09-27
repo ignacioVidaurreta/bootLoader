@@ -15,6 +15,7 @@
   #define TERMINATE_MUTEX 23
   #define ALLOCATE_MEMORY 24
   #define FREE 25
+  #define KILL 29
   
 
   extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
@@ -23,18 +24,21 @@
   void closeMessageQueue(char *id);
   void sendMessage(char *id, void *msg, int msgSize);
   void* receiveMessage(char *id);
-  int startProcess(char *procName, void *procPointer);
+  int startProcUser(char *procName, void *procPointer);
   int waitMutex(char *id);
   int createMutex(char *id);
   int closeMutex(char *id);
   int lockMutex(char *id);
   int unlockMutex(char *id);
+  void kill(int pid);
 
   /*
   ** turns the given integer into a string and stores it in
   ** the given array
   */
   char* intToString(int num,char * ret);
+
+  int stringToInt(char *string);
 
   /*
   ** returns the length of the given string

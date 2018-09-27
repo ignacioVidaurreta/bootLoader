@@ -30,4 +30,6 @@ uint64_t contextSwitch(uint64_t rsp);
 void print_proc();
 void myexit(uint64_t retval);
 void end_process();
+proc *getProcess(int pid);
+void kill(int pid);
 #endif

@@ -133,3 +133,20 @@ void print_proc(){
     }
 
 }
+
+proc get_process(int pid){
+    for(int i = 0; i < NUM_PROCESS; i++)
+        if(process_table[i].pid == pid)
+            return &(process_table[i]);
+    return (proc) 0;
+}
+
+void kill(int pid){
+    proc process = get_process(pid);
+    if(process == 0)
+        return;
+    else{
+        process->state = DEAD;
+        process->occupied = 0;
+    }
+}

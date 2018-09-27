@@ -1,20 +1,12 @@
 #include <stdlib.h>
 #include <prodcons.h>
-#define MAX_MESSAGES 200
-#define MAX_READERS 50
-#define MAX_WRITERS 50
-#define PRODCONS_MSG_QUEUE_ID "prodConsMsgQueue"
-#define CREATION_MSG_QUEUE_ID "creationMsgQueue"
-#define COMM_MSG_QUEUE_ID "commMsgQueue"
 
 void changeInProcesses(char *processes, int number, int *prevNumber, int *pids);
 void cleanup(int *writerPids, int *readerPids, int  currentWriters, int currentReaders);
-void *reader();
-void *writer();
+void reader();
+void writer();
 
-static char *commMsgQueueId = "commMsgQueue";
-
-void *prodcons(int startingReaders, int startingWriters){
+void prodcons(int startingReaders, int startingWriters){
 	
 	int currentReaders = 0;
 	int currentWriters = 0;
@@ -22,12 +14,9 @@ void *prodcons(int startingReaders, int startingWriters){
 	int writerPids[MAX_WRITERS] = {0};
 	createMessageQueue(PRODCONS_MSG_QUEUE_ID);
 	createMessageQueue(CREATION_MSG_QUEUE_ID);
-	createMessageQueue(commMsgQueueId);
+	createMessageQueue(COMM_MSG_QUEUE_ID);
 	changeInProcesses("reader", startingReaders, &currentReaders, readerPids);
 	changeInProcesses("writer", startingWriters, &currentWriters, writerPids);
-
-
-
 	char *message = "continue";
 	while(strcmp(message,"exit") != 0){
 		message = (char*)receiveMessage(CREATION_MSG_QUEUE_ID);
@@ -39,39 +28,38 @@ void *prodcons(int startingReaders, int startingWriters){
 			sendMessage(COMM_MSG_QUEUE_ID, "keep on keeping on", strlen("keep on keeping on"));
 	}
 	cleanup(writerPids, readerPids, currentWriters, currentReaders);
-	return (void *) 0;
 }
 
 void changeInProcesses(char* processes, int number, int *prevNumber, int *pids){
 	if(strcmp(processes, "reader") == 0){
 		if(number > 0 && number + *prevNumber < MAX_READERS)
 			for(int i = 0; i < number; i++)
-				pids[i + *prevNumber] = startProcess("reader", &reader);
+				pids[i + *prevNumber] = startProcUser("reader", (void*)reader);
 		else if(number < 0 && *prevNumber + number > 0)
-			for(int i = 0; i > number; i--) ;
-				//killProcess(pids[*prevNumber - i])
+			for(int i = 0; i > number; i--)
+				kill(pids[*prevNumber - i]);
 	}
 	else if(strcmp(processes, "writer") == 0){
 		if(number > 0 && number + *prevNumber < MAX_WRITERS)
 			for(int i = 0; i < number; i++)
-				pids[i + *prevNumber] = startProcess("writer", &writer);
+				pids[i + *prevNumber] = startProcUser("writer", (void*)writer);
 		else if(number < 0 && number + *prevNumber > 0)
-			for(int i = 0; i > number; i--);
-				//killProcess(pids[*prevNumber + i]);
+			for(int i = 0; i > number; i--)
+				kill(pids[*prevNumber + i]);
 	}
 	*prevNumber += number;
 }
 
 void cleanup(int *writerPids, int *readerPids, int  currentWriters, int currentReaders){
 	for(int i = 0; i < currentWriters; i++)
-		//killProcess(writerPids[i]);
+		kill(writerPids[i]);
 	for(int i = 0; i < currentReaders; i++)
 		sendMessage(PRODCONS_MSG_QUEUE_ID, "exit", strlen("exit"));
 	closeMessageQueue(CREATION_MSG_QUEUE_ID);
 	closeMessageQueue(PRODCONS_MSG_QUEUE_ID);
 }
 
-void *reader(){
+void reader(){
 	int messagesRead = 0;
 	while(1){
 		char *message = "continue";
@@ -81,10 +69,9 @@ void *reader(){
 		}
 	}
 	printf("messages read: %d\n", messagesRead);
-	return (void*) 0;
 }
 
-void *writer(){
+void writer(){
 	int messagesSent = 0;
 	while(1){
 		if(messagesSent > MAX_MESSAGES){
@@ -97,5 +84,4 @@ void *writer(){
 			messagesSent++;
 		}
 	}
-	return (void*) 0;
 }

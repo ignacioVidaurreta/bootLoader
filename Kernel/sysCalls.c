@@ -99,7 +99,9 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 		case PROC_CASCADE:
 			proc_cascade();
 			return 1;
-
+		case SYS_KILL:
+			kill(arg1);
+			return 1;
 	}
 	return -1;
 }
