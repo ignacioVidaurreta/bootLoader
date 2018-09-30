@@ -3,7 +3,7 @@
 #include "process.h"
 #include "buddy.h"
 
-extern void irq00Handler();
+extern void ctx_switch();
 static tHeader *wait_queue;
 
 void wait(uint64_t pid) {
@@ -11,7 +11,7 @@ void wait(uint64_t pid) {
     current_proc->waitpid = pid;
     add_proc_to_queue(wait_queue, current_proc);
     current_proc->state = WAIT;
-    irq00Handler();
+    ctx_switch();
 }
 
 void delete_from_wait(proc p) {

@@ -9,6 +9,7 @@ GLOBAL irq02Handler
 GLOBAL irq03Handler
 GLOBAL irq04Handler
 GLOBAL irq05Handler
+GLOBAL ctx_switch
 
 GLOBAL exception0Handler
 GLOBAL exception6Handler
@@ -132,10 +133,12 @@ irq00Handler:
     call contextSwitch
     mov rsp, rax
 
-    popState
 
     mov al, 20h
     out 20h, al 
+ 
+    popState
+    
     iretq
 
 ; Keyboard
@@ -158,6 +161,9 @@ irq04Handler:
 irq05Handler:
 	irqHandlerMaster 5
 
+ctx_switch:
+    int 20h
+    ret
 
 ; Zero Division Exception
 exception0Handler:
@@ -176,7 +182,7 @@ exception6Handler:
 int80Handler:
 	
 	pushStateWithReturn
-	mov r9, rax
+	;mov r9, rax
 	call int80
 	popStateWithReturn
 	iretq

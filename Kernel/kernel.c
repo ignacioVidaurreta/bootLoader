@@ -118,7 +118,7 @@ void messageQueueTestSuite(){
 
 int main(){
 
-	initializeScreen();
+	//initializeScreen();
 	ncResetPosition();
 	int test=0;
 	if (test){

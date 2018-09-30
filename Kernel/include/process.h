@@ -9,6 +9,7 @@ enum p_state {RUN, WAIT, READY, ZOMBIE, DEAD};
 
 struct process {
     uint64_t pid;
+    uint64_t waitpid;
     uint64_t priority;
     enum p_state state;
     proc parent;
@@ -16,12 +17,11 @@ struct process {
     uint64_t stack[STACK_SIZE];
     uint8_t occupied;
     char *name;
-    uint64_t waitpid;
 };
 
 extern struct process process_table[NUM_PROCESS];
 
-int start_proc(char *proc_name, void (*function)(int argc, char *argv[]));
+uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]));
 void init_process();
 int get_new_index();
 int get_new_pid();

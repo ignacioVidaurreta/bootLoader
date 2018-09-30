@@ -4,5 +4,5 @@ add-symbol-file Kernel/kernel.elf 0x100000
 dir Kernel/
 add-symbol-file Userland/0000-sampleCodeModule.elf 0x400000
 dir Userland/SampleCodeModule/
-b initializeKernelBinary
+b main
 c

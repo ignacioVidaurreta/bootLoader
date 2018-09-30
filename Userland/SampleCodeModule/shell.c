@@ -13,14 +13,14 @@ void shell(){
   cmdID commandID= NONE;
   while(!endFlag){
     char command[BUFFER_SIZE]={0};
+    uint64_t pid;
     printf("master> "); //prompts
     scanf("%s", command);
     scroll();
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        uint64_t pid = start_proc_user("help", (void *) printHelpMsg);
-        int80(pid, 0, 0, 0, 0, 30);
+        pid = start_proc_user("help", (void *) printHelpMsg);
         break;
       case EXIT:
         endFlag=1;
@@ -61,6 +61,7 @@ void shell(){
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
+    int80(pid, 0, 0, 0, 0, 30);
   }
 }
 uint64_t start_proc_user(char *name, void *function) {
