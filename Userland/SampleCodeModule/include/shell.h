@@ -6,6 +6,7 @@
 
   void shell();
   uint64_t start_proc_user(char *name, void *function);
+  void wait(uint64_t pid);
   void scroll();
   cmdID execute(char * cmd);
   void printHelpMsg();

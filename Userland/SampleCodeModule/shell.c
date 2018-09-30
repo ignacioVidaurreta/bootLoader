@@ -21,15 +21,18 @@ void shell(){
     switch(commandID){
       case HELP:
         pid = start_proc_user("help", (void *) printHelpMsg);
+        wait(pid);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        startProcUser("getDate", (void *) getDate);
+        pid = start_proc_user("getDate", (void *) getDate);
+        wait(pid);
         break;
       case CLOCK:
-        startProcUser("start clock", (void *) startClock);
+        pid = start_proc_user("start clock", (void *) startClock);
+        wait(pid);
         break;
       case DIV:
         zeroDivException();
@@ -41,10 +44,15 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        startProcUser("clear", (void *) clear);
+        pid = start_proc_user("clear", (void *) clear);
+        wait(pid);
         break;
       case PS:
-        startProcUser("ps", (void *) print_process);
+        pid = start_proc_user("ps", (void *) print_process);
+        wait(pid);
+        break;
+      case TEST:
+        int80(0, 0, 0, 0, 0, 26);
         break;
       case PRINT_MEM:
         int80(0, 0, 0, 0, 0, 27);
@@ -61,12 +69,15 @@ void shell(){
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
-    int80(pid, 0, 0, 0, 0, 30);
   }
 }
 uint64_t start_proc_user(char *name, void *function) {
     uint64_t pid = int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
     return pid;
+}
+
+void wait(uint64_t pid) {
+    int80(pid, 0, 0, 0, 0, 29);
 }
 
 void scroll(){
