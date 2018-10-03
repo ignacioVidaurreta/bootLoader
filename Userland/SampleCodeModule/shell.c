@@ -74,7 +74,7 @@ uint64_t start_proc_user(char *name, void *function) {
 }
 
 void wait(uint64_t pid) {
-    int80(pid, 0, 0, 0, 0, 29);
+    int80(pid, 0, 0, 0, 0, 30);
 }
 
 void scroll(){
