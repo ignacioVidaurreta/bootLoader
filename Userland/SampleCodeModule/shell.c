@@ -51,9 +51,6 @@ void shell(){
         pid = start_proc_user("ps", (void *) print_process);
         wait(pid);
         break;
-      case TEST:
-        int80(0, 0, 0, 0, 0, 26);
-        break;
       case PRINT_MEM:
         int80(0, 0, 0, 0, 0, 27);
         break;
