@@ -52,6 +52,8 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
     init_process();
+    initMutex();
+    initMessageQueue();
 	loadIDT();
 
 	return getStackBase();

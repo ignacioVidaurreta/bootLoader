@@ -221,7 +221,6 @@ tmailbox * newMailbox(const char *mailboxId) {
 
 
 void initMessageQueueCreatesMutexTest(){
-    initMessageQueue();
 
     tmutex* mut = containMutex(MUTEX_NAME);
 

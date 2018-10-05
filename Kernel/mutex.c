@@ -235,7 +235,6 @@ tmutex_node* removeAndFreeFromMutexes(char * mutexId, tmutex_node* node){
 // TESTS
 
 void initMutexTest(){
-  initMutex();
   if(mutexes == NULL)
     ncPrint("initMutexTest FAILED! : mutexes = NULL");
   else if(mutexes->head == NULL)
