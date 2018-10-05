@@ -60,10 +60,14 @@ int stringToInt(char *string){
       ret += digits*(string[i] - 48);
       digits *= 10;
     }
-    else
-      return 1000;   //ya sé, re choto, por ahora el valor de error es 1000
+    else{
+        if (string[i] != 0 ){
+            return 1000;   //ya sé, re choto, por ahora el valor de error es 1000
+        }
+    }
+
   }
-  return 1000;
+  return ret;
 }
 
 /*
@@ -211,7 +215,7 @@ char readChar(){
 }
 
 int isNum(char c){
-  return (c>='0' && c<='9');
+  return (c>='0' && c<='9') || c=='\n';
 }
 
 void deleteCharacter(){
