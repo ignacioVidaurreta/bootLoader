@@ -97,6 +97,7 @@ void mutexTestSuite(){
 }
 
 void messageQueueTestSuite(){
+
 	ncScroll();
 	initMessageQueueCreatesMutexTest();
 	ncScroll();
@@ -111,7 +112,9 @@ void messageQueueTestSuite(){
 	closeMailboxClosesMailboxTest();
 	ncScroll();
 	containsMailboxTest();
+
 	ncScroll();
+
 }
 
 
@@ -119,8 +122,9 @@ void messageQueueTestSuite(){
 int main(){
 
 	//initializeScreen();
+	initMutex();
 	ncResetPosition();
-	int test=0;
+	int test=1;
 	if (test){
 		ncPrintTest("------------ Round Robin Test Suite: ------------");
 	    roundRobinTestSuite();
