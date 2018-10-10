@@ -1,13 +1,13 @@
 #include <date.h>
 #include <stdlib.h>
-#include <shell.h> //ESTO SACARLO CUANDO SE SOLUCIONE LO DEL \N PORQUE NO VAMOS A NECESITAR SCROLL
+#include <shell.h>
 
 void getDate(){
   int day, month, year;
   day = getDay();
   month = getMonth();
   year = getYear();
-  printDate(day, month, year); //TODO averiguar como imprimir el año como 2018 en nvez de 18
+  printDate(day, month, year);
 
   printf("   ");
 

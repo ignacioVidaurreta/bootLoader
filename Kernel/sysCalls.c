@@ -63,10 +63,7 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			ncPrintNumberParser(arg4, arg3, &p);
 			return 1;
 		case SYS_NEW_PROC:
-			ncPrint("Created");
-			int ret = start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
-			ncScroll();
-			return ret;
+			return start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
 		case SYS_PRINT_PROC:
 			print_proc();
 			return 1;

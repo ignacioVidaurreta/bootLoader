@@ -58,7 +58,9 @@ void shell(){
         int80(0, 0, 0, 0, 0, 28);
         break;
       case PRODCONS:
-        prodconsPid = startProcUser("prodcons", (void*) prodcons);
+        if(prodconsPid == 0)
+          prodconsPid = startProcUser("prodcons", (void*) prodcons);
+        break;
       case END_PRODCONS:
         if(prodconsPid != 0)
           sendMessage(CREATION_MSG_QUEUE_ID, "exit", strlen("exit"));

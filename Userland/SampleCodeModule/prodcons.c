@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <prodcons.h>
+#include <date.h>
 
 void changeInProcesses(char *processes, int number, int *prevNumber, int *pids);
 void cleanup(int *writerPids, int *readerPids, int  currentWriters, int currentReaders);
@@ -7,7 +8,6 @@ void reader();
 void writer();
 
 void prodcons(int startingReaders, int startingWriters){
-	
 	int currentReaders = 0;
 	int currentWriters = 0;
 	int readerPids[MAX_READERS] = {0};
@@ -27,7 +27,7 @@ void prodcons(int startingReaders, int startingWriters){
 		else if(strcmp(message, "more messages") == 0)
 			sendMessage(COMM_MSG_QUEUE_ID, "keep on keeping on", strlen("keep on keeping on"));
 	}
-	cleanup(writerPids, readerPids, currentWriters, currentReaders);
+	//cleanup(writerPids, readerPids, currentWriters, currentReaders);
 }
 
 void changeInProcesses(char* processes, int number, int *prevNumber, int *pids){
