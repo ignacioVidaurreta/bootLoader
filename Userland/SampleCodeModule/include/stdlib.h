@@ -24,12 +24,11 @@
   void closeMessageQueue(char *id);
   void sendMessage(char *id, void *msg, int msgSize);
   void* receiveMessage(char *id);
-  int startProcUser(char *procName, void *procPointer);
-  int waitMutex(char *id);
-  int createMutex(char *id);
-  int closeMutex(char *id);
-  int lockMutex(char *id);
-  int unlockMutex(char *id);
+  int start_proc_user(char *procName, void *procPointer);
+  void createMutex(char *id);
+  void closeMutex(char *id);
+  void lockMutex(char *id);
+  void unlockMutex(char *id);
   void kill(int pid);
 
   /*

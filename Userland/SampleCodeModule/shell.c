@@ -59,20 +59,23 @@ void shell(){
         break;
       case PRODCONS:
         if(prodconsPid == 0)
-          prodconsPid = startProcUser("prodcons", (void*) prodcons);
+          prodconsPid = start_proc_user("prodcons", (void*) prodcons);
         break;
       case END_PRODCONS:
         if(prodconsPid != 0)
           sendMessage(CREATION_MSG_QUEUE_ID, "exit", strlen("exit"));
-      default :
+        break;
+      case ADD_READERS:
+        printf("Reader Added");
+        break;
+      case ADD_WRITERS:
+        printf("Writer Added");
+        break;
+      default:
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
   }
-}
-uint64_t start_proc_user(char *name, void *function) {
-    uint64_t pid = int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
-    return pid;
 }
 
 void wait(uint64_t pid) {
@@ -84,7 +87,7 @@ void scroll(){
 }
 
 cmdID execute(char * cmd){
-
+  char* aux;
   if(strcmp(cmd, "help")== 0){
       return HELP;
   }else if(strcmp(cmd, "exit") == 0){
@@ -98,8 +101,7 @@ cmdID execute(char * cmd){
       return DIV;
   }else if(strcmp(cmd, "invOpcode") == 0){
       return INVOPC;
-  }
-  else if(strcmp(cmd, "clear")== 0){
+  }else if(strcmp(cmd, "clear")== 0){
       return CLEAR;
   }else if(strcmp(cmd, "ps") == 0){
       return PS;
@@ -115,7 +117,7 @@ cmdID execute(char * cmd){
     return END_PRODCONS;
   }
   else{
-    char* aux="echo";
+    aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
       int len = strlen(cmd);
       if (len > BUFFER_SIZE){
@@ -132,14 +134,16 @@ cmdID execute(char * cmd){
       if(prodconsPid != 0 && readers < 1000){
         sendMessage(CREATION_MSG_QUEUE_ID, "reader", strlen("reader"));
         sendMessage(CREATION_MSG_QUEUE_ID, (void*)(&readers), sizeof(int));
+        return ADD_READERS;
       }
     }
-    aux = "addWrters";
+    aux = "addWriters";
     if(strncmp(aux, cmd, 10) == 0){
       int writers = stringToInt(&cmd[10]);
       if(prodconsPid != 0 && writers < 1000){
         sendMessage(CREATION_MSG_QUEUE_ID, "writer", strlen("writer"));
         sendMessage(CREATION_MSG_QUEUE_ID, (void*)(&writers), sizeof(int));
+        return ADD_WRITERS;
       }
     }
   }

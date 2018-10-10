@@ -101,3 +101,30 @@ char* concat(const char* str1, const char* str2){
 
 	return aux;
 }
+
+void swap(char* numStr, int index1, int index2){
+  char aux = numStr[index1];
+  numStr[index1] = numStr[index2];
+  numStr[index2] = aux;
+}
+
+char * intToString(int num, char * numStr){
+  int i =0, j;
+  if (num != 0){
+    if (num< 0){
+      numStr[i++] = '-';
+    }
+    for(;num >0; i++){
+        numStr[i]=num%10 + '0';
+        num = num/10;
+    }
+    for (j =0; j< i/2; j++){ //No es necesario recorrerlo completo
+      swap(numStr, j, i-j-1);
+    }
+    numStr[i] = 0;
+  }else{
+    numStr[0] = '0';
+  }
+
+  return numStr;
+}

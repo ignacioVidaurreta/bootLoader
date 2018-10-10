@@ -1,11 +1,10 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, PRINT_MEM, PROC_CASCADE, PRODCONS, END_PRODCONS} cmdID;
+  typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, PRINT_MEM, PROC_CASCADE, PRODCONS, END_PRODCONS, ADD_READERS, ADD_WRITERS} cmdID;
 #include <stdint.h>
 
   void shell();
-  uint64_t start_proc_user(char *name, void *function);
   void wait(uint64_t pid);
   void scroll();
   cmdID execute(char * cmd);

@@ -99,6 +99,7 @@ void mutexTestSuite(){
 }
 
 void messageQueueTestSuite(){
+
 	ncScroll();
 	initMessageQueueCreatesMutexTest();
 	ncScroll();
@@ -113,7 +114,9 @@ void messageQueueTestSuite(){
 	closeMailboxClosesMailboxTest();
 	ncScroll();
 	containsMailboxTest();
+
 	ncScroll();
+
 }
 
 
@@ -121,6 +124,7 @@ void messageQueueTestSuite(){
 int main(){
 
 	//initializeScreen();
+	initMutex();
 	ncResetPosition();
 	int test=0;
 	if (test){

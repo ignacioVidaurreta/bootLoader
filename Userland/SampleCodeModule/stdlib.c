@@ -60,10 +60,14 @@ int stringToInt(char *string){
       ret += digits*(string[i] - 48);
       digits *= 10;
     }
-    else
-      return 1000;   //ya sé, re choto, por ahora el valor de error es 1000
+    else{
+        if (string[i] != 0 ){
+            return 1000;   //ya sé, re choto, por ahora el valor de error es 1000
+        }
+    }
+
   }
-  return 1000;
+  return ret;
 }
 
 /*
@@ -211,7 +215,7 @@ char readChar(){
 }
 
 int isNum(char c){
-  return (c>='0' && c<='9');
+  return (c>='0' && c<='9') || c=='\n';
 }
 
 void deleteCharacter(){
@@ -257,10 +261,26 @@ void* receiveMessage(char *id){
   return (void*) int80((uint64_t)id, 0, 0, 0, 0, RECEIVE_MAILBOX);
 }
 
-int startProcUser(char *name, void *function) {
-    return int80((uint64_t) name, (uint64_t) function, 0, 0, 0, 13);
+int start_proc_user(char *procName, void *procPointer) {
+    return int80((uint64_t) procName, (uint64_t) procPointer, 0, 0, 0, 13);
 }
 
 void kill(int pid){
   int80(pid, 0, 0, 0, 0, KILL);
+}
+
+void createMutex(char *mutexId){
+  int80((uint64_t) mutexId, 0, 0, 0, 0, CREATE_MUTEX);
+}
+
+void lockMutex(char *mutexId){
+  int80((uint64_t) mutexId, 0, 0, 0, 0, LOCK_MUTEX);
+}
+
+void unlockMutex(char *mutexId){
+  int80((uint64_t) mutexId, 0, 0, 0, 0, UNLOCK_MUTEX);
+}
+
+void closeMutex(char *mutexId){
+  int80((uint64_t) mutexId, 0, 0, 0, 0, TERMINATE_MUTEX);
 }
