@@ -11,6 +11,7 @@
 #include "mutex.h"
 #include "include/messageQueue.h"
 #include "buddy.h"
+#include <philosophers.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -124,14 +125,16 @@ int main(){
 	//initializeScreen();
 	initMutex();
 	ncResetPosition();
-	int test=1;
+	int test=0;
 	if (test){
+
 		ncPrintTest("------------ Round Robin Test Suite: ------------");
 	    roundRobinTestSuite();
 	    ncPrintTest("------------ Mutex Test Suite: ------------");
 	    mutexTestSuite();
 	    ncPrintTest("------------ Message Queue Test Suite: ------------");
 	    messageQueueTestSuite();
+
 	}else{
 		start_proc("shell", sampleCodeModuleAddress);
 	}
