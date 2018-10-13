@@ -65,9 +65,11 @@ void add_proc_to_queue(tHeader *queue_header, proc p) {
      node->p->pid = 5;
      add_to_queue(queue_header, node);
      if (node->p->pid == queue_header->first->p->pid){
-         ncPrint("testAddElementToHeader: PASSED! ");
+         ncPrint("testAddElementToHeader: ");
+         ncPrintTestPassed("PASSED!");
      }else{
-         ncPrint("testAddElementToHeader: FAILED! ");
+         ncPrint("testAddElementToHeader: ");
+         ncPrintTestFailed("FAILED!");
      }
      //no hacer doble free, ver que
      myfree(node, sizeof(*node));
@@ -103,9 +105,11 @@ void testAddMultipleElementsToHeader(){
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
     if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->last->p->pid){
-        ncPrint("testAddMultipleElementsToHeader: PASSED!");
+        ncPrint("testAddMultipleElementsToHeader: ");
+        ncPrintTestPassed("PASSED!");
     }else{
-        ncPrint("testAddMultipleElementsToHeader: FAILED!");
+        ncPrint("testAddMultipleElementsToHeader: ");
+        ncPrintTestFailed("FAILED!");
     }
     myfree(node1, sizeof(*node1));
     myfree(node2, sizeof(*node2));
@@ -146,9 +150,11 @@ void testAddMultipleElementsToHeader(){
      }
 
      if(equals){
-         ncPrint("testAddALotOfElementsToQueue: PASSED! ");
+         ncPrint("testAddALotOfElementsToQueue: ");
+         ncPrintTestPassed("PASSED!");
      }else{
-         ncPrint("testAddALotOfElementsToQueue: FAILED! ");
+         ncPrint("testAddALotOfElementsToQueue: ");
+         ncPrintTestFailed("FAILED!");
      }
 
 

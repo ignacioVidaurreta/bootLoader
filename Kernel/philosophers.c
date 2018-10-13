@@ -8,53 +8,67 @@
 
 
 void philosophers(int i){
-    /*
-    while(1){
+
+    //while(1){
         char * name =get_current_proc()->name;
+        uint64_t pid = get_current_proc()->pid;
+
+        char* right_fork = mymalloc(sizeof(right_fork));
+        char* left_fork = mymalloc(sizeof(left_fork));
+
+        intToString((i+1)%5, right_fork);
+        intToString(i, left_fork);
+
         ncPrint(name);
         ncPrint("  is Waiting for his or hers");
         if ( i%2 == 0){ //Si es par
             ncPrint("left fork");
-            wait(fork[(i+1)%5]);
+            ncScroll();
+            lock(concat("__FORK", right_fork), pid);
             ncPrint("right fork");
-            wait(fork[i]);
+            ncScroll();
+            lock(concat("__FORK", left_fork), pid);
         }else{
-            ncPrint("right fork")
-            wait(fork[i]);
+            ncPrint("right fork");
+            ncScroll();
+            lock(concat("__FORK", left_fork), pid);
             ncPrint("left fork");
-            wait(fork[(i+1)%5]);
+            ncScroll();
+            lock(concat("__FORK", right_fork), pid);
         }
         ncPrint(name);
         ncPrint("  is Eating");
-        int j = 0
-        while(j<1000){
+        int j = 0;
+        while(j<100000){
             j++;
         }
         ncPrint(name);
         ncPrint(" stopped eating and is releasing ");
         if ( i%2 == 0){ //Si es par
             ncPrint("left fork");
-            signal(fork[(i+1)%5]);
+            ncScroll();
+            unlock(concat("__FORK", right_fork), pid);
             ncPrint("right fork");
-            signal(fork[i]);
+            ncScroll();
+            unlock(concat("__FORK", left_fork), pid);
         }else{
-            ncPrint("right fork")
-            signal(fork[i]);
+            ncPrint("right fork");
+            unlock(concat("__FORK", left_fork), pid);
             ncPrint("left fork");
-            signal(fork[(i+1)%5]);
+            unlock(concat("__FORK", right_fork), pid);
         }
 
         ncPrint(name);
         ncPrint("  is thinking ...");
+        ncScroll();
         j = 0;
-         while(j<1000){
+         while(j<100000){
             j++;
         }
 
-    }
-    */
-}
+    //}
 
+}
 
 void testPhilosophers(){
     initPhil();

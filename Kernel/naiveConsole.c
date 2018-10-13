@@ -94,9 +94,17 @@ void ncPrint(const char * string)
 	ncPrintInColor(string, WHITE);
 }
 
-void ncPrintTest(const char* string)
+void ncPrintTestHeader(const char* string)
 {
+	ncPrintInColor(string, BLUE);
+}
+
+void ncPrintTestPassed(const char* string){
 	ncPrintInColor(string, GREEN);
+}
+
+void ncPrintTestFailed(const char* string){
+	ncPrintInColor(string, RED);
 }
 
 void ncNewLine(){

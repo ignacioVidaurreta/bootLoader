@@ -22,7 +22,11 @@ void * mymalloc( int size )
 
     if (i > sizes) {
         return NULL;
-    } else if (i == sizes && freelists[i] == NULL) {
+    /*
+     *  Saqué el && freelists[i] == NULL porque freelists no puede
+     *  acceder a la posición 20
+     */
+    } else if (i == sizes ) {
         return (void*)0x1000000; //Caso inicial
     } else if (freelists[i] != NULL) {
 
