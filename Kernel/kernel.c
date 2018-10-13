@@ -12,6 +12,7 @@
 #include "include/messageQueue.h"
 #include "buddy.h"
 #include <philosophers.h>
+#include <listTest.c>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -127,9 +128,10 @@ int main(){
 	//initializeScreen();
 	initMutex();
 	ncResetPosition();
-	int test=0;
+	int test=1;
 	if (test){
-
+		start();
+		/*
 		ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
 	    roundRobinTestSuite();
 	    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
@@ -137,9 +139,9 @@ int main(){
 	    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
 	    messageQueueTestSuite();
 
-		//testPhilosophers();
+		//testPhilosophers();*/
 	}else{
-		start_proc("shell", sampleCodeModuleAddress, 0, NULL);
+		//start_proc("shell", sampleCodeModuleAddress, 0, NULL);
 	}
 	halt();
 	return 0;
