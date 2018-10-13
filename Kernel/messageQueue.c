@@ -33,7 +33,6 @@ void send(const char *mailboxId, const void *message, const unsigned int message
 
 void * receive(const char *mailboxId) {
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
-
 	tmailbox * mailbox = getMailbox(mailboxId);
 	void * message = getMessage(mailbox->messageQueue);
     removeFirst(mailbox->messageQueue);

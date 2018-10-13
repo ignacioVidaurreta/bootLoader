@@ -12,7 +12,8 @@ void prodcons(){
 	int currentWriters = 0;
 	int readerPids[MAX_READERS] = {0};
 	int writerPids[MAX_WRITERS] = {0};
-	createMutex(SHELL_PRODCONS_MUTEX);
+	//createMutex(SHELL_PRODCONS_MUTEX);
+	//createMutex(PRODCONS_MUTEX);
 	createMessageQueue(PRODCONS_MSG_QUEUE_ID);
 	createMessageQueue(CREATION_MSG_QUEUE_ID);
 	createMessageQueue(COMM_MSG_QUEUE_ID);
@@ -20,17 +21,13 @@ void prodcons(){
 	changeInProcesses("writer", STARTING_WRITERS, &currentWriters, writerPids);
 	char *message = "continue";
 	while(strcmp(message,"exit") != 0){
-		lockMutex(SHELL_PRODCONS_MUTEX);
 		message = (char*)receiveMessage(CREATION_MSG_QUEUE_ID);
-		if(strcmp(message, "reader") == 0){
+		if(strcmp(message, "reader") == 0)
 			changeInProcesses(message, *((int*)receiveMessage(CREATION_MSG_QUEUE_ID)), &currentReaders, readerPids);
-		}
-		else if(strcmp(message, "writer") == 0){
+		else if(strcmp(message, "writer") == 0)
 			changeInProcesses(message, *((int*)receiveMessage(CREATION_MSG_QUEUE_ID)), &currentWriters, writerPids);
-		}
 		else if(strcmp(message, "more messages") == 0)
 			sendMessage(COMM_MSG_QUEUE_ID, "keep on keeping on", strlen("keep on keeping on"));
-		unlockMutex(SHELL_PRODCONS_MUTEX);
 	}
 	cleanup(writerPids, readerPids, currentWriters, currentReaders);
 }
@@ -62,7 +59,8 @@ void cleanup(int *writerPids, int *readerPids, int  currentWriters, int currentR
 		kill(readerPids[i]);
 	closeMessageQueue(CREATION_MSG_QUEUE_ID);
 	closeMessageQueue(PRODCONS_MSG_QUEUE_ID);
-	closeMutex(SHELL_PRODCONS_MUTEX);
+	//closeMutex(SHELL_PRODCONS_MUTEX);
+	//closeMutex(PRODCONS_MUTEX);
 }
 
 void reader(){
@@ -70,8 +68,9 @@ void reader(){
 	while(1){
 		char *message = "continue";
 		while(strcmp(message, "exit") != 0){
-			message = (char*)receiveMessage(CREATION_MSG_QUEUE_ID);
-			printf("%d\n", messagesRead);
+			message = (char*)receiveMessage(PRODCONS_MSG_QUEUE_ID);
+			if(strcmp(message, "receiving") == 0)
+				printf("%s\n", (char*)receiveMessage(PRODCONS_MSG_QUEUE_ID));
 			messagesRead++;
 		}
 	}
@@ -87,7 +86,8 @@ void writer(){
 				messagesSent = 0;
 		}
 		else{
-			sendMessage(PRODCONS_MSG_QUEUE_ID, "lel this is fun message lel", strlen("lel this is fun message lel") + 1);
+			sendMessage(PRODCONS_MSG_QUEUE_ID, "receiving", strlen("receiving"));
+			sendMessage(PRODCONS_MSG_QUEUE_ID, "message -- ", strlen("message -- "));
 			messagesSent++;
 		}
 	}

@@ -1,7 +1,7 @@
 IMAGE = Image/x64BareBonesImage.qcow2
 
 QEMU = /usr/bin/qemu-system-x86_64
-QEMUOPTS = -hda $(IMAGE) -m 512 -soundhw pcspk
+QEMUOPTS = -hda $(IMAGE) -m 512 -soundhw pcspk -monitor stdio
 QEMU_GDB = -s -S
 QEMU_NO_GRAPH = -nographic 
 

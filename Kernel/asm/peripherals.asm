@@ -30,19 +30,10 @@ getTimeFromRTC:
 
 readFromKeyboard:
 
-	in al, 64h
-	test al, 1
-	jz exit
-
 	mov rax, 0
 	in al, 60h
 
 	ret
-
-	exit:
-
-		mov al, -1
-		ret
 
 ; sets the IMR to the 8 bit number given by this function's first parameter thus enabling/disabling the desired
 ; hardware exceptions.

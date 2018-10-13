@@ -79,7 +79,7 @@ int lock(char* mutexId, uint64_t processId){
     int was_locked= mutex_lock(&mutex->status);
 
 
-    if( was_locked){ //Si estaba bloqueado ==> agregarlo a la cola de procesos esperando
+    if(was_locked){ //Si estaba bloqueado ==> agregarlo a la cola de procesos esperando
         if (mutex->waitingPIDs->head == NULL){
             tproc_node* newProc = mymalloc(sizeof(tproc_node));
             newProc->next = NULL;
