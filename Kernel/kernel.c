@@ -130,8 +130,7 @@ int main(){
 	ncResetPosition();
 	int test=1;
 	if (test){
-		start();
-		/*
+		startListTest();
 		ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
 	    roundRobinTestSuite();
 	    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
@@ -139,7 +138,7 @@ int main(){
 	    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
 	    messageQueueTestSuite();
 
-		//testPhilosophers();*/
+		//testPhilosophers();
 	}else{
 		//start_proc("shell", sampleCodeModuleAddress, 0, NULL);
 	}

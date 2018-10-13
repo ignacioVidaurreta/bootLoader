@@ -7,7 +7,10 @@
 // the addition operation will take the actual element but all following
 // operations such as remove or get will take the id.
 // Thus, the identifying function will take the element and the id and
-// return 0 if the element corresponds to that id.
+// return true (different than cero) if the element corresponds to that id.
+//
+// The list does accept repeats, if this is not desired the user must control
+// additions with the contains function.
 
 typedef struct listCDT *listADT;
 
@@ -23,5 +26,7 @@ void *getL(listADT list, void *id);
 void *getFirstL(listADT list);
 int containsL(listADT list, void *id);
 void destroyListL(listADT list);
+int sizeL(listADT list);
+int isEmptyL(listADT list);
 
 #endif

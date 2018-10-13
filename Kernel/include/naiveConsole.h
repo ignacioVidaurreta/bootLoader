@@ -56,6 +56,7 @@ typedef struct {
 void drawPixelWithColour(int x, int y, Colour col);
 
 void ncPrint(const char * string);
+void ncPrintLn(const char * string);
 void ncPrintChar(char character);
 void ncNewLineAt(Position* p);
 void ncNewLine();

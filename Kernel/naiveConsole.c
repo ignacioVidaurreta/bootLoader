@@ -94,6 +94,12 @@ void ncPrint(const char * string)
 	ncPrintInColor(string, WHITE);
 }
 
+void ncPrintLn(const char * string)
+{
+    ncPrintInColor(string, WHITE);
+    ncScroll();
+}
+
 void ncPrintTestHeader(const char* string)
 {
 	ncPrintInColor(string, BLUE);
