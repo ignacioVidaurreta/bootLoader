@@ -147,8 +147,9 @@ int scanf(const char* format, ...){
 				i++;
 				j++;
 			}else{
-        return count;
-      }
+                va_end(args);
+                return count;
+            }
 		}
 		else{
 			i++; //leo el asterisco
