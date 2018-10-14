@@ -103,14 +103,17 @@ void ncPrintLn(const char * string)
 void ncPrintTestHeader(const char* string)
 {
 	ncPrintInColor(string, BLUE);
+	ncScroll();
 }
 
 void ncPrintTestPassed(const char* string){
 	ncPrintInColor(string, GREEN);
+	ncScroll();
 }
 
 void ncPrintTestFailed(const char* string){
 	ncPrintInColor(string, RED);
+	ncScroll();
 }
 
 void ncNewLine(){

@@ -6,7 +6,7 @@ int idFunction(void *elem, void *id){
 	return ((int*)elem) == ((int*)id);
 }
 
-void startListTest(){
+void listTestSuite(){
 	int *x1 = mymalloc(sizeof(int));
 	int *x2 = mymalloc(sizeof(int));
 	int *x3 = mymalloc(sizeof(int));
@@ -16,38 +16,94 @@ void startListTest(){
 	*x3 = 3;
 	*x4 = 4;
 	listADT l = createListL(idFunction, sizeof(int));
-	ncPrint("1: the elements to test are: ");ncPrintDec(*x1);ncPrint(", ");ncPrintDec(*x2);ncPrint(", ");ncPrintDec(*x3);ncPrint(", ");ncPrintDec(*x4);
+	ncPrint("The elements to test are: ");ncPrintDec(*x1);ncPrint(", ");ncPrintDec(*x2);ncPrint(", ");ncPrintDec(*x3);ncPrint(", ");ncPrintDec(*x4);
 	ncScroll();
+	listAdditionTest(l, x1, x2, x3);
+	listRemoveFirstTest(l, x1, x2, x3);
+	listRemoveTest(l, x1, x2, x3);
+	removeAndFreeFirstL(l);
+	listRemoveAndFreeFirstTest(l,x3);
+	listRemoveAllTest(l, x1, x2, x3, x4);
+	listRemoveAndFreeAllTest(l, x1, x2, x3, x4);
+
+}
+
+void listAdditionTest(listADT l, int* x1, int* x2, int* x3){
 	addL(l, x1);
 	addL(l, x2);
 	addL(l, x3);
-	if(containsL(l, x1) && containsL(l, x2) && containsL(l, x3))
-		ncPrintLn("2: addition works");
+	ncPrint("listAdditionTest: ");
+	if(containsL(l, x1) && containsL(l, x2) && containsL(l, x3)){
+		ncPrintTestPassed("PASSED!");
+	}else{
+		ncPrintTestFailed("FAILED!");
+	}
+
+}
+
+void listRemoveFirstTest(listADT l, int* x1, int* x2, int* x3){
 	removeFirstL(l);
-	if(!containsL(l, x1) && containsL(l, x2) && containsL(l, x3))
-		ncPrintLn("3: removal of first works");
+	ncPrint("listRemoveFirstTest: ");
+	if(!containsL(l, x1) && containsL(l, x2) && containsL(l, x3)){
+		ncPrintTestPassed("PASSED!");
+	}else{
+		ncPrintTestFailed("FAILED!");
+	}
+}
+
+void listRemoveTest(listADT l, int* x1, int* x2, int* x3){
 	removeL(l, x2);
-	if(!containsL(l, x2) && containsL(l, x3))
-		ncPrintLn("4: removal works");
-	removeAndFreeFirstL(l);
-	if(!containsL(l, x3) && isEmptyL(l))
-		ncPrintLn("5: removal and free of first works");
+	ncPrint("listRemoveTest: ");
+	if(!containsL(l, x2) && containsL(l, x3)){
+		ncPrintTestPassed("PASSED!");
+	}else{
+		ncPrintTestFailed("FAILED!");
+	}
+}
+
+void listRemoveAndFreeFirstTest(listADT l, int* x3){
+	ncPrint("listRemoveAndFreeFirstTest: ");
+	if(!containsL(l, x3) && isEmptyL(l)){
+		ncPrintTestPassed("PASSED!");
+	}else{
+		ncPrintTestFailed("FAILED!");
+	}
+}
+
+void listRemoveAllTest(listADT l, int* x1, int* x2, int* x3, int* x4){
 	addL(l, x1);
 	addL(l, x2);
 	addL(l, x3);
 	addL(l, x4);
 	if(containsL(l, x1) && containsL(l, x2) && containsL(l, x3) && containsL(l, x4)){
 		removeAllL(l);
-		if(isEmptyL(l) && !containsL(l, x1))
-			ncPrintLn("6: removal of all works");
+		ncPrint("listRemoveAllTest: ");
+		if(isEmptyL(l) && !containsL(l, x1)){
+			ncPrintTestPassed("PASSED!");
+		}else{
+			ncPrintTestFailed("FAILED!");
+		}
+	}else{
+		ncPrint("TEST ERROR: Test addition  ");
+		ncPrintTestFailed("FAILED!");
 	}
+}
+
+void listRemoveAndFreeAllTest(listADT l, int* x1, int* x2, int* x3, int* x4){
 	addL(l, x1);
 	addL(l, x2);
 	addL(l, x3);
 	addL(l, x4);
 	if(containsL(l, x1) && containsL(l, x2) && containsL(l, x3) && containsL(l, x4)){
 		removeAndFreeAllL(l);
-		if(isEmptyL(l) && !containsL(l, x1))
-			ncPrintLn("7: removal and free of all works");
+		ncPrint("listRemoveAndFreeAllTest: ");
+		if(isEmptyL(l) && !containsL(l, x1)){
+			ncPrintTestPassed("PASSED!");
+		}else{
+			ncPrintTestFailed("FAILED!");
+		}
+	}else{
+		ncPrint("TEST ERROR: Test addition  ");
+		ncPrintTestFailed("FAILED!");
 	}
 }

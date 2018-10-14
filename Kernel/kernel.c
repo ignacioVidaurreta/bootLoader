@@ -79,52 +79,29 @@ void idle2() {
 
 
 void roundRobinTestSuite(){
-	ncScroll();
 	testAddElementToHeader();
-	ncScroll();
 	testAddMultipleElementsToHeader();
-	ncScroll();
 	testAddALotOfElementsToQueue();
-	ncScroll();
 
 }
 void mutexTestSuite(){
-	ncScroll();
 	initMutexTest();
-	ncScroll();
 	createMutexCreatesAMutexTest();
-	ncScroll();
 	lockofLockedMutexClaimsMutexTest();
-	ncScroll();
 	lockOfLockedMutexAddsToWaitingListTest();
-	ncScroll();
 	unlockOfLockedMutexChangesOwnerTest();
-	ncScroll();
 	unlockWithoutWaitingChangesStatusToUnlockTest();
-	ncScroll();
 	terminateMutexEliminatesTheMutexTest();
-	ncScroll();
 }
 
 void messageQueueTestSuite(){
-
-	ncScroll();
 	initMessageQueueCreatesMutexTest();
-	ncScroll();
 	createMailBoxCreatesMailBoxTest();
-	ncScroll();
 	getMailboxFindsExistingMailboxTest();
-	ncScroll();
 	sendSendsMessageTest();
-	ncScroll();
 	receiveReceivesMessageTest();
-	ncScroll();
 	closeMailboxClosesMailboxTest();
-	ncScroll();
 	containsMailboxTest();
-
-	ncScroll();
-
 }
 
 void runTests(){
