@@ -105,7 +105,8 @@ void messageQueueTestSuite(){
 }
 
 void runTests(){
-	startListTest();
+	ncPrintTestHeader("------------ ListADT Test Suite: ------------");
+	listTestSuite();
 	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
     roundRobinTestSuite();
     ncPrintTestHeader("------------ Mutex Test Suite: ------------");
@@ -116,7 +117,7 @@ void runTests(){
 	//testPhilosophers();
 }
 
-int action = ACTION_STARTUP;
+int action = ACTION_TEST;
 
 int main(){
 
