@@ -70,7 +70,7 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			print_proc();
 			return 1;
 		case SEND_MAILBOX:
-			send((const char*)arg1, (const void *)arg2, arg3);
+			send((char*)arg1, (void *)arg2, arg3);
 			return 0;
 		case RECEIVE_MAILBOX:
 			return (uint64_t)receive((char *)arg1);

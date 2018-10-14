@@ -5,217 +5,89 @@
 #include "naiveConsole.h"
 #include "mutex.h"
 #include "lib.h"
+#include "listADT.h"
 
-tmailbox_list * mailboxes;
+listADT mailboxes;
+
+int idFunctionMailbox(void *elem, void *id){
+	return strcmp(((tmailbox*)elem)->mailboxId,(char*)id)==0;
+}
+
+int idFunctionMessageQueue(void *elem, void *id){
+	return strcmp(((tmessage*)elem)->message,(char*)id)==0;
+}
 
 void initMessageQueue(){
-  mailboxes = mymalloc(sizeof(tmailbox_list));
-  mailboxes->head = NULL;
+  mailboxes = createListL(idFunctionMailbox, sizeof(tmailbox));
   createMutex(MUTEX_NAME, 0);
 }
 
 int createMailBox(char * mailboxId){
   lock(MUTEX_NAME, get_current_proc()->pid);
-
-  if(!containsMailbox(mailboxId)){
+  if(!containsL(mailboxes, mailboxId)){
 //      ncPrint(" -- No prior mailbox with this id exists --");
-      addMailbox(newMailbox(mailboxId));
+      addL(mailboxes,newMailbox(mailboxId));
 //      ncPrint(" -- Mailbox was successfully added --");
     }
-
   unlock(MUTEX_NAME, get_current_proc()->pid);
   return 0;
 }
 
-void send(const char *mailboxId, const void *message, const unsigned int messageSize) {
+void send(char *mailboxId, const void *message, const unsigned int messageSize) {
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
-	tmailbox * mailbox = getMailbox(mailboxId);
-	addMessage(mailbox->messageQueue,message,messageSize);
+	tmailbox * mailbox = getL(mailboxes, mailboxId);
+	addL(mailbox->messageQueue,newMessage(message,messageSize));
 	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 }
 
-void * receive(const char *mailboxId) {
+void * receive(char *mailboxId) {
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
-	tmailbox * mailbox = getMailbox(mailboxId);
-	void * message = getMessage(mailbox->messageQueue);
-    removeFirst(mailbox->messageQueue);
+	tmailbox * mailbox = getL(mailboxes, mailboxId);
+	tmessage * message = getFirstL(mailbox->messageQueue);
+    removeFirstL(mailbox->messageQueue);
 	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
-	return message;
+	return message->message;
 }
 
-void closeMailbox(const char *mailboxId) {
+void closeMailbox(char *mailboxId) {
 	lock(MUTEX_NAME,get_current_proc()->pid);
 	lock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 
-	tmailbox * mailbox = getMailbox(mailboxId);
-	removeAndFreeAllMessages(mailbox->messageQueue);
-	removeAndFreeMailbox(mailboxId);
+	tmailbox * mailbox = getL(mailboxes, mailboxId);
+	removeAndFreeAllL(mailbox->messageQueue);
+	removeAndFreeL(mailboxes, mailboxId);
 
 	unlock(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
 	unlock(MUTEX_NAME,get_current_proc()->pid);
 }
 
-
-
-int containsMailbox(const char * mailboxId) {
-	if(mailboxes == NULL)
-    return FALSE;
-
-	tmailbox_node * aux;
-	if(mailboxes->head == NULL){
-		return FALSE;
-	}else {
-		aux = mailboxes->head;
-		while(aux != NULL){
-			if(strcmp(mailboxId,aux->mailbox->mailboxId)==0){
-                return TRUE;
-            }
-			aux = aux->next;
-		}
-	}
-	return FALSE;
+tmailbox * newMailbox(char *mailboxId) {
+  tmailbox * newMailbox = mymalloc(sizeof(tmailbox));
+  newMailbox->mailboxId = mymalloc(strlen(mailboxId) + 1);
+  strcpy(newMailbox->mailboxId,mailboxId);
+  newMailbox->messageQueue = createListL(idFunctionMessageQueue,sizeof(tmessage));
+  createMutex(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
+  return newMailbox;
 }
 
-tmailbox * getMailbox(const char *mailboxId) {
-
-	if(mailboxes == NULL) return NULL;
-
-	tmailbox_node * aux = mailboxes->head;
-	while (aux != NULL) {
-		if(strcmp(mailboxId,aux->mailbox->mailboxId)==0) {
-			return aux->mailbox;
-		}
-        aux = aux->next;
-	}
-	return NULL;
+tmessage * newMessage(const void *message, const unsigned int messageSize){
+  tmessage * newMessage = mymalloc(sizeof(tmessage));
+  newMessage->message = mymalloc(messageSize);
+  memcpy(newMessage->message,message,messageSize);
+  return newMessage;
 }
 
-void * getMessage(tmessageQueue_list * messageQueue) {
-	if(messageQueue == NULL) return NULL;
-	if(messageQueue->head == NULL) return NULL;
-	return messageQueue->head->message;
+
+tmailbox * getMailbox(char *mailboxId) {
+
+	return getL(mailboxes, mailboxId);
+
 }
 
-int removeFirst(tmessageQueue_list * messageQueue) {
-	if(messageQueue == NULL) return NULL_LIST_ERROR;
-	if(messageQueue->head == NULL) return EMPTY_LIST_ERROR;
-
-	tmessageQueue_node * aux;
-	aux = messageQueue->head;
-	messageQueue->head = messageQueue->head->next;
-  myfree(aux,sizeof(tmessageQueue_node));
-	return REMOTION_OK;
+void * getMessage(listADT messageQueue) {
+	return getFirstL(messageQueue);
 }
 
-int removeAndFreeAllMessages(tmessageQueue_list * messageQueue) {
-	if(messageQueue == NULL) return NULL_LIST_ERROR;
-	while (removeAndFreeFirstMessage(messageQueue) != EMPTY_LIST_ERROR);
-	return REMOTION_OK;
-}
-
-int removeAndFreeFirstMessage(tmessageQueue_list * messageQueue) {
-	if(messageQueue == NULL) return NULL_LIST_ERROR;
-	if(messageQueue->head == NULL) return EMPTY_LIST_ERROR;
-
-	tmessageQueue_node * aux;
-	aux = messageQueue->head;
-	messageQueue->head = messageQueue->head->next;
-	myfree(aux->message,sizeof(aux->size));
-	myfree(aux,sizeof(tmessageQueue_node));
-	return REMOTION_OK;
-}
-
-int removeAndFreeMailbox(const char *mailboxId) {
-
-	tmailbox_node * aux;
-	tmailbox_node * auxPrev;
-	tmailbox_node * aux2;
-	int firstLoop = 1;
-	if(mailboxes == NULL) return NULL_LIST_ERROR;
-	if(mailboxes->head == NULL) {
-		return ELEMENT_DOESNT_EXIST;
-	}else {
-		aux = mailboxes->head;
-		auxPrev=NULL;
-
-		while (aux != NULL) {
-			if(strcmp(mailboxId,aux->mailbox->mailboxId)==0) {
-
-				aux2 = aux->next;
-				myfree(aux->mailbox,sizeof(tmailbox));
-				myfree(aux,sizeof(tmailbox_node));
-				if(firstLoop == 1){
-					mailboxes->head = aux2;
-				}else {
-					auxPrev->next = aux2;
-				}
-				return REMOTION_OK;
-			}
-			auxPrev = aux;
-			aux = aux->next;
-			firstLoop = 0;
-		}
-		return ELEMENT_DOESNT_EXIST;
-	}
-}
-
-int addMessage(tmessageQueue_list * messageQueue, const void *message, const unsigned int size) {
-
-	if(messageQueue == NULL) return NULL_LIST_ERROR;
-    if(message == NULL) return NULL_ELEMENT_ERROR;
-    if(size == 0)  return SIZE_ERROR;
-
-	tmessageQueue_node * newNode = mymalloc(sizeof(tmessageQueue_node));
-    newNode->message = mymalloc(size);
-    newNode->size = size;
-    newNode->next = NULL;
-    memcpy(newNode->message,message,size);
-
-	tmessageQueue_node *  aux;
-	if(messageQueue->head == NULL) {
-        messageQueue->head = newNode;
-    }
-    else {
-		aux = messageQueue->head;
-		while(aux->next != NULL) {
-			aux = aux->next;
-		}
-		aux->next = newNode;
-    }
-    return INSERTION_OK;
-}
-
-int addMailbox(tmailbox * mailbox){
-  if(mailboxes == NULL) return NULL_LIST_ERROR;
-    if(mailbox == NULL) return NULL_ELEMENT_ERROR;
-
-	tmailbox_node * newNode = mymalloc(sizeof(tmailbox_node));
-    newNode->mailbox = mymalloc(sizeof(tmailbox));
-    newNode->next = NULL;
-    memcpy(newNode->mailbox,mailbox,sizeof(tmailbox));
-
-	tmailbox_node * aux;
-	if(mailboxes->head == NULL) {
-        mailboxes->head = newNode;
-    }
-    else {
-		aux = mailboxes->head;
-		while(aux->next != NULL) {
-			aux = aux->next;
-		}
-		aux->next = newNode;
-    }
-    return INSERTION_OK;
-}
-
-tmailbox * newMailbox(const char *mailboxId) {
-	tmailbox * newMailbox = mymalloc(sizeof(tmailbox));
-	newMailbox->mailboxId = mymalloc(strlen(mailboxId) + 1);
-	strcpy(newMailbox->mailboxId,mailboxId);
-	newMailbox->messageQueue = mymalloc(sizeof(tmessageQueue_list));
-	createMutex(concat(MUTEX_NAME,mailboxId),get_current_proc()->pid);
-	return newMailbox;
-}
 
 
 
@@ -238,8 +110,7 @@ void initMessageQueueCreatesMutexTest(){
 
 void createMailBoxCreatesMailBoxTest(){
     createMailBox("__MAILBOXTEST__");
-
-    if(strcmp(mailboxes->head->mailbox->mailboxId, "__MAILBOXTEST__") == 0){
+    if(strcmp(((tmailbox*)getFirstL(mailboxes))->mailboxId, "__MAILBOXTEST__") == 0){
         ncPrint("createMailBoxCreatesMailBoxTest: ");
         ncPrintTestPassed("PASSED!");
     }else{
@@ -249,7 +120,7 @@ void createMailBoxCreatesMailBoxTest(){
 }
 
 void getMailboxFindsExistingMailboxTest(){
-    tmailbox* mb = getMailbox("__MAILBOXTEST__");
+    tmailbox* mb = getL(mailboxes,"__MAILBOXTEST__");
     if (mb != NULL && strcmp(mb->mailboxId, "__MAILBOXTEST__") == 0){
         ncPrint("getMailboxFindsExistingMailboxTest: ");
         ncPrintTestPassed("PASSED!");
@@ -261,9 +132,8 @@ void getMailboxFindsExistingMailboxTest(){
 
 void sendSendsMessageTest(){
     send("__MAILBOXTEST__", "a_test", strlen("a_test"));
-    tmailbox* mb = getMailbox("__MAILBOXTEST__");
-
-    if (strcmp(mb->messageQueue->head->message, "a_test") == 0){
+    tmailbox* mb = getL(mailboxes, "__MAILBOXTEST__");
+    if (strcmp(((tmessage*)getFirstL(mb->messageQueue))->message, "a_test") == 0){
         ncPrint("sendSendsMessageTest: ");
         ncPrintTestPassed("PASSED!");
     }else{
@@ -275,7 +145,6 @@ void sendSendsMessageTest(){
 
 void receiveReceivesMessageTest(){
     char * msg = receive("__MAILBOXTEST__");
-
     if (strcmp(msg, "a_test") == 0){
         ncPrint("receiveReceivesMessageTest: ");
         ncPrintTestPassed("PASSED!");
@@ -300,9 +169,9 @@ void closeMailboxClosesMailboxTest(){
 void containsMailboxTest(){
     int failed = 1;
 
-    if (containsMailbox("__MAILBOXTEST__") == FALSE){
+    if (containsL(mailboxes,"__MAILBOXTEST__") == FALSE){
         createMailBox("__MAILBOXTEST__");
-        if (containsMailbox("__MAILBOXTEST__") == TRUE){
+        if (containsL(mailboxes,"__MAILBOXTEST__") == TRUE){
             failed = 0;
             ncPrint("containsMailboxTest: ");
             ncPrintTestPassed("PASSED!");

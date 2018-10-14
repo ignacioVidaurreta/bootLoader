@@ -1,6 +1,6 @@
 #ifndef MESSAGEQUEUE_H
 #define MESSAGEQUEUE_H
-
+#include "listADT.h"
 #define MUTEX_NAME "__MessegeQueueMutex__"
 
 #define TRUE 1
@@ -13,47 +13,50 @@
 #define ELEMENT_DOESNT_EXIST -1
 #define SIZE_ERROR 2
 
-
-typedef struct messageQueue_node{
-  void * message;
-  int size;
-  struct messageQueue_node * next;
-}tmessageQueue_node;
-
-typedef struct messageQueue_list{
-  tmessageQueue_node * head;
-}tmessageQueue_list;
-
 typedef struct mailbox{
   char * mailboxId;
-  tmessageQueue_list * messageQueue;
+  listADT messageQueue;
 }tmailbox;
 
-typedef struct mailbox_node{
-  struct mailbox_node * next;
-  tmailbox * mailbox;
-}tmailbox_node;
+typedef struct message{
+  void * message;
+  int size;
+}tmessage;
 
-typedef struct mailbox_list{
-  tmailbox_node * head;
-
-}tmailbox_list;
+// typedef struct messageQueue_node{
+//   void * message;
+//   int size;
+//   struct messageQueue_node * next;
+// }tmessageQueue_node;
+//
+// typedef struct messageQueue_list{
+//   tmessageQueue_node * head;
+// }tmessageQueue_list;
+//
+// typedef struct mailbox{
+//   char * mailboxId;
+//   tmessageQueue_list * messageQueue;
+// }tmailbox;
+//
+// typedef struct mailbox_node{
+//   struct mailbox_node * next;
+//   tmailbox * mailbox;
+// }tmailbox_node;
+//
+// typedef struct mailbox_list{
+//   tmailbox_node * head;
+//
+// }tmailbox_list;
 
 void initMessageQueue();
 int createMailBox(char * mailboxId);
-void send(const char *mailboxId, const void *message, const unsigned int messageSize);
-void * receive(const char *mailboxId);
-void closeMailbox(const char *mailboxId);
-int containsMailbox(const char * mailboxId);
-tmailbox * getMailbox(const char *mailboxId);
-void *getMessage(tmessageQueue_list * messageQueue);
-int removeFirst(tmessageQueue_list * messageQueue);
-int removeAndFreeAllMessages(tmessageQueue_list * messageQueue);
-int removeAndFreeFirstMessage(tmessageQueue_list * messageQueue);
-int removeAndFreeMailbox(const char *mailboxId);
-int addMessage(tmessageQueue_list * messageQueue, const void *message, const unsigned int size);
-int addMailbox(tmailbox * mailbox);
-tmailbox * newMailbox(const char *mailboxId);
+void send(char *mailboxId, const void *message, const unsigned int messageSize);
+void * receive(char *mailboxId);
+void closeMailbox(char *mailboxId);
+tmailbox * getMailbox(char *mailboxId);
+void *getMessage(listADT messageQueue);
+tmailbox * newMailbox(char *mailboxId);
+tmessage * newMessage(const void *message, const unsigned int messageSize);
 
 //TESTS
 void initMessageQueueCreatesMutexTest();
