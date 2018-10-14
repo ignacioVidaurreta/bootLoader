@@ -5,7 +5,20 @@
   #define STDIN 0
   #define STDOUT 1
   #define BUFFER_SIZE 80
+  #define SYS_READ 1
+  #define SYS_WRITE 2
+  #define SYS_CLR_SCRN 3
+  #define SYS_READ_KEYA 4
+  #define SYS_TIME 5
+  #define SYS_BEEP 6
+  #define SYS_NO_BEEP 7
+  #define SYS_SCRN_INFO 8
+  #define SYS_DEL_CHAR 9
+  #define SYS_DRAW_PXL 10
+  #define SYS_SCRL 11
+  #define SYS_DRAW_NUM 12
   #define SYS_NEW_PROC 13
+  #define SYS_PRINT_PROC 14
   #define SEND_MAILBOX  15
   #define RECEIVE_MAILBOX 16
   #define CREATE_MAILBOX  17
@@ -13,11 +26,14 @@
   #define CREATE_MUTEX  19
   #define LOCK_MUTEX  20
   #define UNLOCK_MUTEX  21
-  #define SYS_FD 22
+  #define SYS_FDS 22
   #define TERMINATE_MUTEX 23
   #define ALLOCATE_MEMORY 24
   #define FREE 25
-  #define KILL 29
+  #define SYS_PRINT_MEM 26
+  #define SYS_PROC_CASCADE 27
+  #define SYS_KILL 28
+  #define SYS_WAIT 29
   
 
   extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);

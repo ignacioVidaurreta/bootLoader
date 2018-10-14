@@ -20,15 +20,15 @@ void getDate(){
 }
 
 int getDay(){
-  return int80(6,0,0,0,0,5);
+  return int80(6,0,0,0,0,SYS_TIME);
 }
 
 int getMonth(){
-  return int80(7,0,0,0,0,5);
+  return int80(7,0,0,0,0,SYS_TIME);
 }
 
 int getYear(){
-  return int80(8,0,0,0,0,5);
+  return int80(8,0,0,0,0,SYS_TIME);
 }
 
 void printDate(int day, int month, int year){
@@ -38,15 +38,15 @@ void printDate(int day, int month, int year){
 }
 
 int getHour(){
-  return int80(4,0,0,0,0,5);
+  return int80(4,0,0,0,0,SYS_TIME);
 }
 
 int getMinutes(){
-  return int80(3,0,0,0,0,5);
+  return int80(3,0,0,0,0,SYS_TIME);
 }
 
 int getSeconds(){
-  return int80(2,0,0,0,0,5);
+  return int80(2,0,0,0,0,SYS_TIME);
 }
 
 void printTime(int hr, int min, int sec){

@@ -37,4 +37,5 @@ void end_process();
 proc *getProcess(int pid);
 void kill(int pid);
 int getFd(proc p, int desiredFd);
+void switchFd(proc p, int fdType, int newFd);
 #endif

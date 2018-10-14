@@ -58,45 +58,45 @@ void startClock(){
 
 
 int getScreenHeight(){
-  return int80(2, 0, 0, 0, 0, 8);
+  return int80(2, 0, 0, 0, 0, SYS_SCRN_INFO);
 }
 
 int getScreenWidth(){
-  return int80(1, 0, 0, 0, 0, 8);
+  return int80(1, 0, 0, 0, 0, SYS_SCRN_INFO);
 }
 
 int writeNumwColor(int x, int y, int color, int num){
   if (num == SEPARADOR){
-    int80(x,y, color, 10, 0, 12); //imprime el separador
+    int80(x,y, color, 10, 0, SYS_DRAW_NUM); //imprime el separador
     return x + (5*8);
   }
   if (num >= 10){
     int aux = num/10;
-    int80(x,y,color,aux,0, 12);
-    int80(x+5*8, y, color, num%10, 0, 12);
+    int80(x,y,color,aux,0, SYS_DRAW_NUM);
+    int80(x+5*8, y, color, num%10, 0, SYS_DRAW_NUM);
     return x+(5*8)*2;
   }else{
-    int80(x,y,color,0,0,12);
-    int80(x + 5*8,y,color,num,0, 12);
+    int80(x,y,color,0,0, SYS_DRAW_NUM);
+    int80(x + 5*8,y,color,num,0, SYS_DRAW_NUM);
     return x+ (5*8)*2;
   }
 }
 
 void clearScreen(){
-  int80(0,0,0,0,0,3);
+  int80(0,0,0,0,0, SYS_CLR_SCRN);
 }
 
 void beep(){
-  int80(1000, 0, 0, 0, 0, 6);
+  int80(1000, 0, 0, 0, 0, SYS_BEEP);
 }
 
 void stopBeep(){
-  int80(0, 0, 0, 0, 0, 7);
+  int80(0, 0, 0, 0, 0, SYS_NO_BEEP);
 }
 
 char readInput(){
   char c=0;
-  int80(1, (uint64_t)&c, 1, 0, 0, 1);
+  int80(1, (uint64_t)&c, 1, 0, 0, SYS_READ);
 
   return c;
 }

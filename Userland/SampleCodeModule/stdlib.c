@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void putChar(char c){
-  int80(getStdout(),(uint64_t)&c, 1, 0,0,2);
+  int80(getStdout(),(uint64_t)&c, 1, 0,0, SYS_WRITE);
 }
 
 
@@ -209,7 +209,7 @@ char* readBuffer(char* read){
 char readChar(){
   char c=0;
   while (c == 0){
-    int80(getStdin(), (uint64_t)&c, 1, 0, 0, 1);
+    int80(getStdin(), (uint64_t)&c, 1, 0, 0, SYS_READ);
   }
 
   return c;
@@ -220,7 +220,7 @@ int isNum(char c){
 }
 
 void deleteCharacter(){
-  int80(0,0,0,0,0,9);
+  int80(0,0,0,0,0,SYS_DEL_CHAR);
 }
 
 
@@ -263,11 +263,11 @@ void* receiveMessage(char *id){
 }
 
 int start_proc_user(char *procName, void *procPointer) {
-    return int80((uint64_t) procName, (uint64_t) procPointer, 0, 0, 0, 13);
+    return int80((uint64_t) procName, (uint64_t) procPointer, 0, 0, 0, SYS_NEW_PROC);
 }
 
 void kill(int pid){
-  int80(pid, 0, 0, 0, 0, KILL);
+  int80(pid, 0, 0, 0, 0, SYS_KILL);
 }
 
 void createMutex(char *mutexId){
@@ -287,9 +287,9 @@ void closeMutex(char *mutexId){
 }
 
 int getStdout(){
-  return int80(STDOUT, 0, 0, 0, 0, SYS_FD);
+  return int80(STDOUT, 0, 0, 0, 0, SYS_FDS);
 }
 
 int getStdin(){
-  return int80(STDIN, 0, 0, 0, 0, SYS_FD);
+  return int80(STDIN, 0, 0, 0, 0, SYS_FDS);
 }

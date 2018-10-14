@@ -24,6 +24,9 @@ void init_process() {
     process_table[0].state = RUN;
     process_table[0].parent = NULL;
     process_table[0].rsp = 0;
+    process_table[0].fds = mymalloc(2*sizeof(int));
+    process_table[0].fds[0] = DEFAULT_STDIN;
+    process_table[0].fds[1] = DEFAULT_STDOUT;
     current_proc = &process_table[0];
     process_table[0].occupied = 1;
 }
@@ -60,8 +63,8 @@ uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     process->parent = get_current_proc();
     process->name = proc_name;
     process->fds = mymalloc(2*sizeof(int));
-    process->fds[0] = DEFAULT_STDIN;
-    process->fds[1] = DEFAULT_STDOUT;
+    process->fds[0] = process->parent->fds[0];
+    process->fds[1] = process->parent->fds[1];
 
     tNode *node = mymalloc(sizeof(tNode));
     node-> p = process;
@@ -127,11 +130,11 @@ void print_proc(){
             ncPrint("          ");
             ncPrint(process_table[i].name);
             ncPrint("          ");
-            ncPrintBase(time(4), 10);
+            ncPrintBase(sysTime(4, 0, 0, 0, 0), 10);
             ncPrint(":");
-            ncPrintBase(time(3), 10);
+            ncPrintBase(sysTime(3, 0, 0, 0, 0), 10);
             ncPrint(":");
-            ncPrintBase(time(2), 10);
+            ncPrintBase(sysTime(2, 0, 0, 0, 0), 10);
             ncScroll();
 
 
@@ -163,4 +166,8 @@ void kill(int pid){
 
 int getFd(proc p, int desiredFd){
     return p->fds[desiredFd];
+}
+
+void switchFd(proc p, int fdType, int newFd){
+    p->fds[fdType] = newFd;
 }

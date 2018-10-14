@@ -52,10 +52,10 @@ void shell(){
         wait(pid);
         break;
       case PRINT_MEM:
-        int80(0, 0, 0, 0, 0, 27);
+        int80(0, 0, 0, 0, 0, SYS_PRINT_MEM);
         break;
       case PROC_CASCADE:
-        int80(0, 0, 0, 0, 0, 28);
+        int80(0, 0, 0, 0, 0, SYS_PROC_CASCADE);
         break;
       case PRODCONS:
         if(prodconsPid == 0)
@@ -79,11 +79,11 @@ void shell(){
 }
 
 void wait(uint64_t pid) {
-    int80(pid, 0, 0, 0, 0, 30);
+    int80(pid, 0, 0, 0, 0, SYS_WAIT);
 }
 
 void scroll(){
-  int80(0,0,0,0,0,11);
+  int80(0,0,0,0,0,SYS_SCRL);
 }
 
 cmdID execute(char * cmd){
@@ -194,8 +194,8 @@ void echo(char*arg){
 }
 
 void clear(){
-  int80(0,0,0,0,0,3);
+  int80(0,0,0,0,0,SYS_CLR_SCRN);
 }
 void print_process(){
-    int80(0, 0, 0, 0, 0, 14); //Prints processes
+    int80(0, 0, 0, 0, 0, SYS_PRINT_PROC); //Prints processes
 }

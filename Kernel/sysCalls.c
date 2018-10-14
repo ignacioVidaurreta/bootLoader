@@ -12,99 +12,107 @@
 #include "RoundRobin.h"
 #include "wait.h"
 
-void write(uint64_t fd, char* buffer, uint64_t count);
-void read(uint64_t fd, char* buffer, uint64_t count);
+int sysRead(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysWrite(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysClearScreen(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysReadKeya(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysBeep(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysNoBeep(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysScreenInfo(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysDeleteChar(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysDrawPxl(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysScroll(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysDrawNum(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysNewProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysPrintProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysSendMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysReceiveMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysCreateMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysCloseMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysCreateMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysLockMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysUnlockMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysGetFds(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysTerminateMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysAlloc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysFree(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysPrintFreeMem(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysProcCascade(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysKill(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 void cleanUser(void);
-int time(uint64_t timeType);
-int screenInfo(uint8_t arg1);
 
+typedef int (*sysFun)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
+
+sysFun sysCalls[] = 
+	{/*0*/sysRead, /*1*/sysWrite, /*2*/sysClearScreen, /*3*/sysReadKeya, /*4*/sysTime, /*5*/sysBeep, /*6*/sysNoBeep, /*7*/sysScreenInfo, 
+	 /*8*/sysDeleteChar, /*9*/sysDrawPxl, /*10*/sysScroll, /*11*/sysDrawNum, /*12*/sysNewProc, /*13*/sysPrintProc, /*14*/sysSendMailbox, 
+	 /*15*/sysReceiveMailbox, /*16*/sysCreateMailbox, /*17*/sysCloseMailbox, /*18*/sysCreateMutex, /*19*/sysLockMutex, /*20*/sysUnlockMutex, 
+	 /*21*/sysGetFds, /*22*/sysTerminateMutex, /*23*/sysAlloc, /*24*/sysFree, /*25*/sysPrintFreeMem, /*26*/sysProcCascade, /*27*/sysKill, 
+	 /*28*/sysWait, /*29*/sysSwitchFd};
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
-	Colour c;
-	Position p;
-	switch(sysCallID){
-		case SYS_READ:
-			read(arg1, (char*)arg2, arg3);
-			return 1;
-		case SYS_WRITE:
-			write(arg1, (char*)arg2, arg3);
-			return 1;
-		case SYS_CLR_SCRN:
-			ncClear();
-			return 1;
-		case SYS_READ_KEYA:
-			return readKeyboardBufferAll((char*)arg1);
-		case SYS_TIME:
-			return time(arg1);
-		case SYS_BEEP:
-			beepASM(arg1);
-			return 1;
-		case SYS_NO_BEEP:
-			noBeepASM();
-			return 1;
-		case SYS_SCRN_INFO:
-			return screenInfo(arg1);
-		case SYS_DEL_CHAR:
-			ncDeleteChar();
-			return 1;
-		case SYS_DRAW_PXL:
-			c.red = arg3;
-			c.green = arg4;
-			c.blue = arg5;
-			drawPixelWithColour(arg1, arg2, c);
-			return 1;
-		case SYS_SCRL:
-			ncScroll();
-			return 1;
-		case DRAW_NUM:
-      		//arg3: Color num, arg4: número a imprimir
-			p.x = arg1;
-			p.y = arg2;
-			ncPrintNumberParser(arg4, arg3, &p);
-			return 1;
-		case SYS_NEW_PROC:
-			return start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
-		case SYS_PRINT_PROC:
-			print_proc();
-			return 1;
-		case SEND_MAILBOX:
-			send((const char*)arg1, (const void *)arg2, arg3);
-			return 0;
-		case RECEIVE_MAILBOX:
-			return (uint64_t)receive((char *)arg1);
-		case CREATE_MAILBOX:
-			return createMailBox((char *)arg1);
-		case DESTROY_MAILBOX:
-			closeMailbox((char*)arg1);
-			return 0;
-		case CREATE_MUTEX:
-			return createMutex((char *)arg1, get_current_proc()->pid);
-		case LOCK_MUTEX:
-			return lock((char *)arg1, get_current_proc()->pid);
-		case UNLOCK_MUTEX:
-			return unlock((char *)arg1, get_current_proc()->pid);
-		case SYS_FDS:
-			return getFd(get_current_proc(), arg1);
-		case TERMINATE_MUTEX:
-			return terminateMutex((char *)arg1, get_current_proc()->pid);
-		case PRINT_MEM:
-			print_free_memory();
-			return 1;
-		case PROC_CASCADE:
-			proc_cascade();
-			return 1;
-		case SYS_KILL:
-			kill(arg1);
-			return 1;
-        case SYS_WAIT:
-            wait(arg1);
-            return 1;
-	}
-	return -1;
+	if(sysCallID < SYS_CALL_COUNT)
+		return sysCalls[sysCallID - 1](arg1, arg2, arg3, arg4, arg5);
+	return SYS_CALL_FAILURE;
 }
 
-int time(uint64_t timeType){
+int sysRead(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	int fd = arg1;
+	char *buffer = (char*) arg2;
+	int count = arg3;
+	switch (fd){
+		case KEY_BUF:
+			readKeyboardBuffer(buffer, count);
+			break;
+		default:
+			if(isPipe(fd))
+				readFromPipe(buffer, fd, count);
+	}
+	return SYS_CALL_SUCCESS;
+}
+
+int sysWrite(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	int fd = arg1;
+	char *buffer = (char*) arg2;
+	int count = arg3;
+	char aux[count + 1];
+	int i;
+	Colour error = {.red = 0xFF, .green = 0, .blue = 0};
+	for(i = 0; i < count; i++)
+		aux[i] = buffer[i];
+	aux[i] = 0;
+	switch (fd){
+		case STD_OUT:
+			ncPrint(aux);
+			break;
+		case STD_ERR:
+			ncPrintInColor(aux, error);
+			break;
+		default:
+			if(isPipe(fd))
+				writeToPipe(buffer, count, fd);
+	}
+	return SYS_CALL_SUCCESS;
+}
+
+int sysClearScreen(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	ncClear();
+	return SYS_CALL_SUCCESS;
+}
+
+int sysReadKeya(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+	return readKeyboardBufferAll((char*)arg1);
+}
+
+int sysTime(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	int timeType = arg1;
 	switch(timeType){
 		case TICKS:
 			return ticksElapsed();
@@ -123,45 +131,23 @@ int time(uint64_t timeType){
 		case YRS:
 			return getTimeFromRTC(9);
 	}
-	return -1;
+	return SYS_CALL_FAILURE;
 }
 
-void write(uint64_t fd, char* buffer, uint64_t count){
+int sysBeep(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	char aux[count + 1];
-	int i;
-	Colour error = {.red = 0xFF, .green = 0, .blue = 0};
-	for(i = 0; i < count; i++)
-		aux[i] = buffer[i];
-	aux[i] = 0;
-	switch (fd){
-
-		case STD_OUT:
-			ncPrint(aux);
-			break;
-		case STD_ERR:
-			ncPrintInColor(aux, error);
-			break;
-		default:
-			if(isPipe(fd))
-				writeToPipe(buffer, count, fd);
-	}
+	beepASM(arg1);
+	return SYS_CALL_SUCCESS;
 }
 
-void read(uint64_t fd, char* buffer, uint64_t count){
+int sysNoBeep(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	switch (fd){
-		case KEY_BUF:
-			readKeyboardBuffer(buffer, count);
-			break;
-		default:
-			if(isPipe(fd)){
-				readFromPipe(buffer, fd, count);
-			}
-	}
+	noBeepASM();
+	return SYS_CALL_SUCCESS;
 }
 
-int screenInfo(uint8_t arg1){
+int sysScreenInfo(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
 	switch(arg1){
 		case HEIGHT:
 			return height();
@@ -172,5 +158,133 @@ int screenInfo(uint8_t arg1){
 		case CWIDTH:
 			return cwidth();
 	}
-	return -1;
+	return SYS_CALL_FAILURE;
+}
+
+int sysDeleteChar(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	ncDeleteChar();
+	return 1;
+}
+
+int sysDrawPxl(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	Colour c;
+	c.red = arg3;
+	c.green = arg4;
+	c.blue = arg5;
+	drawPixelWithColour(arg1, arg2, c);
+	return SYS_CALL_SUCCESS;
+}
+
+int sysScroll(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	ncScroll();
+	return SYS_CALL_SUCCESS;
+}
+
+int sysDrawNum(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	Position p;
+	//arg3: Color num, arg4: número a imprimir
+	p.x = arg1;
+	p.y = arg2;
+	ncPrintNumberParser(arg4, arg3, &p);
+	return SYS_CALL_SUCCESS;
+}
+
+int sysNewProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
+}
+
+int sysPrintProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	print_proc();
+	return SYS_CALL_SUCCESS;
+}
+
+int sysSendMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	send((const char*)arg1, (const void *)arg2, arg3);
+	return 0;
+}
+
+int sysReceiveMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return (uint64_t) receive((char *)arg1);
+}
+
+int sysCreateMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return createMailBox((char *)arg1);
+}
+
+int sysCloseMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	closeMailbox((char*)arg1);
+	return SYS_CALL_SUCCESS;
+}
+
+int sysCreateMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return createMutex((char *)arg1, get_current_proc()->pid);
+}
+
+int sysLockMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return lock((char *)arg1, get_current_proc()->pid);
+}
+
+int sysUnlockMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return unlock((char *)arg1, get_current_proc()->pid);
+}
+
+int sysGetFds(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return getFd(get_current_proc(), arg1);
+}
+
+int sysTerminateMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	return terminateMutex((char *)arg1, get_current_proc()->pid);
+}
+
+int sysAlloc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+	return SYS_CALL_FAILURE;
+}
+
+int sysFree(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+	return SYS_CALL_FAILURE;
+}
+
+int sysPrintFreeMem(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	print_free_memory();
+	return SYS_CALL_SUCCESS;
+}
+
+int sysProcCascade(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	proc_cascade();
+	return SYS_CALL_SUCCESS;
+}
+
+int sysKill(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	kill(arg1);
+	return SYS_CALL_SUCCESS;	
+}
+
+int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+
+	wait(arg1);
+    return SYS_CALL_SUCCESS;
+}
+
+int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+	
+	switchFd(get_current_proc(), arg1, arg2);
+	return SYS_CALL_SUCCESS;
 }

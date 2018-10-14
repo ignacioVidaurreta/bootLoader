@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <keyboard.h>
 
+#define SYS_CALL_SUCCESS 1
+#define SYS_CALL_FAILURE -1
+#define SYS_CALL_COUNT 30
+
 //Sys call IDs:
 #define SYS_READ 1
 #define SYS_WRITE 2
@@ -30,10 +34,11 @@
 #define TERMINATE_MUTEX	23
 #define ALLOCATE_MEMORY 24
 #define FREE 25
-#define PRINT_MEM 27 //Prints free memory blocks and sizes
-#define PROC_CASCADE 28
-#define SYS_KILL 29 		//kills a process given a pid as its first arguement.
-#define SYS_WAIT 30
+#define PRINT_MEM 26 //Prints free memory blocks and sizes
+#define PROC_CASCADE 27
+#define SYS_KILL 28 		//kills a process given a pid as its first arguement.
+#define SYS_WAIT 29
+#define SYS_SWITCH_FD 30
 
 //there are special characters which do not have an ascii representation
 //however they are stored in the keyboard buffer and returned this are:
@@ -117,5 +122,6 @@
 //except for the sysCallID which should be inserted into the rax register.
 //returns -1 in rax as a failure sign.
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
+int sysTime(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 
 #endif
