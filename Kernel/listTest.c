@@ -1,4 +1,5 @@
 #include <listADT.h>
+#include <buddy.h>
 #include <naiveConsole.h>
 
 int idFunction(void *elem, void *id){

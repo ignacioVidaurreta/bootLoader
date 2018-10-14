@@ -12,7 +12,7 @@
 #include "include/messageQueue.h"
 #include "buddy.h"
 #include <philosophers.h>
-#include <listTest.c>
+#include <listTest.h>
 
 extern uint8_t text;
 extern uint8_t rodata;

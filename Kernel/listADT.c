@@ -1,6 +1,5 @@
 #include <listADT.h>
 #include <buddy.h>
-#include <naiveConsole.h>
 
 struct node{
 	void *elem;
