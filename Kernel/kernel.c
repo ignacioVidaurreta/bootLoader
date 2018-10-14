@@ -114,7 +114,6 @@ void runTests(){
     ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
     messageQueueTestSuite();
 
-	//testPhilosophers();
 }
 
 int action = ACTION_TEST;
@@ -126,9 +125,10 @@ int main(){
 	switch(action){
 		case ACTION_TEST:
 			runTests();
+			//testPhilosophers();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress);
+			start_proc("shell", sampleCodeModuleAddress, 0, NULL);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:

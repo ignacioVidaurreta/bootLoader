@@ -7,9 +7,11 @@
 #include <buddy.h>
 
 
-void philosophers(int i){
+void philosophers(uint64_t i){
+    ncScroll(); /*Por qué funciona sólo si está arriba?? ._. */
+    ncPrint((char*)i);
 
-    //while(1){
+    /*
         char * name =get_current_proc()->name;
         uint64_t pid = get_current_proc()->pid;
 
@@ -65,8 +67,7 @@ void philosophers(int i){
          while(j<100000){
             j++;
         }
-
-    //}
+      */
 
 }
 
@@ -80,32 +81,37 @@ void initPhil(){
         createMutex(concat("__FORK", intToString(i, aux)), 20); //Ese 20 es medio rancio
     }
 
-
+    //char* args[] = {"0", "1", "2", "3", "4"};
+    char * cero[] = {"0"};
+    char * uno[] = {"1"};
+    char * dos[] = {"2"};
+    char * tres[] = {"3"};
+    char * cuatro[] = {"4"};
     for(int j = 0; j<5; j++){
-        char* aux2 = mymalloc(sizeof(aux2)) ;
+        // ncPrint(args[j]);
+        // ncScroll();
+
         switch(j){
             case 0:
-                start_proc("Aristoteles", (void*) philosophers );
+                start_proc("Aristoteles", (void*) philosophers, 1, cero);
                 break;
             case 1:
-                start_proc("Socrates", (void*) philosophers );
+                start_proc("Socrates", (void*) philosophers, 1, uno );
                 break;
             case 2:
-                start_proc("Platon", (void*) philosophers);
+                start_proc("Platon", (void*) philosophers, 1, dos);
                 break;
             case 3:
-                start_proc("Pitagoras", (void*) philosophers);
+                start_proc("Simone de Beauvoir", (void*) philosophers, 1, tres);
                 break;
             case 4:
-                start_proc("Kant", (void*) philosophers);
+                start_proc("Kant", (void*) philosophers, 1, cuatro);
                 break;
-            case 5:
-                start_proc("Olympe", (void*) philosophers);
-                break;
-            default:
-                start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers); //por si llegamos a ampliar
-                break;
+            // // default:
+            //     start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers, 1, args); //por si llegamos a ampliar
+            //     break;
         }
+
     }
 
 
