@@ -4,6 +4,7 @@
 #include <time.h>
 #include <peripherals.h>
 #include <bitMap.h>
+#include <pipes.h>
 #include "process.h"
 #include "messageQueue.h"
 #include "mutex.h"
@@ -83,6 +84,8 @@ int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t a
 			return lock((char *)arg1, get_current_proc()->pid);
 		case UNLOCK_MUTEX:
 			return unlock((char *)arg1, get_current_proc()->pid);
+		case SYS_FDS:
+			return getFd(get_current_proc(), arg1);
 		case TERMINATE_MUTEX:
 			return terminateMutex((char *)arg1, get_current_proc()->pid);
 		case PRINT_MEM:
@@ -139,16 +142,22 @@ void write(uint64_t fd, char* buffer, uint64_t count){
 		case STD_ERR:
 			ncPrintInColor(aux, error);
 			break;
+		default:
+			if(isPipe(fd))
+				writeToPipe(buffer, count, fd);
 	}
 }
 
 void read(uint64_t fd, char* buffer, uint64_t count){
 
 	switch (fd){
-
 		case KEY_BUF:
 			readKeyboardBuffer(buffer, count);
 			break;
+		default:
+			if(isPipe(fd)){
+				readFromPipe(buffer, fd, count);
+			}
 	}
 }
 

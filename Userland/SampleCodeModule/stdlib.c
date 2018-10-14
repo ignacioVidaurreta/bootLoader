@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void putChar(char c){
-  int80(1,(uint64_t)&c, 1, 0,0,2);
+  int80(getStdout(),(uint64_t)&c, 1, 0,0,2);
 }
 
 
@@ -209,7 +209,7 @@ char* readBuffer(char* read){
 char readChar(){
   char c=0;
   while (c == 0){
-    int80(1, (uint64_t)&c, 1, 0, 0, 1);
+    int80(getStdin(), (uint64_t)&c, 1, 0, 0, 1);
   }
 
   return c;
@@ -284,4 +284,12 @@ void unlockMutex(char *mutexId){
 
 void closeMutex(char *mutexId){
   int80((uint64_t) mutexId, 0, 0, 0, 0, TERMINATE_MUTEX);
+}
+
+int getStdout(){
+  return int80(STDOUT, 0, 0, 0, 0, SYS_FD);
+}
+
+int getStdin(){
+  return int80(STDIN, 0, 0, 0, 0, SYS_FD);
 }

@@ -5,6 +5,7 @@
 void freeFds(int readfd, int writefd);
 int findFreeWritefd();
 int findFreeReadfd();
+void shiftPipe(int count, Pipe p);
 
 listADT pipes = 0;
 int readfds[MAX_PIPES] = {0};
@@ -40,21 +41,22 @@ void destroyPipe(int fd){
 int writeToPipe(const char *message, int size, int fd){
 	Pipe p = getL(pipes, &fd);
 	if(p->index + size >= PIPE_SIZE)
-		return 0;
+		return PIPE_FAILURE;
 	int i;
 	for(i = 0; i < size; i++)
-		p->buffer[p->index + i + 1] = message[i];
-	p->index += i;
-	return 1;
+		p->buffer[p->index + i] = message[i];
+	p->index += i + 1;
+	return PIPE_SUCCESS;
 }
 
-int readFromPipe(int fd, char *buffer){
+int readFromPipe(char *buffer, int count, int fd){
 	Pipe p = getL(pipes, &fd);
-	for(int i = 0; i < p->index + 1; i++)
+	if(count > p->index + 1)
+		return PIPE_FAILURE;
+	for(int i = 0; i < count; i++)
 		buffer[i] = p->buffer[i];
-	int aux = p->index;
-	p->index = 0;
-	return aux;
+	shiftPipe(count, p);
+	return PIPE_SUCCESS;
 }
 
 int isPipe(int fd){
@@ -78,4 +80,10 @@ int findFreeReadfd(){
 void freeFds(int readfd, int writefd){
 	writefds[writefd] = 0;
 	readfds[readfd - MAX_PIPES] = 0;
+}
+
+void shiftPipe(int count, Pipe p){
+	for(int i = 0; i < PIPE_SIZE - count; i++)
+		p->buffer[i] = p->buffer[count + i];
+	p->index -= count;
 }

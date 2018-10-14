@@ -26,7 +26,7 @@
 #define CREATE_MUTEX	19  //arg1: char* mutexId
 #define LOCK_MUTEX	20
 #define UNLOCK_MUTEX	21
-//Hay un 22 para agregar una syscall
+#define SYS_FDS 22			//gets the current stdin or stdout (specified in first arguement) of the calling process. STDIN = 0, STDOUT = 1.
 #define TERMINATE_MUTEX	23
 #define ALLOCATE_MEMORY 24
 #define FREE 25
@@ -42,7 +42,7 @@
 //					   2 buffer to be read into
 //					   3 ammount of characters to be read
 //file descriptors: 1 keyboard buffer as defined in keyboard.c.
-#define KEY_BUF 1
+#define KEY_BUF 0
 
 
 

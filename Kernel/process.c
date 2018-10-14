@@ -58,7 +58,10 @@ uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     process->pid = get_new_pid();
     process->state = READY;
     process->parent = get_current_proc();
-    process->name= proc_name;
+    process->name = proc_name;
+    process->fds = mymalloc(2*sizeof(int));
+    process->fds[0] = DEFAULT_STDIN;
+    process->fds[1] = DEFAULT_STDOUT;
 
     tNode *node = mymalloc(sizeof(tNode));
     node-> p = process;
@@ -156,4 +159,8 @@ void kill(int pid){
         process->state = DEAD;
         process->occupied = 0;
     }
+}
+
+int getFd(proc p, int desiredFd){
+    return p->fds[desiredFd];
 }

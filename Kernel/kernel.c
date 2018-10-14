@@ -14,6 +14,12 @@
 #include <philosophers.h>
 #include <listTest.h>
 
+#define ACTION_TEST 0
+#define ACTION_STARTUP 1
+#define ACTION_EXCEPRETURN 2
+
+extern void ctx_switch();
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -121,26 +127,35 @@ void messageQueueTestSuite(){
 
 }
 
+void runTests(){
+	startListTest();
+	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
+    roundRobinTestSuite();
+    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
+    mutexTestSuite();
+    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
+    messageQueueTestSuite();
 
+	//testPhilosophers();
+}
+
+int action = ACTION_STARTUP;
 
 int main(){
 
 	//initializeScreen();
-	initMutex();
 	ncResetPosition();
-	int test=1;
-	if (test){
-		startListTest();
-		ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
-	    roundRobinTestSuite();
-	    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
-	    mutexTestSuite();
-	    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
-	    messageQueueTestSuite();
-
-		//testPhilosophers();
-	}else{
-		//start_proc("shell", sampleCodeModuleAddress, 0, NULL);
+	switch(action){
+		case ACTION_TEST:
+			runTests();
+			break;
+		case ACTION_STARTUP:
+			start_proc("shell", sampleCodeModuleAddress);
+			action = ACTION_EXCEPRETURN;
+			break;
+		case ACTION_EXCEPRETURN:
+			ctx_switch();
+			break;
 	}
 	halt();
 	return 0;

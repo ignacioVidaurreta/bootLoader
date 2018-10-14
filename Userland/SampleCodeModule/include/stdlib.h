@@ -2,6 +2,8 @@
 #define _STDLIB_H
 
   #include <stdint.h>
+  #define STDIN 0
+  #define STDOUT 1
   #define BUFFER_SIZE 80
   #define SYS_NEW_PROC 13
   #define SEND_MAILBOX  15
@@ -11,7 +13,7 @@
   #define CREATE_MUTEX  19
   #define LOCK_MUTEX  20
   #define UNLOCK_MUTEX  21
-  #define LOCK_IF_UNLOCKED_MUTEX 22
+  #define SYS_FD 22
   #define TERMINATE_MUTEX 23
   #define ALLOCATE_MEMORY 24
   #define FREE 25
@@ -78,6 +80,9 @@
 
    char* strncpy(char *destination, const char *source, int n);
    int strncmp(const char* str1, const char* str2, int n);
+
+   int getStdout();
+   int getStdin();
 
 
 #endif

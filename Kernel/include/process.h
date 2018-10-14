@@ -2,6 +2,8 @@
 #define PROCESS_H
 #define NUM_PROCESS 100
 #define STACK_SIZE 512
+#define DEFAULT_STDIN 0
+#define DEFAULT_STDOUT 1
 #include <stdint.h>
 typedef struct process *proc;
 
@@ -16,6 +18,7 @@ struct process {
     uint64_t rsp;
     uint64_t stack[STACK_SIZE];
     uint8_t occupied;
+    int* fds;
     char *name;
 };
 
@@ -33,4 +36,5 @@ void myexit(uint64_t retval);
 void end_process();
 proc *getProcess(int pid);
 void kill(int pid);
+int getFd(proc p, int desiredFd);
 #endif
