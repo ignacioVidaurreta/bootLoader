@@ -79,56 +79,34 @@ void idle2() {
 
 
 void roundRobinTestSuite(){
-	ncScroll();
 	testAddElementToHeader();
-	ncScroll();
 	testAddMultipleElementsToHeader();
-	ncScroll();
 	testAddALotOfElementsToQueue();
-	ncScroll();
 
 }
 void mutexTestSuite(){
-	ncScroll();
 	initMutexTest();
-	ncScroll();
 	createMutexCreatesAMutexTest();
-	ncScroll();
 	lockofLockedMutexClaimsMutexTest();
-	ncScroll();
 	lockOfLockedMutexAddsToWaitingListTest();
-	ncScroll();
 	unlockOfLockedMutexChangesOwnerTest();
-	ncScroll();
 	unlockWithoutWaitingChangesStatusToUnlockTest();
-	ncScroll();
 	terminateMutexEliminatesTheMutexTest();
-	ncScroll();
 }
 
 void messageQueueTestSuite(){
-
-	ncScroll();
 	initMessageQueueCreatesMutexTest();
-	ncScroll();
 	createMailBoxCreatesMailBoxTest();
-	ncScroll();
 	getMailboxFindsExistingMailboxTest();
-	ncScroll();
 	sendSendsMessageTest();
-	ncScroll();
 	receiveReceivesMessageTest();
-	ncScroll();
 	closeMailboxClosesMailboxTest();
-	ncScroll();
 	containsMailboxTest();
-
-	ncScroll();
-
 }
 
 void runTests(){
-	startListTest();
+	ncPrintTestHeader("------------ ListADT Test Suite: ------------");
+	listTestSuite();
 	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
     roundRobinTestSuite();
     ncPrintTestHeader("------------ Mutex Test Suite: ------------");
@@ -136,7 +114,6 @@ void runTests(){
     ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
     messageQueueTestSuite();
 
-	//testPhilosophers();
 }
 
 int action = ACTION_STARTUP;
@@ -148,9 +125,10 @@ int main(){
 	switch(action){
 		case ACTION_TEST:
 			runTests();
+			//testPhilosophers();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress);
+			start_proc("shell", sampleCodeModuleAddress, 0, NULL);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:

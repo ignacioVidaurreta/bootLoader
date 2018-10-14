@@ -31,7 +31,7 @@ void init_process() {
     process_table[0].occupied = 1;
 }
 
-uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
+uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]), int argc, char* argv[]) {
     int index_proc = get_new_index();
 
     proc process = &process_table[index_proc];
@@ -58,6 +58,34 @@ uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[])) {
     //5 registers that will be poped by IRETQ
     //Return address of exit
     process->rsp = (uint64_t) &process->stack[STACK_SIZE - 21];
+    /*
+     *  Por ahora sólo paso por registros
+     */
+    int i;
+    for( i= 0 ; i< argc && i<6; i++){
+      switch(i){
+        case 0:
+          process->stack[STACK_SIZE - 16] = (uint64_t)argv[i]; //rdi
+          break;
+        case 1:
+          process->stack[STACK_SIZE - 15]= (uint64_t)argv[i]; //rsi
+          break;
+        case 2:
+          process->stack[STACK_SIZE - 18]= (uint64_t)argv[i]; //rdx
+          break;
+        case 3:
+          process->stack[STACK_SIZE - 19]= (uint64_t)argv[i]; //rcx
+          break;
+        case 4:
+          process->stack[STACK_SIZE - 14]= (uint64_t)argv[i]; //r8
+          break;
+        case 5:
+          process->stack[STACK_SIZE - 13]= (uint64_t)argv[i]; //r9
+          break;
+      }
+    }
+
+
     process->pid = get_new_pid();
     process->state = READY;
     process->parent = get_current_proc();
@@ -112,7 +140,7 @@ proc get_current_proc() {
 uint64_t contextSwitch(uint64_t rsp) {
     timerHandler();
     current_proc->rsp = rsp;
-    
+
     current_proc = round_robin(ready_queue);
 
     return current_proc->rsp;

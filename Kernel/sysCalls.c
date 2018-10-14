@@ -11,6 +11,7 @@
 #include "buddy.h"
 #include "RoundRobin.h"
 #include "wait.h"
+#include <lib.h>
 
 int sysRead(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysWrite(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
@@ -195,7 +196,7 @@ int sysDrawNum(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint6
 
 int sysNewProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	return start_proc((char *) arg1, (void *) arg2); //Name and pointer to the function
+	return start_proc((char *) arg1, (void *) arg2, arg3, (char**) arg4);
 }
 
 int sysPrintProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
@@ -206,7 +207,7 @@ int sysPrintProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uin
 
 int sysSendMailbox(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	send((const char*)arg1, (const void *)arg2, arg3);
+	send((char*)arg1, (const void *)arg2, arg3);
 	return 0;
 }
 
