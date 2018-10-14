@@ -7,10 +7,10 @@ int idFunction(void *elem, void *id){
 }
 
 void listTestSuite(){
-	int *x1 = mymalloc(sizeof(int*));
-	int *x2 = mymalloc(sizeof(int*));
-	int *x3 = mymalloc(sizeof(int*));
-	int *x4 = mymalloc(sizeof(int*));
+	int *x1 = mymalloc(sizeof(int));
+	int *x2 = mymalloc(sizeof(int));
+	int *x3 = mymalloc(sizeof(int));
+	int *x4 = mymalloc(sizeof(int));
 	*x1 = 1;
 	*x2 = 2;
 	*x3 = 3;
@@ -24,7 +24,7 @@ void listTestSuite(){
 	removeAndFreeFirstL(l);
 	listRemoveAndFreeFirstTest(l,x3);
 	listRemoveAllTest(l, x1, x2, x3, x4);
-	//listRemoveAndFreeAllTest(l, x1, x2, x3, x4);
+	listRemoveAndFreeAllTest(l, x1, x2, x3, x4);
 
 }
 
