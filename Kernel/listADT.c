@@ -1,5 +1,6 @@
 #include <listADT.h>
 #include <buddy.h>
+#include <naiveConsole.h>
 
 struct node{
 	void *elem;
@@ -140,10 +141,15 @@ int containsL(listADT list, void *id){
 }
 
 int containsR(Node current, int (*idFunction)(void*, void*), void *id){
-	if(current == 0)
+	if(current == 0){
+		//ncPrintLn("at end of list");
 		return 0;
-	if(!idFunction(current->elem, id))
+	}
+	if(!idFunction(current->elem, id)){
+		//ncPrintLn("at non matching element");
 		return containsR(current->next, idFunction, id);
+	}
+	//ncPrintLn("at matching element");
 	return 1;
 }
 

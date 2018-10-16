@@ -43,6 +43,7 @@ int sysKill(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t
 int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 void cleanUser(void);
 
 typedef int (*sysFun)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
@@ -56,7 +57,7 @@ sysFun sysCalls[] =
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
-	if(sysCallID < SYS_CALL_COUNT)
+	if(sysCallID <= SYS_CALL_COUNT)
 		return sysCalls[sysCallID - 1](arg1, arg2, arg3, arg4, arg5);
 	return SYS_CALL_FAILURE;
 }
@@ -72,7 +73,7 @@ int sysRead(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t
 			break;
 		default:
 			if(isPipe(fd))
-				readFromPipe(buffer, fd, count);
+				readFromPipe(buffer, count, fd);
 	}
 	return SYS_CALL_SUCCESS;
 }
@@ -293,7 +294,7 @@ int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint
 
 int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	return createPipe();
+	return (uint64_t) createPipe();
 }
 
 int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){

@@ -12,7 +12,9 @@
 #include "include/messageQueue.h"
 #include "buddy.h"
 #include <philosophers.h>
+#include <pipes.h>
 #include <listTest.h>
+#include <pipeTest.h>
 
 #define ACTION_TEST 0
 #define ACTION_STARTUP 1
@@ -62,6 +64,7 @@ void * initializeKernelBinary()
     init_process();
     initMutex();
     initMessageQueue();
+    initPipes();
 	loadIDT();
 
 	return getStackBase();
@@ -105,6 +108,8 @@ void messageQueueTestSuite(){
 }
 
 void runTests(){
+	ncPrintTestHeader("------------ Pipe Test Suite: ------------");
+	pipeTestSuite();
 	ncPrintTestHeader("------------ ListADT Test Suite: ------------");
 	listTestSuite();
 	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
@@ -116,7 +121,7 @@ void runTests(){
 
 }
 
-int action = ACTION_STARTUP;
+int action = ACTION_TEST;
 
 int main(){
 

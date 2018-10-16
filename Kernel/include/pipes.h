@@ -17,6 +17,8 @@ typedef struct {
 
 typedef pipe *Pipe;
 
+void initPipes();
+
 int *createPipe();
 int writeToPipe(const char *message, int size, int fd);
 int readFromPipe(char *buffer, int count, int fd);

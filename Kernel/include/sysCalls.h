@@ -6,7 +6,7 @@
 
 #define SYS_CALL_SUCCESS 1
 #define SYS_CALL_FAILURE -1
-#define SYS_CALL_COUNT 30
+#define SYS_CALL_COUNT 32
 
 //Sys call IDs:
 #define SYS_READ 1
@@ -63,6 +63,7 @@
 //file descriptors: 1 standard output.
 //					2 user output, this represents the last line, into which the user inputs commands.
 //					3 user error. The command line will display a red message.
+//					any other fd will be looked up and if it exists it will be written to.
 #define STD_OUT 1
 #define STD_ERR 2
 
