@@ -5,7 +5,7 @@
 #include "lib.h"
 #include "process.h"
 #include "listADT.h"
-
+#include "wait.h"
 #define NUM_OF_TESTS 7
 
 //listADT mutexes;

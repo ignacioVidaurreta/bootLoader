@@ -82,10 +82,10 @@ void philosophers(uint64_t i){
     }
     lock("__PRINT_MUTEX__", pid);
     ncPrint(name);
-    ncPrint("is thinking ...");
+    ncPrint(" is thinking ...");
     ncScroll();
     unlock("__PRINT_MUTEX__", pid);
-  
+
 }
 
 void testPhilosophers(){
