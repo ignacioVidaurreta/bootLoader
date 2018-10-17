@@ -10,8 +10,10 @@
 
 //listADT mutexes;
 static listADT mutexes;
+static int test_inc = 0;
 
 static int tests_passed = 0;
+
 int idFunctionMutex(void *elem, void *id){
 	return strcmp(((tmutex*)elem)->id,(char*)id)==0;
 }
@@ -102,19 +104,32 @@ int unlock(char* mutexId, uint64_t processId){
     if (mutex == NULL){
         return -1;
     }
+	 // ncScroll();
+	 // ncPrint("unlock: ");
+	 // ncPrintDec(processId);
+	 // ncPrint(" , owner: ");
+	 // ncPrintDec(mutex->ownerpid);
+	 // ncScroll();
 
     if( mutex->ownerpid == processId){
+
         uint64_t new_pid;
         int blockedProcessFound = 0;
 
   		if (!isEmptyL(mutex->waitingPIDs)){
 				new_pid = ((tproc*)getFirstL(mutex->waitingPIDs))->pid;
 				removeFirstL(mutex->waitingPIDs);
-				signal();
 				blockedProcessFound = 1;
 				}
 
-
+				// ncScroll();
+				// ncPrint("unlock: ");
+				// ncPrintDec(processId);
+				// ncPrint(" blockedFound:");
+				// ncPrintDec(blockedProcessFound);
+				// ncPrint(" new_pid:");
+				// ncPrintDec(new_pid);
+				// ncScroll();
         /*
          *  No hace falta desbloquear el mutex si se
          *  lo voy a dar a otro proceso. Con simplemente
@@ -123,7 +138,7 @@ int unlock(char* mutexId, uint64_t processId){
          */
          if (blockedProcessFound) {
              mutex-> ownerpid = new_pid;
-             //wakeup(new_pid);
+             signal();
          }else{ //Si no encontré proceso, librero el mutex
              mutex-> status = UNLOCKED;
          }
@@ -204,6 +219,31 @@ void createMutexCreatesAMutexTest(){
 
 }
 
+void increment_test(){
+	for(int i=0;i<1000;i++){
+		lock("__INC_GLOBAL__",get_current_proc()->pid);
+		test_inc++;
+		if(test_inc==5000)
+			signal();
+		unlock("__INC_GLOBAL__",get_current_proc()->pid);
+	}
+}
+
+
+void multiProcessUsesMutexTest(){
+	createMutex("__INC_GLOBAL__",get_current_proc()->pid);
+
+	for(int i=0;i<5;i++){
+		start_proc("test",(void*) increment_test,0,NULL);
+	}
+	wait(get_current_proc()->pid);
+	ncPrint("multiProcessUsesMutexTest: ");
+	if(test_inc == 5000){
+		ncPrintTestPassed("PASSED!");
+	}else{
+		ncPrintTestFailed("FAILED! ");
+	}
+}
 
 void lockofLockedMutexClaimsMutexTest(){
     createMutex("LOCKEO_EL_MUTEX", 2);

@@ -50,5 +50,8 @@ void unlockOfLockedMutexChangesOwnerTest();
 void unlockWithoutWaitingChangesStatusToUnlockTest();
 void terminateMutexEliminatesTheMutexTest();
 void numOfTestsPassed();
+void multiProcessUsesMutexTest();
+void increment_test();
+
 
 #endif
