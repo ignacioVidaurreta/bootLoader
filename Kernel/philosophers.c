@@ -101,9 +101,9 @@ void initPhil(){
     //char* args[] = {"0", "1", "2", "3", "4"};
     char * cero[] = {"0"};
     char * uno[] = {"1"};
-    // char * dos[] = {"2"};
-    // char * tres[] = {"3"};
-    // char * cuatro[] = {"4"};
+    char * dos[] = {"2"};
+    char * tres[] = {"3"};
+    char * cuatro[] = {"4"};
     //int64_t pids[5];
     for(int j = 0; j<5; j++){
         // ncPrint(args[j]);
@@ -116,15 +116,15 @@ void initPhil(){
             case 1:
                 start_proc("Socrates", (void*) philosophers, 1, uno );
                 break;
-            // case 2:
-            //     pids[2]= start_proc("Platon", (void*) philosophers, 1, dos);
-            //     break;
-            // case 3:
-            //     pids[3]= start_proc("Simone de Beauvoir", (void*) philosophers, 1, tres);
-            //     break;
-            // case 4:
-            //     pids[4]= start_proc("Kant", (void*) philosophers, 1, cuatro);
-            //     break;
+            case 2:
+                start_proc("Platon", (void*) philosophers, 1, dos);
+                break;
+            case 3:
+                start_proc("Simone de Beauvoir", (void*) philosophers, 1, tres);
+                break;
+            case 4:
+                start_proc("Kant", (void*) philosophers, 1, cuatro);
+                break;
             // // default:
             //     start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers, 1, args); //por si llegamos a ampliar
             //     break;

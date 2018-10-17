@@ -6,9 +6,12 @@
 #include "process.h"
 #include "listADT.h"
 
+#define NUM_OF_TESTS 7
+
 //listADT mutexes;
 static listADT mutexes;
 
+static int tests_passed = 0;
 int idFunctionMutex(void *elem, void *id){
 	return strcmp(((tmutex*)elem)->id,(char*)id)==0;
 }
@@ -25,7 +28,7 @@ void initMutex(){
 
     tmutex * mutex_master = mymalloc(sizeof(tmutex));
     mutex_master->id = MUTEX_MASTER_ID;
-    mutex_master->status = LOCKED;
+    mutex_master->status = UNLOCKED;
     mutex_master->ownerpid= NULL_PID;
 
     listADT waiting_proc =  createListL(idFunctionProcs,sizeof(uint64_t));
@@ -81,6 +84,7 @@ int lock(char* mutexId, uint64_t processId){
 
     if(was_locked){ //Si estaba bloqueado ==> agregarlo a la cola de procesos esperando
         addL(mutex->waitingPIDs,newProc(processId));
+				wait(processId);
 
     }else{
         mutex->ownerpid = processId;
@@ -103,15 +107,12 @@ int unlock(char* mutexId, uint64_t processId){
         uint64_t new_pid;
         int blockedProcessFound = 0;
 
-        //El blockedProcessFound=1 no debería ir, pero hasta que tengamos
-        // la conexión a procesos lo dejo para que agarre el siguietne
-
-        while(!blockedProcessFound && !isEmptyL(mutex->waitingPIDs)){
-            new_pid = ((tproc*)getFirstL(mutex->waitingPIDs))->pid;
-            removeFirstL(mutex->waitingPIDs);
-            //blockedProcessFound = isBlocked(pid);
-            blockedProcessFound = 1; //
-        }
+  		if (!isEmptyL(mutex->waitingPIDs)){
+				new_pid = ((tproc*)getFirstL(mutex->waitingPIDs))->pid;
+				removeFirstL(mutex->waitingPIDs);
+				signal();
+				blockedProcessFound = 1;
+				}
 
 
         /*
@@ -180,6 +181,7 @@ void initMutexTest(){
     }else{
         ncPrint("initMutexTest ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }
 }
 
@@ -193,11 +195,13 @@ void createMutexCreatesAMutexTest(){
     if(containsL(mutexes,"HOLA_SOY_UN_TEST")){
       ncPrint("createMutexCreatesAMutexTest  ");
       ncPrintTestPassed("PASSED!");
+			tests_passed++;
     }
     else{
       ncPrint("createMutexCreatesAMutexTest  ");
       ncPrintTestFailed("FAILED!");
     }
+
 }
 
 
@@ -212,6 +216,7 @@ void lockofLockedMutexClaimsMutexTest(){
     if (mutex->ownerpid == 2){
         ncPrint("lockofLockedMutexClaimsMutexTest ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }else{
         ncPrint("lockofLockedMutexClaimsMutexTest ");
         ncPrintTestFailed("FAILED!");
@@ -234,6 +239,7 @@ void lockOfLockedMutexAddsToWaitingListTest(){
     if (((tproc*)getFirstL(mutex->waitingPIDs))->pid == 3){
         ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }else{
         ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
         ncPrintTestFailed("FAILED!");
@@ -252,6 +258,7 @@ void unlockOfLockedMutexChangesOwnerTest(){
     if (mutex->ownerpid == 3){
         ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }else{
         ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
         ncPrintTestFailed("FAILED!");
@@ -270,6 +277,7 @@ void unlockWithoutWaitingChangesStatusToUnlockTest(){
     if( mutex->status == UNLOCKED){
         ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }else{
         ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
         ncPrintTestFailed("FAILED!");
@@ -284,8 +292,18 @@ void terminateMutexEliminatesTheMutexTest(){
     if(mutex == NULL){
         ncPrint("terminateMutexEliminatesTheMutexTest: ");
         ncPrintTestPassed("PASSED!");
+				tests_passed++;
     }else{
         ncPrint("terminateMutexEliminatesTheMutexTest: ");
         ncPrintTestFailed("FAILED!");
     }
+}
+
+void numOfTestsPassed(){
+	if (tests_passed == NUM_OF_TESTS){
+		ncPrintTestPassed("All Tests PASSED");
+	}else{
+		ncPrintDec(NUM_OF_TESTS - tests_passed);
+		ncPrintTestFailed("Tests FAILED");
+	}
 }

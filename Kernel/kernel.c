@@ -87,6 +87,7 @@ void roundRobinTestSuite(){
 	testAddALotOfElementsToQueue();
 
 }
+
 void mutexTestSuite(){
 	initMutexTest();
 	createMutexCreatesAMutexTest();
@@ -95,6 +96,7 @@ void mutexTestSuite(){
 	unlockOfLockedMutexChangesOwnerTest();
 	unlockWithoutWaitingChangesStatusToUnlockTest();
 	terminateMutexEliminatesTheMutexTest();
+	numOfTestsPassed();
 }
 
 void messageQueueTestSuite(){
@@ -108,16 +110,17 @@ void messageQueueTestSuite(){
 }
 
 void runTests(){
+
 	ncPrintTestHeader("------------ Pipe Test Suite: ------------");
 	pipeTestSuite();
 	ncPrintTestHeader("------------ ListADT Test Suite: ------------");
 	listTestSuite();
 	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
-    roundRobinTestSuite();
-    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
-    mutexTestSuite();
-    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
-    messageQueueTestSuite();
+  roundRobinTestSuite();
+  ncPrintTestHeader("------------ Mutex Test Suite: ------------");
+  mutexTestSuite();
+  ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
+  messageQueueTestSuite();
 
 }
 

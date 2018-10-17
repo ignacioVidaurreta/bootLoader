@@ -49,6 +49,6 @@ void lockOfLockedMutexAddsToWaitingListTest();
 void unlockOfLockedMutexChangesOwnerTest();
 void unlockWithoutWaitingChangesStatusToUnlockTest();
 void terminateMutexEliminatesTheMutexTest();
-
+void numOfTestsPassed();
 
 #endif
