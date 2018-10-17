@@ -10,6 +10,7 @@
 void philosophers(uint64_t i){
     // ncScroll(); /*Por qué funciona sólo si está arriba?? ._. */
     // ncPrint((char*)i);
+
     int num = *((char*)i) - '0';
     char * name =get_current_proc()->name;
     uint64_t pid = get_current_proc()->pid;
@@ -23,7 +24,7 @@ void philosophers(uint64_t i){
     lock("__PRINT_MUTEX__", pid);
     ncPrint(name);
     ncPrint(" is waiting for the ");
-    if ( i%2 == 0){ //Si es par
+    if ( num%2 == 0){ //Si es par
         ncPrint("left fork... ");
         ncScroll();
         unlock("__PRINT_MUTEX__", pid);
@@ -56,7 +57,7 @@ void philosophers(uint64_t i){
     lock("__PRINT_MUTEX__", pid);
     ncPrint(name);
     ncPrint(" stopped eating and is releasing the ");
-    if ( i%2 == 0){ //Si es par
+    if ( num%2 == 0){ //Si es par
         ncPrint("left fork... ");
         ncScroll();
         unlock("__PRINT_MUTEX__", pid);
@@ -84,7 +85,7 @@ void philosophers(uint64_t i){
     ncPrint("is thinking ...");
     ncScroll();
     unlock("__PRINT_MUTEX__", pid);
-
+  
 }
 
 void testPhilosophers(){
