@@ -50,6 +50,13 @@
   void lockMutex(char *id);
   void unlockMutex(char *id);
   void kill(int pid);
+  int *createPipe();
+  void destroyPipe(int fd);
+  void writeToFd(int fd, char *buffer, int size);
+  void readFromFd(int fd, char *buffer, int size);
+  int getStdout();
+  int getStdin();
+  void switchFd(int fdType, int newFd);
 
   /*
   ** turns the given integer into a string and stores it in
@@ -99,8 +106,8 @@
    char* strncpy(char *destination, const char *source, int n);
    int strncmp(const char* str1, const char* str2, int n);
 
-   int getStdout();
-   int getStdin();
+   void wait(uint64_t pid);
 
+   int *joinByPipe(char *procName1, void *procPointer1, char *procName2, void *procPointer2);
 
 #endif

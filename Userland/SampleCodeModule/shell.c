@@ -71,15 +71,15 @@ void shell(){
       case ADD_WRITERS:
         printf("Writer Added");
         break;
+      case PIPE_EXAMPLE:
+        pid = start_proc_user("pipes", (void*) pipeExample);
+        wait(pid);
+        break;
       default:
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
     }
   }
-}
-
-void wait(uint64_t pid) {
-    int80(pid, 0, 0, 0, 0, SYS_WAIT);
 }
 
 void scroll(){
@@ -115,6 +115,9 @@ cmdID execute(char * cmd){
   }
   else if(strcmp(cmd, "endProdcons") == 0){
     return END_PRODCONS;
+  }
+  else if(strcmp(cmd, "pipeItUp") == 0){
+    return PIPE_EXAMPLE;
   }
   else{
     aux="echo";
@@ -196,6 +199,19 @@ void echo(char*arg){
 void clear(){
   int80(0,0,0,0,0,SYS_CLR_SCRN);
 }
+
 void print_process(){
-    int80(0, 0, 0, 0, 0, SYS_PRINT_PROC); //Prints processes
+  int80(0, 0, 0, 0, 0, SYS_PRINT_PROC); //Prints processes
+}
+
+void pipeReader(){
+
+  char text[80] = {0};
+  scanf("%s", text);
+  printf("%s\n", text);
+}
+
+void pipeExample(){
+
+  joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
 }

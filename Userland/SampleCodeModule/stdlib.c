@@ -293,3 +293,52 @@ int getStdout(){
 int getStdin(){
   return int80(STDIN, 0, 0, 0, 0, SYS_FDS);
 }
+
+int *createPipe(){
+
+  return (int*) int80(0, 0, 0, 0, 0, SYS_CREATE_PIPE);
+}
+
+void destroyPipe(int fd){
+  
+  int80(fd, 0, 0, 0, 0, SYS_DESTROY_PIPE);
+}
+
+void writeToFd(int fd, char *buffer, int size){
+
+  int80(fd, (uint64_t) buffer, size, 0, 0, SYS_WRITE);
+}
+
+void readFromFd(int fd, char *buffer, int size){
+
+  int80(fd, (uint64_t) buffer, size, 0, 0, SYS_READ);
+}
+
+void switchFd(int fdType, int newFd){
+
+  int80(fdType, newFd, 0, 0, 0, SYS_SWITCH_FD);
+}
+
+int *malloc(uint64_t size){
+
+  return (int*) int80(size, 0, 0, 0, 0, ALLOCATE_MEMORY);
+}
+
+void wait(uint64_t pid) {
+  int80(pid, 0, 0, 0, 0, SYS_WAIT);
+}
+
+int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcName, void *writerProcPointer){
+
+  int* pipe = createPipe();
+  switchFd(STDOUT, pipe[1]);
+  int writerPid = start_proc_user(writerProcName, writerProcPointer);
+  switchFd(STDOUT, STDOUT);
+  switchFd(STDIN, pipe[0]);
+  int readerPid = start_proc_user(readerProcName, readerProcPointer);
+  switchFd(STDIN, STDIN);
+  int* pids = malloc(2*sizeof(int));
+  pids[1] = writerPid;
+  pids[0] = readerPid;
+  return pids;
+}

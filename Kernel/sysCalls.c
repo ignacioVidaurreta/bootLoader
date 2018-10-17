@@ -255,11 +255,14 @@ int sysTerminateMutex(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4
 }
 
 int sysAlloc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
-	return SYS_CALL_FAILURE;
+
+	return (uint64_t) mymalloc(arg1);
 }
 
 int sysFree(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
-	return SYS_CALL_FAILURE;
+
+	myfree((void*) arg1, arg2);
+	return SYS_CALL_SUCCESS;
 }
 
 int sysPrintFreeMem(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
