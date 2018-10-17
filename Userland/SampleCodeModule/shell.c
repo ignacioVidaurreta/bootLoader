@@ -74,9 +74,10 @@ void shell(){
       case PIPE_EXAMPLE:
         pid = start_proc_user("pipes", (void*) pipeExample);
         wait(pid);
+        scroll();
         break;
       default:
-        printf("Invalid command: Please try again. Write help to get a list of the possible commands");
+        printf("'%s' is not a valid command. Please try again. Write help to get a list of the possible commands", command);
         scroll();
     }
   }
@@ -189,6 +190,9 @@ void printHelpMsg(){
     printf("* ![UNDER CONSTRUCTION]! addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
     scroll();
     printf("* ![UNDER CONSTRUCTION]! endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
+    scroll();
+    printf("* pipeItUp: Simple program showing the work of pipes");
+    scroll();
 }
 
 void echo(char*arg){
@@ -208,10 +212,11 @@ void pipeReader(){
 
   char text[80] = {0};
   scanf("%s", text);
-  printf("%s\n", text);
+  printf("Pipe read: %s\n", text);
 }
 
 void pipeExample(){
 
-  joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
+  //joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
+  joinByPipe("getDate", (void*) getDate, "pipeReader", (void*) pipeReader);
 }
