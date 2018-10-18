@@ -8,13 +8,11 @@
 
 
 void philosophers(uint64_t i){
-    // ncScroll(); /*Por qué funciona sólo si está arriba?? ._. */
-    // ncPrint((char*)i);
 
     int num = *((char*)i) - '0';
     char * name =get_current_proc()->name;
     uint64_t pid = get_current_proc()->pid;
-
+    
     char* right_fork = mymalloc(sizeof(right_fork));
     char* left_fork = mymalloc(sizeof(left_fork));
 

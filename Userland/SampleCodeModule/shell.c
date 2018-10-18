@@ -76,6 +76,11 @@ void shell(){
         wait(pid);
         scroll();
         break;
+      case PHIL:
+        pid = start_proc_user("philosophers", (void*) philosophers);
+        wait(pid);
+        scroll();
+        break;
       default:
         printf("'%s' is not a valid command. Please try again. Write help to get a list of the possible commands", command);
         scroll();
@@ -119,8 +124,9 @@ cmdID execute(char * cmd){
   }
   else if(strcmp(cmd, "pipeItUp") == 0){
     return PIPE_EXAMPLE;
-  }
-  else{
+  }else if(strcmp(cmd, "philosophers") == 0){
+      return PHIL;
+  }else{
     aux="echo";
     if(strncmp(aux, cmd, 4) == 0){
       int len = strlen(cmd);
@@ -193,6 +199,8 @@ void printHelpMsg(){
     scroll();
     printf("* pipeItUp: Simple program showing the work of pipes");
     scroll();
+    printf("* philosophers: Run the Philosophers simulation");
+    scroll();
 }
 
 void echo(char*arg){
@@ -219,4 +227,9 @@ void pipeExample(){
 
   //joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
   joinByPipe("getDate", (void*) getDate, "pipeReader", (void*) pipeReader);
+}
+
+
+void philosophers(){
+  int80(0, 0, 0, 0, 0, PHILOSOPHERS);
 }

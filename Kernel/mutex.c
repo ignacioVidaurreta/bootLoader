@@ -4,6 +4,7 @@
 #include "buddy.h"
 #include "lib.h"
 #include "process.h"
+#include <wait.h>
 #include "listADT.h"
 #include "wait.h"
 #define NUM_OF_TESTS 7

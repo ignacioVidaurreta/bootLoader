@@ -37,6 +37,7 @@
   #define SYS_SWITCH_FD 30
   #define SYS_CREATE_PIPE 31
   #define SYS_DESTROY_PIPE 32
+  #define PHILOSOPHERS 33
 
   extern uint64_t int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID);
 
