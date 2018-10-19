@@ -112,19 +112,19 @@ void initPhil(){
 
         switch(j){
             case 0:
-                start_proc("Aristoteles", (void*) philosophers, 1, cero);
+                start_proc("Aristoteles", (void*) philosophers, 1, cero, 0);
                 break;
             case 1:
-                start_proc("Socrates", (void*) philosophers, 1, uno );
+                start_proc("Socrates", (void*) philosophers, 1, uno, 0);
                 break;
             case 2:
-                start_proc("Platon", (void*) philosophers, 1, dos);
+                start_proc("Platon", (void*) philosophers, 1, dos, 0);
                 break;
             case 3:
-                start_proc("Simone de Beauvoir", (void*) philosophers, 1, tres);
+                start_proc("Simone de Beauvoir", (void*) philosophers, 1, tres, 0);
                 break;
             case 4:
-                start_proc("Kant", (void*) philosophers, 1, cuatro);
+                start_proc("Kant", (void*) philosophers, 1, cuatro, 0);
                 break;
             // // default:
             //     start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers, 1, args); //por si llegamos a ampliar

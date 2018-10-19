@@ -44,7 +44,7 @@
   void closeMessageQueue(char *id);
   void sendMessage(char *id, void *msg, int msgSize);
   void* receiveMessage(char *id);
-  int start_proc_user(char *procName, void *procPointer);
+  int start_proc_user(char *procName, void *procPointer, int argc, char *argv[], uint64_t priority);
   void createMutex(char *id);
   void closeMutex(char *id);
   void lockMutex(char *id);

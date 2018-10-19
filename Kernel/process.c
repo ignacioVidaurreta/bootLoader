@@ -31,7 +31,7 @@ void init_process() {
     process_table[0].occupied = 1;
 }
 
-uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]), int argc, char* argv[]) {
+uint64_t start_proc(char *proc_name, void *function, int argc, char* argv[], uint64_t priority) {
     int index_proc = get_new_index();
 
     proc process = &process_table[index_proc];
@@ -90,6 +90,7 @@ uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]), i
     process->state = READY;
     process->parent = get_current_proc();
     process->name = proc_name;
+    process->priority = priority;
     process->fds = mymalloc(2*sizeof(int));
     process->fds[0] = process->parent->fds[0];
     process->fds[1] = process->parent->fds[1];

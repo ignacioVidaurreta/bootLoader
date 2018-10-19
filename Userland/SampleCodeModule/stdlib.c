@@ -262,8 +262,8 @@ void* receiveMessage(char *id){
   return (void*) int80((uint64_t)id, 0, 0, 0, 0, RECEIVE_MAILBOX);
 }
 
-int start_proc_user(char *procName, void *procPointer) {
-    return int80((uint64_t) procName, (uint64_t) procPointer, 0, 0, 0, SYS_NEW_PROC);
+int start_proc_user(char *procName, void *procPointer, int argc, char *argv[], uint64_t priority) {
+    return int80((uint64_t) procName, (uint64_t) procPointer, (uint64_t) argc, (uint64_t) argv, (uint64_t) priority, SYS_NEW_PROC);
 }
 
 void kill(int pid){
@@ -332,10 +332,10 @@ int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcN
 
   int* pipe = createPipe();
   switchFd(STDOUT, pipe[1]);
-  int writerPid = start_proc_user(writerProcName, writerProcPointer);
+  int writerPid = start_proc_user(writerProcName, writerProcPointer, 0, 0, 0);
   switchFd(STDOUT, STDOUT);
   switchFd(STDIN, pipe[0]);
-  int readerPid = start_proc_user(readerProcName, readerProcPointer);
+  int readerPid = start_proc_user(readerProcName, readerProcPointer, 0, 0, 0);
   switchFd(STDIN, STDIN);
   int* pids = malloc(2*sizeof(int));
   pids[1] = writerPid;

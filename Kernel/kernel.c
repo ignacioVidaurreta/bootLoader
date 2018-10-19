@@ -124,7 +124,7 @@ void runTests(){
 
 }
 
-int action = ACTION_TEST;
+int action = ACTION_STARTUP;
 
 int main(){
 
@@ -136,7 +136,7 @@ int main(){
 			testPhilosophers();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress, 0, NULL);
+			start_proc("shell", sampleCodeModuleAddress, 0, NULL, 0);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:
