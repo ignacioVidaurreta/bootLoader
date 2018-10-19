@@ -8,77 +8,104 @@
 
 
 void philosophers(uint64_t i){
-    // ncScroll(); /*Por qué funciona sólo si está arriba?? ._. */
-    // ncPrint((char*)i);
 
     int num = *((char*)i) - '0';
     char * name =get_current_proc()->name;
     uint64_t pid = get_current_proc()->pid;
-
+    
     char* right_fork = mymalloc(sizeof(right_fork));
     char* left_fork = mymalloc(sizeof(left_fork));
 
     intToString((num+1)%5, right_fork);
     intToString(num, left_fork);
 
-    lock("__PRINT_MUTEX__", pid);
-    ncPrint(name);
-    ncPrint(" is waiting for the ");
+
     if ( num%2 == 0){ //Si es par
-        ncPrint("left fork... ");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrintDec(pid);
+            // ncPrint(" is waiting for the ");
+            // ncPrint("left fork... ");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         lock(concat("__FORK", left_fork), pid);
-        lock("__PRINT_MUTEX__", pid);
-        ncPrint(name);
-        ncPrint(" is waiting for the right fork... ");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
-        lock(concat("__FORK", right_fork), pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" is waiting for the right fork... ");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
     }else{
-        ncPrint("right fork...");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrintDec(pid);
+            // ncPrint(" is waiting for the ");
+            // ncPrint("right fork...");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         lock(concat("__FORK", right_fork), pid);
-        lock("__PRINT_MUTEX__", pid);
-        ncPrint(name);
-        ncPrint(" is waiting for the left fork...");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" is waiting for the left fork...");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         lock(concat("__FORK", left_fork), pid);
     }
-    lock("__PRINT_MUTEX__", pid);
-    ncPrint(name);
-    ncPrint(" is eating");
-    ncScroll();
-    unlock("__PRINT_MUTEX__", pid);
+    // lock("__PRINT_MUTEX__", pid);
+    // ncPrint(name);
+    // ncPrint(" is eating");
+    // ncScroll();
+    // unlock("__PRINT_MUTEX__", pid);
 
 
-    lock("__PRINT_MUTEX__", pid);
-    ncPrint(name);
-    ncPrint(" stopped eating and is releasing the ");
+
     if ( num%2 == 0){ //Si es par
-        ncPrint("left fork... ");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrintDec(pid);
+            // ncPrint(" stopped eating and is releasing the ");
+            // ncPrint("left fork... ");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         unlock(concat("__FORK", left_fork), pid);
-        lock("__PRINT_MUTEX__", pid);
-        ncPrint(name);
-        ncPrint(" is releasing the right fork...");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" released the left fork");
+            // ncScroll();
+            // ncPrint(name);
+            // ncPrint(" is releasing the right fork...");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         unlock(concat("__FORK", right_fork), pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" released the right fork");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
     }else{
-        ncPrint("right fork... ");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrintDec(pid);
+            // ncPrint(" stopped eating and is releasing the ");
+            // ncPrint("right fork... ");
+            // ncScroll();
+            // ncPrint(concat("__FORK", right_fork));
+            // ncPrintDec(pid);
+            // unlock("__PRINT_MUTEX__", pid);
         unlock(concat("__FORK", right_fork), pid);
-        lock("__PRINT_MUTEX__", pid);
-        ncPrint(name);
-        ncPrint(" is releasing the left fork");
-        ncScroll();
-        unlock("__PRINT_MUTEX__", pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" released the right fork");
+            // ncScroll();
+            // ncPrint(name);
+            // ncPrint(" is releasing the left fork");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
         unlock(concat("__FORK", left_fork), pid);
+            // lock("__PRINT_MUTEX__", pid);
+            // ncPrint(name);
+            // ncPrint(" released the left fork");
+            // ncScroll();
+            // unlock("__PRINT_MUTEX__", pid);
     }
     lock("__PRINT_MUTEX__", pid);
     ncPrint(name);

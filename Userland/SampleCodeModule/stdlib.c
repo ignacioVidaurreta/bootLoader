@@ -70,6 +70,23 @@ int stringToInt(char *string){
   return ret;
 }
 
+char* concat(const char* str1, const char* str2){
+
+	int s1 = strlen(str1);
+	int s2 = strlen(str2);
+	char * aux = (char*) malloc(s1 +s2 +1);
+	int i;
+	for (i=0; str1[i] != 0; i++)
+	{
+		aux[i] = str1[i];
+	}
+	for (int j = 0; str2[j] != 0; j++){
+		aux[i++] = str2[j];
+	}
+	aux[i] = 0;
+
+	return aux;
+}
 /*
  *  https://bobobobo.wordpress.com/2008/01/28/how-to-use-variable-argument-lists-va_list/
  *  Imprime el string dado cambiando el:
@@ -300,7 +317,7 @@ int *createPipe(){
 }
 
 void destroyPipe(int fd){
-  
+
   int80(fd, 0, 0, 0, 0, SYS_DESTROY_PIPE);
 }
 
@@ -319,9 +336,9 @@ void switchFd(int fdType, int newFd){
   int80(fdType, newFd, 0, 0, 0, SYS_SWITCH_FD);
 }
 
-int *malloc(uint64_t size){
+void *malloc(uint64_t size){
 
-  return (int*) int80(size, 0, 0, 0, 0, ALLOCATE_MEMORY);
+  return (void*) int80(size, 0, 0, 0, 0, ALLOCATE_MEMORY);
 }
 
 void wait(uint64_t pid) {
