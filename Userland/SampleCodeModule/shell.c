@@ -3,6 +3,7 @@
 #include <date.h>
 #include <clock.h>
 #include <prodcons.h>
+#include <philo.h>
 
 char arg[BUFFER_SIZE - 5];
 int prodconsPid = 0;
@@ -20,18 +21,18 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        pid = start_proc_user("help", (void *) printHelpMsg);
+        pid = start_proc_user("help", (void *) printHelpMsg, 0, 0);
         wait(pid);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        pid = start_proc_user("getDate", (void *) getDate);
+        pid = start_proc_user("getDate", (void *) getDate, 0, 0);
         wait(pid);
         break;
       case CLOCK:
-        pid = start_proc_user("start clock", (void *) startClock);
+        pid = start_proc_user("start clock", (void *) startClock, 0, 0);
         wait(pid);
         break;
       case DIV:
@@ -44,11 +45,11 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        pid = start_proc_user("clear", (void *) clear);
+        pid = start_proc_user("clear", (void *) clear, 0, 0);
         wait(pid);
         break;
       case PS:
-        pid = start_proc_user("ps", (void *) print_process);
+        pid = start_proc_user("ps", (void *) print_process, 0, 0);
         wait(pid);
         break;
       case PRINT_MEM:
@@ -59,7 +60,7 @@ void shell(){
         break;
       case PRODCONS:
         if(prodconsPid == 0)
-          prodconsPid = start_proc_user("prodcons", (void*) prodcons);
+          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0);
         break;
       case END_PRODCONS:
         if(prodconsPid != 0)
@@ -72,13 +73,14 @@ void shell(){
         printf("Writer Added");
         break;
       case PIPE_EXAMPLE:
-        pid = start_proc_user("pipes", (void*) pipeExample);
+        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0);
         wait(pid);
         scroll();
         break;
       case PHIL:
-        pid = start_proc_user("philosophers", (void*) philosophers);
-        wait(pid);
+        // pid = start_proc_user("philosophers", (void*) philosophers, 0, 0);
+        // wait(pid);
+        pid= testPhilosophers();
         scroll();
         break;
       default:
@@ -227,9 +229,4 @@ void pipeExample(){
 
   //joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
   joinByPipe("getDate", (void*) getDate, "pipeReader", (void*) pipeReader);
-}
-
-
-void philosophers(){
-  int80(0, 0, 0, 0, 0, PHILOSOPHERS);
 }

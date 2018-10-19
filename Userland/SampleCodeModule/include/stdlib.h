@@ -45,7 +45,7 @@
   void closeMessageQueue(char *id);
   void sendMessage(char *id, void *msg, int msgSize);
   void* receiveMessage(char *id);
-  int start_proc_user(char *procName, void *procPointer);
+  int start_proc_user(char *procName, void *procPointer, int argc, char* argv[]);
   void createMutex(char *id);
   void closeMutex(char *id);
   void lockMutex(char *id);
@@ -58,7 +58,8 @@
   int getStdout();
   int getStdin();
   void switchFd(int fdType, int newFd);
-
+  void* malloc(uint64_t size);
+  char* concat(const char* str1, const char* str2);
   /*
   ** turns the given integer into a string and stores it in
   ** the given array

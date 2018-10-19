@@ -124,7 +124,7 @@ void runTests(){
 
 }
 
-int action = ACTION_TEST;
+int action = ACTION_STARTUP;
 
 int main(){
 

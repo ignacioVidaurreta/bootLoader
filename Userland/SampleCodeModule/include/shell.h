@@ -16,6 +16,5 @@
   void zeroDivException();
   void print_process();
   void pipeExample();
-  void philosophers();
 
 #endif
