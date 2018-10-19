@@ -80,7 +80,7 @@ void shell(){
       case PHIL:
         // pid = start_proc_user("philosophers", (void*) philosophers, 0, 0);
         // wait(pid);
-        pid= testPhilosophers();
+        testPhilosophers();
         scroll();
         break;
       default:
