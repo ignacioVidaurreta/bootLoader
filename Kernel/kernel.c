@@ -11,7 +11,6 @@
 #include "mutex.h"
 #include "include/messageQueue.h"
 #include "buddy.h"
-#include <philosophers.h>
 #include <pipes.h>
 #include <listTest.h>
 #include <pipeTest.h>
@@ -124,7 +123,7 @@ void runTests(){
 
 }
 
-int action = ACTION_STARTUP;
+int action = ACTION_TEST;
 
 int main(){
 
@@ -132,8 +131,7 @@ int main(){
 	ncResetPosition();
 	switch(action){
 		case ACTION_TEST:
-			//runTests();
-			testPhilosophers();
+			runTests();
 			break;
 		case ACTION_STARTUP:
 			start_proc("shell", sampleCodeModuleAddress, 0, NULL, 0);
