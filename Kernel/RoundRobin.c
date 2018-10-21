@@ -77,7 +77,6 @@ void add_to_queue(tHeader *queue_header, tNode *node) {
      if (node->p->pid == queue_header->first->p->pid){
          ncPrint("testAddElementToHeader: ");
          ncPrintTestPassed("PASSED! ");
-         num_test_passed++;
      }else{
          ncPrintTestFailed("testAddElementToHeader: ");
          ncPrintTestFailed("FAILED! ");
@@ -120,7 +119,6 @@ void testAddMultipleElementsToHeader(){
     if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->first->next->p->pid){
         ncPrint("testAddMultipleElementsToHeader: ");
         ncPrintTestPassed("PASSED! ");
-        num_test_passed++;
     }else{
         ncPrint("testAddMultipleElementsToHeader: ");
         ncPrintTestFailed("FAILED! ");
@@ -166,7 +164,6 @@ void testAddMultipleElementsToHeader(){
      if(equals){
          ncPrint("testAddALotOfElementsToQueue: ");
          ncPrintTestPassed("PASSED! ");
-         num_test_passed++;
      }else{
          ncPrint("testAddALotOfElementsToQueue: ");
          ncPrintTestFailed("FAILED! ");
