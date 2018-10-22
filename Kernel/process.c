@@ -1,6 +1,4 @@
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "process.h"
 #include "include/RoundRobin.h"
 #include <naiveConsole.h>
@@ -8,6 +6,8 @@
 #include "buddy.h"
 #include "wait.h"
 #include <sysCalls.h>
+#include <lib.h>
+#include <RoundRobin.h>
 
 int max_pid;
 struct process process_table[NUM_PROCESS];
@@ -151,30 +151,29 @@ uint64_t contextSwitch(uint64_t rsp) {
 void print_proc(){
     int num_printed=0;
 
-    ncPrint("PID        NAME        TIME       PRIORITY");
+    ncPrint("PID        NAME        TIME           PRIORITY");
     ncScroll();
     for(int i = 0; i<NUM_PROCESS; i++){
         if (process_table[i].occupied){
             num_printed++;
             ncPrintBase(process_table[i].pid, 10);
             ncPrint("          ");
-            ncPrint(process_table[i].name);
-            ncPrint("          ");
+            ncPrint(process_table[i].name); //10
+            int len = strlen(process_table[i].name);
+            for(int j = 0; j< 12 - len; j++){
+              ncPrint(" ");
+            }
             ncPrintBase(sysTime(4, 0, 0, 0, 0), 10);
             ncPrint(":");
             ncPrintBase(sysTime(3, 0, 0, 0, 0), 10);
             ncPrint(":");
             ncPrintBase(sysTime(2, 0, 0, 0, 0), 10);
-            ncPrint("                ");
+            ncPrint("       ");
             ncPrintBase(process_table[i].priority, 10);
             ncScroll();
 
 
         }
-    }
-    if(num_printed == 0){
-        ncPrint("No hay procesos!! [PLACEHOLDER ]");
-        ncScroll();
     }
 
 }
@@ -202,4 +201,40 @@ int getFd(proc p, int desiredFd){
 
 void switchFd(proc p, int fdType, int newFd){
     p->fds[fdType] = newFd;
+}
+
+void printRQ(){
+  ncScroll();
+  ncPrint("Ready Queue Status:");
+  ncScroll();
+  printRQR(ready_queue->first);
+}
+
+void printRQR(tNode* node){
+  if( node == NULL ){
+    return;
+  }
+  ncPrint(node->p->name);
+  ncPrint("(PID= ");
+  ncPrintDec(node->p->pid);
+  ncPrint(") ");
+
+  ncPrint("Status: ");
+  switch(node->p->state){
+    case WAIT:
+      ncPrint("WAIT");
+      break;
+    case READY:
+      ncPrint("READY");
+      break;
+    case DEAD:
+      ncPrint("DEAD");
+}
+
+  if(node-> next != NULL){
+      ncPrint(" ---> ");
+  }
+
+  printRQR(node->next);
+  return;
 }
