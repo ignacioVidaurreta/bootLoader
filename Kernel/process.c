@@ -151,7 +151,7 @@ uint64_t contextSwitch(uint64_t rsp) {
 void print_proc(){
     int num_printed=0;
 
-    ncPrint("PID        NAME        TIME");
+    ncPrint("PID        NAME        TIME       PRIORITY");
     ncScroll();
     for(int i = 0; i<NUM_PROCESS; i++){
         if (process_table[i].occupied){
@@ -165,6 +165,8 @@ void print_proc(){
             ncPrintBase(sysTime(3, 0, 0, 0, 0), 10);
             ncPrint(":");
             ncPrintBase(sysTime(2, 0, 0, 0, 0), 10);
+            ncPrint("                ");
+            ncPrintBase(process_table[i].priority, 10);
             ncScroll();
 
 

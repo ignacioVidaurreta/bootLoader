@@ -21,18 +21,18 @@ void shell(){
     commandID = execute(command);
     switch(commandID){
       case HELP:
-        pid = start_proc_user("help", (void *) printHelpMsg, 0, 0, 0);
+        pid = start_proc_user("help", (void *) printHelpMsg, 0, 0, 2);
         wait(pid);
         break;
       case EXIT:
         endFlag=1;
         break;
       case DATE:
-        pid = start_proc_user("getDate", (void *) getDate, 0, 0, 0);
+        pid = start_proc_user("getDate", (void *) getDate, 0, 0, 2);
         wait(pid);
         break;
       case CLOCK:
-        pid = start_proc_user("start clock", (void *) startClock, 0, 0, 0);
+        pid = start_proc_user("start clock", (void *) startClock, 0, 0, 2);
         wait(pid);
         break;
       case DIV:
@@ -45,11 +45,11 @@ void shell(){
         echo(arg);
         break;
       case CLEAR:
-        pid = start_proc_user("clear", (void *) clear, 0, 0, 0);
+        pid = start_proc_user("clear", (void *) clear, 0, 0, 2);
         wait(pid);
         break;
       case PS:
-        pid = start_proc_user("ps", (void *) print_process, 0, 0, 0);
+        pid = start_proc_user("ps", (void *) print_process, 0, 0, 2);
         wait(pid);
         break;
       case PRINT_MEM:
