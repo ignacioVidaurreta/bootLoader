@@ -12,7 +12,6 @@
 #include "RoundRobin.h"
 #include "wait.h"
 #include <lib.h>
-#include <philosophers.h>
 
 int sysRead(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysWrite(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
@@ -45,7 +44,6 @@ int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t
 int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
-int philosophers_sim(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 void cleanUser(void);
 
 
@@ -56,7 +54,7 @@ sysFun sysCalls[] =
 	 /*8*/sysDeleteChar, /*9*/sysDrawPxl, /*10*/sysScroll, /*11*/sysDrawNum, /*12*/sysNewProc, /*13*/sysPrintProc, /*14*/sysSendMailbox,
 	 /*15*/sysReceiveMailbox, /*16*/sysCreateMailbox, /*17*/sysCloseMailbox, /*18*/sysCreateMutex, /*19*/sysLockMutex, /*20*/sysUnlockMutex,
 	 /*21*/sysGetFds, /*22*/sysTerminateMutex, /*23*/sysAlloc, /*24*/sysFree, /*25*/sysPrintFreeMem, /*26*/sysProcCascade, /*27*/sysKill,
- /*28*/sysWait, /*29*/sysSwitchFd, /*30*/sysCreatePipe, /*31*/sysDestroyPipe, /*32*/ philosophers};
+ /*28*/sysWait, /*29*/sysSwitchFd, /*30*/sysCreatePipe, /*31*/sysDestroyPipe};
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
@@ -306,10 +304,5 @@ int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, ui
 int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
 	destroyPipe(arg1);
-	return SYS_CALL_SUCCESS;
-}
-
-int philosophers_sim(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
-	testPhilosophers();
 	return SYS_CALL_SUCCESS;
 }

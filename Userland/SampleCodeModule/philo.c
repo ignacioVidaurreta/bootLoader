@@ -57,12 +57,6 @@ void philosophers(uint64_t i){
 }
 
 
-/*
-void philosophers(uint64_t i){
-  printf("Hola, soy Olympe de Gauge %s", (char*)i);
-  scroll();
-}
-*/
 
 
 
@@ -81,37 +75,35 @@ void initPhil(){
     char * dos[] = {"2"};
     char * tres[] = {"3"};
     char * cuatro[] = {"4"};
-    //int64_t pids[5];
+    int64_t pids[5];
     for(int j = 0; j<5; j++){
         // ncPrint(args[j]);
         // ncScroll();
 
         switch(j){
             case 0:
-                //pids[0] =
-                start_proc_user("Aristoteles", (void*) philosophers, 1, cero, 0);
+                pids[0] = start_proc_user("Aristoteles", (void*) philosophers, 1, cero, 0);
                 break;
             case 1:
-                //pids[1] =
-                start_proc_user("Socrates", (void*) philosophers, 1, uno, 0);
+                pids[1] = start_proc_user("Socrates", (void*) philosophers, 1, uno, 0);
                 break;
             case 2:
-                //pids[2] =
-                start_proc_user("Platon", (void*) philosophers, 1, dos, 0);
+                pids[2] = start_proc_user("Platon", (void*) philosophers, 1, dos, 0);
                 break;
             case 3:
-                //pids[3] =
-                start_proc_user("Simone de Beauvoir", (void*) philosophers, 1, tres, 0);
+                pids[3] = start_proc_user("Simone de Beauvoir", (void*) philosophers, 1, tres, 0);
                 break;
             case 4:
-                //pids[4] =
-                start_proc_user("Kant", (void*) philosophers, 1, cuatro, 0);
+                pids[4] = start_proc_user("Kant", (void*) philosophers, 1, cuatro, 0);
                 break;
             // // default:
             //     start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers, 1, args); //por si llegamos a ampliar
             //     break;
         }
+    }
 
+    for(int i =0; i<5; i++){
+      wait(pids[i]);
     }
 
 

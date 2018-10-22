@@ -78,10 +78,8 @@ void shell(){
         scroll();
         break;
       case PHIL:
-        // pid = start_proc_user("philosophers", (void*) philosophers, 0, 0);
-        // wait(pid);
-        testPhilosophers();
-        scroll();
+        pid = start_proc_user("philosophers", (void*) start_philosophers, 0, 0, 0);
+        wait(pid);
         break;
       default:
         printf("'%s' is not a valid command. Please try again. Write help to get a list of the possible commands", command);
@@ -229,4 +227,9 @@ void pipeExample(){
 
   //joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
   joinByPipe("getDate", (void*) getDate, "pipeReader", (void*) pipeReader);
+}
+
+void start_philosophers(){
+  testPhilosophers();
+  scroll();
 }

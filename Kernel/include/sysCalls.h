@@ -41,7 +41,6 @@
 #define SYS_SWITCH_FD 30	//given an fdType and a newFd switches the desired fdType for the newFd. the fdType can be STDIN = 0, STDOUT = 1.
 #define SYS_CREATE_PIPE 31	//returns an array in which the first member is the read end of a pipe and the second is the write end of it.
 #define SYS_DESTROY_PIPE 32 //destroys the pipe which contains an fd indicated by arg1.
-#define PHILOSOPHERS 33
 //there are special characters which do not have an ascii representation
 //however they are stored in the keyboard buffer and returned this are:
 //backspace which is represented by an 8 and ESC which is represented by a 27.

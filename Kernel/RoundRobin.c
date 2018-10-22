@@ -93,9 +93,11 @@ void add_to_queue(tHeader *queue_header, tNode *node) {
      node->p->pid = 5;
      add_to_queue(queue_header, node);
      if (node->p->pid == queue_header->first->p->pid){
-         ncPrint("testAddElementToHeader: PASSED! ");
+         ncPrint("testAddElementToHeader: ");
+         ncPrintTestPassed("PASSED! ");
      }else{
-         ncPrint("testAddElementToHeader: FAILED! ");
+         ncPrintTestFailed("testAddElementToHeader: ");
+         ncPrintTestFailed("FAILED! ");
      }
      //no hacer doble free, ver que
      myfree(node, sizeof(*node));
@@ -119,10 +121,12 @@ void testAddMultipleElementsToHeader(){
 
     proc p1 = mymalloc(sizeof(struct process));
     p1->state = READY;
+    p1->priority = 1;
     node1->p = p1;
 
     proc p2 = mymalloc(sizeof(struct process));
     p2->state = READY;
+    p2->priority = 0;
     node2->p = p2;
 
 
@@ -130,10 +134,12 @@ void testAddMultipleElementsToHeader(){
     node2->p->pid= 5;
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
-    if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->last->p->pid){
-        ncPrint("testAddMultipleElementsToHeader: PASSED!");
+    if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->first->next->p->pid){
+        ncPrint("testAddMultipleElementsToHeader: ");
+        ncPrintTestPassed("PASSED! ");
     }else{
-        ncPrint("testAddMultipleElementsToHeader: FAILED!");
+        ncPrint("testAddMultipleElementsToHeader: ");
+        ncPrintTestFailed("FAILED! ");
     }
     myfree(node1, sizeof(*node1));
     myfree(node2, sizeof(*node2));
@@ -174,9 +180,11 @@ void testAddMultipleElementsToHeader(){
      }
 
      if(equals){
-         ncPrint("testAddALotOfElementsToQueue: PASSED! ");
+         ncPrint("testAddALotOfElementsToQueue: ");
+         ncPrintTestPassed("PASSED! ");
      }else{
-         ncPrint("testAddALotOfElementsToQueue: FAILED! ");
+         ncPrint("testAddALotOfElementsToQueue: ");
+         ncPrintTestFailed("FAILED! ");
      }
 
 
@@ -240,4 +248,4 @@ void proc_cascade(){
        }
 
        myfree(queue, sizeof(*queue));
-   }
+  }
