@@ -136,7 +136,7 @@ int main(){
 			testPhilosophers();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress, 0, NULL, 0);
+			start_proc("shell", sampleCodeModuleAddress, 0, NULL, 1);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:
@@ -144,5 +144,4 @@ int main(){
 			break;
 	}
 	halt();
-	return 0;
 }

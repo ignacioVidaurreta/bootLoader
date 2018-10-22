@@ -4,19 +4,37 @@
 #include "include/naiveConsole.h"
 
 proc round_robin(tHeader *process_queue) {
-    proc temp = get_current_proc();
-
-    if (process_queue->first != NULL) {
-        tNode *node = pop_queue_node(process_queue);
-        if (temp->pid && temp->state != DEAD && temp->state != WAIT) {
-            temp = node->p;
-            node->p = get_current_proc();
-            add_to_queue(process_queue, node);
-        } else {
-            temp = node->p;
-        }
+    proc current_proc = get_current_proc();
+    tNode *node = NULL;
+    if (process_queue->first == NULL) {
+        return current_proc;
     }
-    return temp;
+
+    switch (current_proc->state) {
+        case DEAD:
+        case WAIT:
+        case ZOMBIE:
+            node = pop_queue_node(process_queue);
+            current_proc = node->p;
+            current_proc->state = RUN;
+            free_queue_nodes(node);
+            return node->p;
+        case RUN:
+            if (current_proc->priority > process_queue->first->p->priority) {
+                return current_proc;
+            } else {
+                node = pop_queue_node(process_queue);
+                proc temp = current_proc;
+                current_proc = node->p;
+                current_proc->state = RUN;
+                node->p = temp;
+                return current_proc;
+            }
+            break;
+        default:
+            break;
+    }
+    return current_proc;
 }
 
 
@@ -43,6 +61,7 @@ void add_to_queue(tHeader *queue_header, tNode *node) {
     node->next = NULL;
     if (queue_header->last == NULL) {
         queue_header->first = node;
+        queue_header->last = node;
     } else {
         if (process->priority > queue_header->first->p->priority) {
             node->next = queue_header->first;

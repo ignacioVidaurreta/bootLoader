@@ -20,6 +20,7 @@ void init_process() {
     ready_queue = mymalloc(sizeof(tHeader));
     init_wait_queue();
     process_table[0].name = "init";
+    process_table[0].priority = 0;
     process_table[0].pid = 0;
     process_table[0].state = RUN;
     process_table[0].parent = NULL;
