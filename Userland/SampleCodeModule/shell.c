@@ -215,11 +215,16 @@ void print_process(){
 void pipeReader(){
 
   char text[80] = {0};
-  scanf("%s", text);
-  printf("%s\n", text);
+  int80(getStdin(), (uint64_t) text, 39, 0, 0, SYS_READ);
+  printf("%s", text);
 }
 
 void pipeExample(){
 
-  joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate);
+  int readerPid;
+  int writerPid;
+  int *pipe = joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate, &readerPid, &writerPid);
+  wait(readerPid);
+  wait(writerPid);
+  destroyPipe(pipe[0]);
 }

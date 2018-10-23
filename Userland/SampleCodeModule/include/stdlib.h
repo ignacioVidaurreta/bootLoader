@@ -108,6 +108,6 @@
 
    void wait(uint64_t pid);
 
-   int *joinByPipe(char *procName1, void *procPointer1, char *procName2, void *procPointer2);
+   int *joinByPipe(char *procName1, void *procPointer1, char *procName2, void *procPointer2, int *readerPid, int *writerPid);
 
 #endif

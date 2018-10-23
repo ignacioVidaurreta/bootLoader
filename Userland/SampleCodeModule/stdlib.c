@@ -328,17 +328,14 @@ void wait(uint64_t pid) {
   int80(pid, 0, 0, 0, 0, SYS_WAIT);
 }
 
-int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcName, void *writerProcPointer){
+int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcName, void *writerProcPointer, int *readerPid, int *writerPid){
 
   int* pipe = createPipe();
   switchFd(STDOUT, pipe[1]);
-  int writerPid = start_proc_user(writerProcName, writerProcPointer);
+  *writerPid = start_proc_user(writerProcName, writerProcPointer);
   switchFd(STDOUT, STDOUT);
   switchFd(STDIN, pipe[0]);
-  int readerPid = start_proc_user(readerProcName, readerProcPointer);
+  *readerPid = start_proc_user(readerProcName, readerProcPointer);
   switchFd(STDIN, STDIN);
-  int* pids = malloc(2*sizeof(int));
-  pids[1] = writerPid;
-  pids[0] = readerPid;
-  return pids;
+  return pipe;
 }
