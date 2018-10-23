@@ -28,6 +28,7 @@ proc round_robin(tHeader *process_queue) {
                 current_proc = node->p;
                 current_proc->state = RUN;
                 node->p = temp;
+                add_to_queue(process_queue, node);
                 return current_proc;
             }
             break;
