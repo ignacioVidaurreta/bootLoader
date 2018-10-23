@@ -2,7 +2,8 @@
 #define SHELL_H
 
   typedef enum {NONE, HELP, ECHO, DATE, CLOCK, DIV, INVOPC, CLEAR, EXIT, PS, PRINT_MEM,
-                PROC_CASCADE, PRODCONS, END_PRODCONS, ADD_READERS, ADD_WRITERS, PIPE_EXAMPLE, PHIL} cmdID;
+                PROC_CASCADE, PRODCONS, END_PRODCONS, ADD_READERS, ADD_WRITERS, PIPE_EXAMPLE, 
+                PHIL} cmdID;
                 
 #include <stdint.h>
 

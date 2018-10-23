@@ -5,7 +5,7 @@
 #define DEFAULT_STDIN 0
 #define DEFAULT_STDOUT 1
 #define AMMOUNT_FDS 2
-#define MAX_PRIORITY 100
+#define MAX_PRIORITY 4
 #include <stdint.h>
 typedef struct process *proc;
 

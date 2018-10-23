@@ -48,7 +48,7 @@ void shell(){
         wait(pid);
         break;
       case PS:
-        pid = start_proc_user("ps", (void *) print_process, 0, 0, 2);
+        pid = start_proc_user("ps", (void *) print_process, 0, 0, 0);
         wait(pid);
         break;
       case PRINT_MEM:
@@ -59,7 +59,7 @@ void shell(){
         break;
       case PRODCONS:
         if(prodconsPid == 0)
-          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 0);
+          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 2);
         break;
       case END_PRODCONS:
         if(prodconsPid != 0)
@@ -72,12 +72,12 @@ void shell(){
         printf("Writer Added");
         break;
       case PIPE_EXAMPLE:
-        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 0);
+        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 2);
         wait(pid);
         scroll();
         break;
       case PHIL:
-        pid = start_proc_user("philosophers", (void*) start_philosophers, 0, 0, 0);
+        pid = start_proc_user("philosophers", (void*) start_philosophers, 0, 0, 2);
         wait(pid);
         break;
       default:
