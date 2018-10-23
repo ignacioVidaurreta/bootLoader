@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <process.h>
 #include "RoundRobin.h"
 #include "buddy.h"
 #include "include/naiveConsole.h"
@@ -20,9 +21,11 @@ proc round_robin(tHeader *process_queue) {
             free_queue_nodes(node);
             return node->p;
         case RUN:
-            if (current_proc->priority > process_queue->first->p->priority) {
+            if (current_proc->priorityCounter > 0) {
+                (current_proc->priorityCounter)--;
                 return current_proc;
             } else {
+                current_proc->priorityCounter = MAX_PRIORITY - current_proc->priority;
                 node = pop_queue_node(process_queue);
                 proc temp = current_proc;
                 current_proc = node->p;
@@ -58,24 +61,14 @@ void add_proc_to_queue(tHeader *queue_header, proc p) {
 
 
 void add_to_queue(tHeader *queue_header, tNode *node) {
-    proc process = node->p;
     node->next = NULL;
     if (queue_header->last == NULL) {
         queue_header->first = node;
         queue_header->last = node;
-    } else {
-        if (process->priority > queue_header->first->p->priority) {
-            node->next = queue_header->first;
-            queue_header->first = node;
-        } else {
-            tNode *temp = queue_header->first;
-            while (temp->next != NULL && temp->next->p->priority >= process->priority) {
-                temp = temp->next;
-            }
-            node->next = temp->next;
-            temp->next = node;
-        }
-    }
+    } 
+    else 
+        queue_header->last->next = node;
+    queue_header->last = node;
 }
 
 

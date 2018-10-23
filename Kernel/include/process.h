@@ -5,6 +5,7 @@
 #define DEFAULT_STDIN 0
 #define DEFAULT_STDOUT 1
 #define AMMOUNT_FDS 2
+#define MAX_PRIORITY 100
 #include <stdint.h>
 typedef struct process *proc;
 
@@ -14,6 +15,7 @@ struct process {
     uint64_t pid;
     uint64_t waitpid;
     uint64_t priority;
+    uint64_t priorityCounter;
     enum p_state state;
     proc parent;
     uint64_t rsp;

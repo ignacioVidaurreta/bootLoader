@@ -21,6 +21,7 @@ void init_process() {
     init_wait_queue();
     process_table[0].name = "init";
     process_table[0].priority = 0;
+    process_table[0].priorityCounter = MAX_PRIORITY - process_table[0].priority;
     process_table[0].pid = 0;
     process_table[0].state = RUN;
     process_table[0].parent = NULL;
@@ -90,7 +91,7 @@ uint64_t start_proc(char *proc_name, void *function, int argc, char* argv[], uin
     process->state = READY;
     process->parent = get_current_proc();
     process->name = proc_name;
-    process->priority = priority;
+    process->priority = MAX_PRIORITY - priority;
     process->fds[0] = process->parent->fds[0];
     process->fds[1] = process->parent->fds[1];
 
