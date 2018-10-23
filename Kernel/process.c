@@ -24,7 +24,6 @@ void init_process() {
     process_table[0].state = RUN;
     process_table[0].parent = NULL;
     process_table[0].rsp = 0;
-    process_table[0].fds = mymalloc(2*sizeof(int));
     process_table[0].fds[0] = DEFAULT_STDIN;
     process_table[0].fds[1] = DEFAULT_STDOUT;
     current_proc = &process_table[0];
@@ -90,7 +89,6 @@ uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]), i
     process->state = READY;
     process->parent = get_current_proc();
     process->name = proc_name;
-    process->fds = mymalloc(2*sizeof(int));
     process->fds[0] = process->parent->fds[0];
     process->fds[1] = process->parent->fds[1];
 

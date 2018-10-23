@@ -7,6 +7,7 @@
 char arg[BUFFER_SIZE - 5];
 int prodconsPid = 0;
 
+void pipeReader();
 
 void shell(){
   int endFlag = 0;
@@ -75,6 +76,10 @@ void shell(){
         pid = start_proc_user("pipes", (void*) pipeExample);
         wait(pid);
         break;
+      case TEST:
+        pid = start_proc_user("pipeReader", (void*) pipeReader);
+        wait(pid);
+        break;
       default:
         printf("Invalid command: Please try again. Write help to get a list of the possible commands");
         scroll();
@@ -118,6 +123,9 @@ cmdID execute(char * cmd){
   }
   else if(strcmp(cmd, "pipeItUp") == 0){
     return PIPE_EXAMPLE;
+  }
+  else if(strcmp(cmd, "test") == 0){
+    return TEST;
   }
   else{
     aux="echo";

@@ -4,6 +4,7 @@
 #define STACK_SIZE 512
 #define DEFAULT_STDIN 0
 #define DEFAULT_STDOUT 1
+#define AMMOUNT_FDS 2
 #include <stdint.h>
 typedef struct process *proc;
 
@@ -18,7 +19,7 @@ struct process {
     uint64_t rsp;
     uint64_t stack[STACK_SIZE];
     uint8_t occupied;
-    int* fds;
+    int fds[AMMOUNT_FDS];
     char *name;
 };
 
