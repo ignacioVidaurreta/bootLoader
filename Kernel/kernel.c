@@ -11,10 +11,10 @@
 #include "mutex.h"
 #include "include/messageQueue.h"
 #include "buddy.h"
-#include <philosophers.h>
 #include <pipes.h>
 #include <listTest.h>
 #include <pipeTest.h>
+#include <wait.h>
 
 #define ACTION_TEST 0
 #define ACTION_STARTUP 1
@@ -87,6 +87,7 @@ void roundRobinTestSuite(){
 	testAddALotOfElementsToQueue();
 
 }
+
 void mutexTestSuite(){
 	initMutexTest();
 	createMutexCreatesAMutexTest();
@@ -95,6 +96,8 @@ void mutexTestSuite(){
 	unlockOfLockedMutexChangesOwnerTest();
 	unlockWithoutWaitingChangesStatusToUnlockTest();
 	terminateMutexEliminatesTheMutexTest();
+	//numOfTestsPassed();
+	multiProcessUsesMutexTest();
 }
 
 void messageQueueTestSuite(){
@@ -108,16 +111,17 @@ void messageQueueTestSuite(){
 }
 
 void runTests(){
+
 	ncPrintTestHeader("------------ Pipe Test Suite: ------------");
 	pipeTestSuite();
 	ncPrintTestHeader("------------ ListADT Test Suite: ------------");
 	listTestSuite();
 	ncPrintTestHeader("------------ Round Robin Test Suite: ------------");
-    roundRobinTestSuite();
-    ncPrintTestHeader("------------ Mutex Test Suite: ------------");
-    mutexTestSuite();
-    ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
-    messageQueueTestSuite();
+  roundRobinTestSuite();
+  ncPrintTestHeader("------------ Mutex Test Suite: ------------");
+  mutexTestSuite();
+  ncPrintTestHeader("------------ Message Queue Test Suite: ------------");
+  messageQueueTestSuite();
 
 }
 
@@ -126,20 +130,22 @@ int action = ACTION_STARTUP;
 int main(){
 
 	//initializeScreen();
+	int shell_pid;
 	ncResetPosition();
 	switch(action){
 		case ACTION_TEST:
 			runTests();
-			//testPhilosophers();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress, 0, NULL);
+			start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:
 			ctx_switch();
 			break;
 	}
+	wait(shell_pid);
 	halt();
+
 	return 0;
 }

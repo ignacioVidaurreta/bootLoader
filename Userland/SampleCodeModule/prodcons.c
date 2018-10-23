@@ -36,7 +36,7 @@ void changeInProcesses(char* processes, int number, int *prevNumber, int *pids){
 	if(strcmp(processes, "reader") == 0){
 		if(number > 0 && number + *prevNumber < MAX_READERS)
 			for(int i = 0; i < number; i++)
-				pids[i + *prevNumber] = start_proc_user("reader", (void*)reader);
+				pids[i + *prevNumber] = start_proc_user("reader", (void*)reader, 0, 0, 0);
 		else if(number < 0 && *prevNumber + number > 0)
 			for(int i = 0; i > number; i--)
 				kill(pids[*prevNumber - i]);
@@ -44,7 +44,7 @@ void changeInProcesses(char* processes, int number, int *prevNumber, int *pids){
 	else if(strcmp(processes, "writer") == 0){
 		if(number > 0 && number + *prevNumber < MAX_WRITERS)
 			for(int i = 0; i < number; i++)
-				pids[i + *prevNumber] = start_proc_user("writer", (void*)writer);
+				pids[i + *prevNumber] = start_proc_user("writer", (void*)writer, 0, 0, 0);
 		else if(number < 0 && number + *prevNumber > 0)
 			for(int i = 0; i > number; i--)
 				kill(pids[*prevNumber + i]);

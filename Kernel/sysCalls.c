@@ -44,16 +44,18 @@ int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t
 int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
+int sysPrintRQ(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 void cleanUser(void);
+
 
 typedef int (*sysFun)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
-sysFun sysCalls[] = 
-	{/*0*/sysRead, /*1*/sysWrite, /*2*/sysClearScreen, /*3*/sysReadKeya, /*4*/sysTime, /*5*/sysBeep, /*6*/sysNoBeep, /*7*/sysScreenInfo, 
-	 /*8*/sysDeleteChar, /*9*/sysDrawPxl, /*10*/sysScroll, /*11*/sysDrawNum, /*12*/sysNewProc, /*13*/sysPrintProc, /*14*/sysSendMailbox, 
-	 /*15*/sysReceiveMailbox, /*16*/sysCreateMailbox, /*17*/sysCloseMailbox, /*18*/sysCreateMutex, /*19*/sysLockMutex, /*20*/sysUnlockMutex, 
-	 /*21*/sysGetFds, /*22*/sysTerminateMutex, /*23*/sysAlloc, /*24*/sysFree, /*25*/sysPrintFreeMem, /*26*/sysProcCascade, /*27*/sysKill, 
-	 /*28*/sysWait, /*29*/sysSwitchFd, /*30*/sysCreatePipe, /*31*/sysDestroyPipe};
+sysFun sysCalls[] =
+	{/*0*/sysRead, /*1*/sysWrite, /*2*/sysClearScreen, /*3*/sysReadKeya, /*4*/sysTime, /*5*/sysBeep, /*6*/sysNoBeep, /*7*/sysScreenInfo,
+	 /*8*/sysDeleteChar, /*9*/sysDrawPxl, /*10*/sysScroll, /*11*/sysDrawNum, /*12*/sysNewProc, /*13*/sysPrintProc, /*14*/sysSendMailbox,
+	 /*15*/sysReceiveMailbox, /*16*/sysCreateMailbox, /*17*/sysCloseMailbox, /*18*/sysCreateMutex, /*19*/sysLockMutex, /*20*/sysUnlockMutex,
+	 /*21*/sysGetFds, /*22*/sysTerminateMutex, /*23*/sysAlloc, /*24*/sysFree, /*25*/sysPrintFreeMem, /*26*/sysProcCascade, /*27*/sysKill,
+ /*28*/sysWait, /*29*/sysSwitchFd, /*30*/sysCreatePipe, /*31*/sysDestroyPipe, /*32*/ sysPrintRQ};
 
 int int80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t sysCallID){
 
@@ -198,7 +200,7 @@ int sysDrawNum(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint6
 
 int sysNewProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
-	return start_proc((char *) arg1, (void *) arg2, arg3, (char**) arg4);
+	return start_proc((char *) arg1, (void *) arg2, arg3, (char**) arg4, arg5);
 }
 
 int sysPrintProc(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
@@ -280,7 +282,7 @@ int sysProcCascade(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, u
 int sysKill(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
 	kill(arg1);
-	return SYS_CALL_SUCCESS;	
+	return SYS_CALL_SUCCESS;
 }
 
 int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
@@ -290,7 +292,7 @@ int sysWait(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t
 }
 
 int sysSwitchFd(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
-	
+
 	switchFd(get_current_proc(), arg1, arg2);
 	return SYS_CALL_SUCCESS;
 }
@@ -303,5 +305,10 @@ int sysCreatePipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, ui
 int sysDestroyPipe(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
 
 	destroyPipe(arg1);
+	return SYS_CALL_SUCCESS;
+}
+
+int sysPrintRQ(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5){
+	printRQ();
 	return SYS_CALL_SUCCESS;
 }

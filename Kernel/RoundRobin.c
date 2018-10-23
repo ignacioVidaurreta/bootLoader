@@ -4,18 +4,37 @@
 #include "include/naiveConsole.h"
 
 proc round_robin(tHeader *process_queue) {
-    proc temp = get_current_proc();
-    if (process_queue->first != NULL) {
-        tNode *node = pop_queue_node(process_queue);
-        if (temp->pid && temp->state != DEAD && temp->state != WAIT) {
-            temp = node->p;
-            node->p = get_current_proc();
-            add_to_queue(process_queue, node);
-        } else {
-            temp = node->p;
-        }
+    proc current_proc = get_current_proc();
+    tNode *node = NULL;
+    if (process_queue->first == NULL) {
+        return current_proc;
     }
-    return temp;
+
+    switch (current_proc->state) {
+        case DEAD:
+        case WAIT:
+        case ZOMBIE:
+            node = pop_queue_node(process_queue);
+            current_proc = node->p;
+            current_proc->state = RUN;
+            free_queue_nodes(node);
+            return node->p;
+        case RUN:
+            if (current_proc->priority > process_queue->first->p->priority) {
+                return current_proc;
+            } else {
+                node = pop_queue_node(process_queue);
+                proc temp = current_proc;
+                current_proc = node->p;
+                current_proc->state = RUN;
+                node->p = temp;
+                return current_proc;
+            }
+            break;
+        default:
+            break;
+    }
+    return current_proc;
 }
 
 
@@ -37,17 +56,26 @@ void add_proc_to_queue(tHeader *queue_header, proc p) {
 }
 
 
- void add_to_queue(tHeader *queue_header, tNode *node){
+void add_to_queue(tHeader *queue_header, tNode *node) {
+    proc process = node->p;
     node->next = NULL;
-    if (queue_header-> last == NULL){
+    if (queue_header->last == NULL) {
         queue_header->first = node;
-    }else{
-        queue_header->last->next = node;
+        queue_header->last = node;
+    } else {
+        if (process->priority > queue_header->first->p->priority) {
+            node->next = queue_header->first;
+            queue_header->first = node;
+        } else {
+            tNode *temp = queue_header->first;
+            while (temp->next != NULL && temp->next->p->priority >= process->priority) {
+                temp = temp->next;
+            }
+            node->next = temp->next;
+            temp->next = node;
+        }
     }
-
-    queue_header->last = node;
-
- }
+}
 
 
  void testAddElementToHeader(){
@@ -66,10 +94,10 @@ void add_proc_to_queue(tHeader *queue_header, proc p) {
      add_to_queue(queue_header, node);
      if (node->p->pid == queue_header->first->p->pid){
          ncPrint("testAddElementToHeader: ");
-         ncPrintTestPassed("PASSED!");
+         ncPrintTestPassed("PASSED! ");
      }else{
-         ncPrint("testAddElementToHeader: ");
-         ncPrintTestFailed("FAILED!");
+         ncPrintTestFailed("testAddElementToHeader: ");
+         ncPrintTestFailed("FAILED! ");
      }
      //no hacer doble free, ver que
      myfree(node, sizeof(*node));
@@ -93,10 +121,12 @@ void testAddMultipleElementsToHeader(){
 
     proc p1 = mymalloc(sizeof(struct process));
     p1->state = READY;
+    p1->priority = 1;
     node1->p = p1;
 
     proc p2 = mymalloc(sizeof(struct process));
     p2->state = READY;
+    p2->priority = 0;
     node2->p = p2;
 
 
@@ -104,12 +134,12 @@ void testAddMultipleElementsToHeader(){
     node2->p->pid= 5;
     add_to_queue(queue_header, node1);
     add_to_queue(queue_header, node2);
-    if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->last->p->pid){
+    if(node1->p->pid == queue_header->first->p->pid && node2->p->pid == queue_header->first->next->p->pid){
         ncPrint("testAddMultipleElementsToHeader: ");
-        ncPrintTestPassed("PASSED!");
+        ncPrintTestPassed("PASSED! ");
     }else{
         ncPrint("testAddMultipleElementsToHeader: ");
-        ncPrintTestFailed("FAILED!");
+        ncPrintTestFailed("FAILED! ");
     }
     myfree(node1, sizeof(*node1));
     myfree(node2, sizeof(*node2));
@@ -151,10 +181,10 @@ void testAddMultipleElementsToHeader(){
 
      if(equals){
          ncPrint("testAddALotOfElementsToQueue: ");
-         ncPrintTestPassed("PASSED!");
+         ncPrintTestPassed("PASSED! ");
      }else{
          ncPrint("testAddALotOfElementsToQueue: ");
-         ncPrintTestFailed("FAILED!");
+         ncPrintTestFailed("FAILED! ");
      }
 
 
@@ -218,4 +248,4 @@ void proc_cascade(){
        }
 
        myfree(queue, sizeof(*queue));
-   }
+  }

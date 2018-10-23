@@ -25,7 +25,7 @@ struct process {
 
 extern struct process process_table[NUM_PROCESS];
 
-uint64_t start_proc(char *proc_name, void (*function)(int argc, char *argv[]), int argc, char* argv[]);
+uint64_t start_proc(char *proc_name, void *function, int argc, char* argv[], uint64_t priority);
 void init_process();
 int get_new_index();
 int get_new_pid();

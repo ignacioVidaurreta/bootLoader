@@ -70,6 +70,23 @@ int stringToInt(char *string){
   return ret;
 }
 
+char* concat(const char* str1, const char* str2){
+
+	int s1 = strlen(str1);
+	int s2 = strlen(str2);
+	char * aux = (char*) malloc(s1 +s2 +1);
+	int i;
+	for (i=0; str1[i] != 0; i++)
+	{
+		aux[i] = str1[i];
+	}
+	for (int j = 0; str2[j] != 0; j++){
+		aux[i++] = str2[j];
+	}
+	aux[i] = 0;
+
+	return aux;
+}
 /*
  *  https://bobobobo.wordpress.com/2008/01/28/how-to-use-variable-argument-lists-va_list/
  *  Imprime el string dado cambiando el:
@@ -262,8 +279,8 @@ void* receiveMessage(char *id){
   return (void*) int80((uint64_t)id, 0, 0, 0, 0, RECEIVE_MAILBOX);
 }
 
-int start_proc_user(char *procName, void *procPointer) {
-    return int80((uint64_t) procName, (uint64_t) procPointer, 0, 0, 0, SYS_NEW_PROC);
+int start_proc_user(char *procName, void *procPointer, int argc, char *argv[], uint64_t priority) {
+    return int80((uint64_t) procName, (uint64_t) procPointer, (uint64_t) argc, (uint64_t) argv, (uint64_t) priority, SYS_NEW_PROC);
 }
 
 void kill(int pid){
@@ -300,7 +317,7 @@ int *createPipe(){
 }
 
 void destroyPipe(int fd){
-  
+
   int80(fd, 0, 0, 0, 0, SYS_DESTROY_PIPE);
 }
 
@@ -319,9 +336,9 @@ void switchFd(int fdType, int newFd){
   int80(fdType, newFd, 0, 0, 0, SYS_SWITCH_FD);
 }
 
-int *malloc(uint64_t size){
+void *malloc(uint64_t size){
 
-  return (int*) int80(size, 0, 0, 0, 0, ALLOCATE_MEMORY);
+  return (void*) int80(size, 0, 0, 0, 0, ALLOCATE_MEMORY);
 }
 
 void wait(uint64_t pid) {
@@ -332,10 +349,10 @@ int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcN
 
   int* pipe = createPipe();
   switchFd(STDOUT, pipe[1]);
-  *writerPid = start_proc_user(writerProcName, writerProcPointer);
+  *writerPid = start_proc_user(writerProcName, writerProcPointer, 0, 0, 0);
   switchFd(STDOUT, STDOUT);
   switchFd(STDIN, pipe[0]);
-  *readerPid = start_proc_user(readerProcName, readerProcPointer);
+  *readerPid = start_proc_user(readerProcName, readerProcPointer, 0, 0, 0);
   switchFd(STDIN, STDIN);
   return pipe;
 }

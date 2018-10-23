@@ -4,6 +4,7 @@
 #include "buddy.h"
 
 extern void ctx_switch();
+ extern tHeader* ready_queue;
 static tHeader *wait_queue;
 
 void wait(uint64_t pid) {
@@ -33,3 +34,11 @@ void init_wait_queue() {
     wait_queue = mymalloc(sizeof(tHeader *));
 }
 
+void signal() {
+  proc waked_proc = pop_queue_node(wait_queue)->p;
+  waked_proc->waitpid = 0;
+  add_proc_to_queue(ready_queue, waked_proc);
+  waked_proc->state = READY;
+  ctx_switch();
+
+}
