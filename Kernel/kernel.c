@@ -14,6 +14,7 @@
 #include <pipes.h>
 #include <listTest.h>
 #include <pipeTest.h>
+#include <wait.h>
 
 #define ACTION_TEST 0
 #define ACTION_STARTUP 1
@@ -95,7 +96,8 @@ void mutexTestSuite(){
 	unlockOfLockedMutexChangesOwnerTest();
 	unlockWithoutWaitingChangesStatusToUnlockTest();
 	terminateMutexEliminatesTheMutexTest();
-	numOfTestsPassed();
+	//numOfTestsPassed();
+	multiProcessUsesMutexTest();
 }
 
 void messageQueueTestSuite(){
@@ -128,18 +130,22 @@ int action = ACTION_STARTUP;
 int main(){
 
 	//initializeScreen();
+	int shell_pid;
 	ncResetPosition();
 	switch(action){
 		case ACTION_TEST:
 			runTests();
 			break;
 		case ACTION_STARTUP:
-			start_proc("shell", sampleCodeModuleAddress, 0, NULL, 1);
+			start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:
 			ctx_switch();
 			break;
 	}
+	wait(shell_pid);
 	halt();
+
+	return 0;
 }
