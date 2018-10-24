@@ -139,7 +139,7 @@ int unlock(char* mutexId, uint64_t processId){
          */
          if (blockedProcessFound) {
              mutex-> ownerpid = new_pid;
-             signal();
+             signal(new_pid);
          }else{ //Si no encontré proceso, librero el mutex
              mutex-> status = UNLOCKED;
          }

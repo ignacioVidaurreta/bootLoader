@@ -34,8 +34,8 @@ void init_wait_queue() {
     wait_queue = mymalloc(sizeof(tHeader *));
 }
 
-void signal() {
-  proc waked_proc = pop_queue_node(wait_queue)->p;
+void signal(uint64_t pid) {
+  proc waked_proc = get_process(pid);
   waked_proc->waitpid = 0;
   add_proc_to_queue(ready_queue, waked_proc);
   waked_proc->state = READY;
