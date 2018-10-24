@@ -128,7 +128,6 @@ void runTests(){
 int action = ACTION_STARTUP;
 
 int main(){
-
 	//initializeScreen();
 	int shell_pid;
 	ncResetPosition();
@@ -137,7 +136,7 @@ int main(){
 			runTests();
 			break;
 		case ACTION_STARTUP:
-			start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);
+			shell_pid = start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);
 			action = ACTION_EXCEPRETURN;
 			break;
 		case ACTION_EXCEPRETURN:

@@ -17,8 +17,9 @@ proc round_robin(tHeader *process_queue) {
             node = pop_queue_node(process_queue);
             current_proc = node->p;
             current_proc->state = RUN;
+            node->next = NULL;
             free_queue_nodes(node);
-            return node->p;
+            return current_proc;
         case RUN:
             if (current_proc->priority > process_queue->first->p->priority) {
                 return current_proc;
@@ -71,6 +72,9 @@ void add_to_queue(tHeader *queue_header, tNode *node) {
             tNode *temp = queue_header->first;
             while (temp->next != NULL && temp->next->p->priority >= process->priority) {
                 temp = temp->next;
+            }
+            if (temp->next == NULL) {
+                queue_header->last = node;
             }
             node->next = temp->next;
             temp->next = node;

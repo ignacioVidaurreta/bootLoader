@@ -77,7 +77,7 @@ void shell(){
         scroll();
         break;
       case PHIL:
-        pid = start_proc_user("philosophers", (void*) start_philosophers, 0, 0, 0);
+        pid = start_proc_user("philosophers", (void*) start_philosophers, 0, 0, 2);
         wait(pid);
         break;
       default:

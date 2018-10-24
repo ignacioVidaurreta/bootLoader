@@ -10,7 +10,7 @@ static tHeader *wait_queue;
 void wait(uint64_t pid) {
     proc current_proc = get_current_proc();
     current_proc->waitpid = pid;
-    add_proc_to_queue(wait_queue, current_proc);
+    //add_proc_to_queue(wait_queue, current_proc);
     current_proc->state = WAIT;
     ctx_switch();
 }

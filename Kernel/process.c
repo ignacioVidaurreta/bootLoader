@@ -106,13 +106,15 @@ uint64_t start_proc(char *proc_name, void *function, int argc, char* argv[], uin
 void myexit(uint64_t retval) {
     end_process();
 
-    while(1) {}
+    while(1) {
+        halt();
+    }
 }
 
 void end_process() {
     if (current_proc->parent->waitpid == current_proc->pid) {
         current_proc->parent->state = READY;
-        delete_from_wait(current_proc->parent);
+        //delete_from_wait(current_proc->parent);
         add_proc_to_queue(ready_queue, current_proc->parent);
     }
     current_proc->state = DEAD;

@@ -74,24 +74,24 @@ void initPhil(){
     char * dos[]    = {"2"};
     char * tres[]   = {"3"};
     char * cuatro[] = {"4"};
-    int64_t pids[NUMBER_OF_PHILOSOPHERS];
+    //int64_t pids[NUMBER_OF_PHILOSOPHERS];
     for(int j = 0; j<NUMBER_OF_PHILOSOPHERS; j++){
 
         switch(j){
             case 0:
-                pids[0] = start_proc_user("Aristoteles", (void*) philosophers, 1, cero, 2);
+                start_proc_user("Aristoteles", (void*) philosophers, 1, cero, 3);
                 break;
             case 1:
-                pids[1] = start_proc_user("Socrates", (void*) philosophers, 1, uno, 2);
+                start_proc_user("Socrates", (void*) philosophers, 1, uno, 3);
                 break;
             case 2:
-                pids[2] = start_proc_user("Platon", (void*) philosophers, 1, dos, 2);
+                start_proc_user("Platon", (void*) philosophers, 1, dos, 3);
                 break;
             case 3:
-                pids[3] = start_proc_user("Simone de Beauvoir", (void*) philosophers, 1, tres, 2);
+                start_proc_user("Simone de Beauvoir", (void*) philosophers, 1, tres, 3);
                 break;
             case 4:
-                pids[4] = start_proc_user("Kant", (void*) philosophers, 1, cuatro, 2);
+                start_proc_user("Kant", (void*) philosophers, 1, cuatro, 3);
                 break;
             // // default:
             //     start_proc(concat("Generic #", intToString(j, aux2)), (void*) philosophers, 1, args); //por si llegamos a ampliar
@@ -99,9 +99,9 @@ void initPhil(){
         }
     }
 
-    for(int i =0; i<NUMBER_OF_PHILOSOPHERS; i++){
-      wait(pids[i]);
-    }
+    //for(int i =0; i<NUMBER_OF_PHILOSOPHERS; i++){
+    //  wait(pids[i]);
+    //}
 
 
 
