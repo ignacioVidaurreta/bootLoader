@@ -59,7 +59,7 @@ void shell(){
         break;
       case PRODCONS:
         if(prodconsPid == 0)
-          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 0);
+          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 9);
         break;
       case END_PRODCONS:
         if(prodconsPid != 0)
@@ -72,7 +72,7 @@ void shell(){
         printf("Writer Added");
         break;
       case PIPE_EXAMPLE:
-        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 0);
+        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 500);
         wait(pid);
         scroll();
         break;

@@ -349,10 +349,10 @@ int *joinByPipe(char *readerProcName, void *readerProcPointer, char *writerProcN
 
   int* pipe = createPipe();
   switchFd(STDOUT, pipe[1]);
-  *writerPid = start_proc_user(writerProcName, writerProcPointer, 0, 0, 0);
+  *writerPid = start_proc_user(writerProcName, writerProcPointer, 0, 0, 501);
   switchFd(STDOUT, STDOUT);
   switchFd(STDIN, pipe[0]);
-  *readerPid = start_proc_user(readerProcName, readerProcPointer, 0, 0, 0);
+  *readerPid = start_proc_user(readerProcName, readerProcPointer, 0, 0, 501);
   switchFd(STDIN, STDIN);
   return pipe;
 }
