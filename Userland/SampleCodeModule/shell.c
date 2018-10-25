@@ -190,7 +190,7 @@ void printHelpMsg(){
     scroll();
     printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
-    printf("* [ NOT_WORKING ] prodcons: starts the demonstration of the prodcons problem");
+    printf("* [ ALMOST_WORKING ] prodcons: starts the demonstration of the prodcons problem LEAVE PRESSING 'q' ");
     scroll();
     // printf("* addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
     // scroll();

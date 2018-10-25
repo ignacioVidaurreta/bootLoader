@@ -12,7 +12,7 @@
 #define PRODCONS_MUTEX "prodconsMutex"
 
 void prodcons();
-void consumer();
-void producer();
+void consumer(char** n);
+void producer(char** n);
 
 #endif
