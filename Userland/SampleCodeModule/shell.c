@@ -72,7 +72,7 @@ void shell(){
         printf("Writer Added");
         break;
       case PIPE_EXAMPLE:
-        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 500);
+        pid = start_proc_user("pipes", (void*) pipeExample, 0, 0, 2);
         wait(pid);
         scroll();
         break;
@@ -190,13 +190,13 @@ void printHelpMsg(){
     scroll();
     printf("* procCascade: Adds 100 processes to Ready queue and then frees them");
     scroll();
-    printf("* ![UNDER CONSTRUCTION]! prodcons: starts the demonstration of the prodcons problem");
+    printf("* prodcons: starts the demonstration of the prodcons problem");
     scroll();
-    printf("* ![UNDER CONSTRUCTION]! addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
+    printf("* addWriters: adds writers to the prodcons demonstration (a negative number will remove writers)");
     scroll();
-    printf("* ![UNDER CONSTRUCTION]! addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
+    printf("* addReaders: adds readers to the prodcons demonstration (a negative number will remove readers)");
     scroll();
-    printf("* ![UNDER CONSTRUCTION]! endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
+    printf("* endProdcons: ends the prodcons demonstration, the ammount of messages read by the readers will be printed");
     scroll();
     printf("* pipeItUp: Simple program showing the work of pipes");
     scroll();
@@ -221,15 +221,13 @@ void pipeReader(){
 
   char text[80] = {0};
   int80(getStdin(), (uint64_t) text, 39, 0, 0, SYS_READ);
-  printf("%s", text);
+  printf("Piped: %s", text);
 }
 
 void pipeExample(){
-
   int readerPid;
   int writerPid;
-  int *pipe = joinByPipe("getDate", (void*) getDate, "pipeReader", (void*) pipeReader, &readerPid, &writerPid);
-  wait(readerPid);
+  int *pipe =  joinByPipe("pipeReader", (void*) pipeReader, "getDate", (void*) getDate, &readerPid, &writerPid);
   wait(writerPid);
   destroyPipe(pipe[0]);
 }

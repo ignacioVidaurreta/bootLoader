@@ -95,7 +95,7 @@ void * getMessage(listADT messageQueue) {
 
 
 void initMessageQueueCreatesMutexTest(){
-
+		initMessageQueue();
     tmutex* mut = containMutex(MUTEX_NAME);
 
     if (mut != NULL){

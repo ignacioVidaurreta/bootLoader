@@ -20,6 +20,10 @@
 #define ACTION_STARTUP 1
 #define ACTION_EXCEPRETURN 2
 
+// void lockOfLocklockofLockedMutexClaimsMutex();
+
+int action = ACTION_TEST;
+
 extern void ctx_switch();
 
 extern uint8_t text;
@@ -62,9 +66,12 @@ void * initializeKernelBinary()
 	clearBSS(&bss, &endOfKernel - &bss);
 
     init_process();
-    initMutex();
-    initMessageQueue();
-    initPipes();
+		initPipes();
+		// if (action != ACTION_TEST){
+				initMutex();
+				initMessageQueue();
+		// }
+
 	loadIDT();
 
 	return getStackBase();
@@ -88,16 +95,19 @@ void roundRobinTestSuite(){
 
 }
 
+// void lockofLockedMutexClaimsMutex(){
+// 	lockofLockedMutexClaimsMutexTest();
+// }
 void mutexTestSuite(){
 	initMutexTest();
 	createMutexCreatesAMutexTest();
-	lockofLockedMutexClaimsMutexTest();
-	lockOfLockedMutexAddsToWaitingListTest();
-	unlockOfLockedMutexChangesOwnerTest();
-	unlockWithoutWaitingChangesStatusToUnlockTest();
+	// lockOfLockedMutexAddsToWaitingListTest();
+	// unlockOfLockedMutexChangesOwnerTest();
+	// unlockWithoutWaitingChangesStatusToUnlockTest();
 	terminateMutexEliminatesTheMutexTest();
 	//numOfTestsPassed();
 	multiProcessUsesMutexTest();
+	// start_proc("lockOfLocklockofLockedMutexClaimsMutex",(void*) lockofLockedMutexClaimsMutex, 0, NULL, 3);
 }
 
 void messageQueueTestSuite(){
@@ -125,15 +135,17 @@ void runTests(){
 
 }
 
-int action = ACTION_STARTUP;
+
 
 int main(){
 	//initializeScreen();
 	int shell_pid;
+	int test_pid;
 	ncResetPosition();
 	switch(action){
 		case ACTION_TEST:
-			runTests();
+			test_pid = start_proc("runTests", runTests, 0, NULL, 1);
+
 			break;
 		case ACTION_STARTUP:
 			shell_pid = start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);

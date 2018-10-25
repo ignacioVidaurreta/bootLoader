@@ -12,8 +12,8 @@
 //listADT mutexes;
 static listADT mutexes;
 static int test_inc = 0;
-
 static int tests_passed = 0;
+static int finished_processes = 0;
 
 int idFunctionMutex(void *elem, void *id){
 	return strcmp(((tmutex*)elem)->id,(char*)id)==0;
@@ -123,14 +123,6 @@ int unlock(char* mutexId, uint64_t processId){
 				blockedProcessFound = 1;
 				}
 
-				// ncScroll();
-				// ncPrint("unlock: ");
-				// ncPrintDec(processId);
-				// ncPrint(" blockedFound:");
-				// ncPrintDec(blockedProcessFound);
-				// ncPrint(" new_pid:");
-				// ncPrintDec(new_pid);
-				// ncScroll();
         /*
          *  No hace falta desbloquear el mutex si se
          *  lo voy a dar a otro proceso. Con simplemente
@@ -185,6 +177,7 @@ tmutex* containMutex(char* mutexId){
 // TESTS
 
 void initMutexTest(){
+		// initMutex();
     if(mutexes == NULL){
         ncPrint("initMutexTest ");
         ncPrintTestFailed("FAILED! --> mutexes = NULL");
@@ -224,20 +217,23 @@ void increment_test(){
 	for(int i=0;i<1000;i++){
 		lock("__INC_GLOBAL__",get_current_proc()->pid);
 		test_inc++;
-		if(test_inc==5000)
-			signal();
 		unlock("__INC_GLOBAL__",get_current_proc()->pid);
 	}
+	lock("__FINISHED_PROC__", get_current_proc()->pid);
+	finished_processes++;
+	unlock("__FINISHED_PROC__", get_current_proc()->pid);
 }
 
 
 void multiProcessUsesMutexTest(){
 	createMutex("__INC_GLOBAL__",get_current_proc()->pid);
+	createMutex("__FINISHED_PROC__", get_current_proc()->pid);
 
 	for(int i=0;i<5;i++){
-		start_proc("test",(void*) increment_test,0,NULL, 0);
+		start_proc("test",(void*) increment_test,0,NULL, 3);
 	}
-	wait(get_current_proc()->pid);
+	while(finished_processes != 5){
+	}
 	ncPrint("multiProcessUsesMutexTest: ");
 	if(test_inc == 5000){
 		ncPrintTestPassed("PASSED!");
@@ -246,84 +242,87 @@ void multiProcessUsesMutexTest(){
 	}
 }
 
-void lockofLockedMutexClaimsMutexTest(){
-    createMutex("LOCKEO_EL_MUTEX", 2);
-    lock("LOCKEO_EL_MUTEX", 2);
 
-    tmutex * mutex = getL(mutexes,"LOCKEO_EL_MUTEX");
-    if(mutex == NULL){
-        ncPrint("TEST ERROR: Couldn't find mutex");
-    }
-    if (mutex->ownerpid == 2){
-        ncPrint("lockofLockedMutexClaimsMutexTest ");
-        ncPrintTestPassed("PASSED!");
-				tests_passed++;
-    }else{
-        ncPrint("lockofLockedMutexClaimsMutexTest ");
-        ncPrintTestFailed("FAILED!");
-    }
+// void lockofLockedMutexClaimsMutexTest(){
+//     createMutex("LOCKEO_EL_MUTEX", get_current_proc()->pid);
+//     lock("LOCKEO_EL_MUTEX", get_current_proc()->pid);
+//
+//     tmutex * mutex = getL(mutexes,"LOCKEO_EL_MUTEX");
+//     if(mutex == NULL){
+//         ncPrint("TEST ERROR: Couldn't find mutex");
+// 				ncScroll();
+//     }
+//     if (mutex->ownerpid == 2){
+//         ncPrint("lockofLockedMutexClaimsMutexTest ");
+//         ncPrintTestPassed("PASSED!");
+//
+// 				tests_passed++;
+//     }else{
+//         ncPrint("lockofLockedMutexClaimsMutexTest ");
+//         ncPrintTestFailed("FAILED!");
+//     }
+//
+//     return;
+//
+// }
 
-    return;
 
-}
-
-
-void lockOfLockedMutexAddsToWaitingListTest(){
-
-    lock("LOCKEO_EL_MUTEX", 3);
-
-    tmutex * mutex = getL(mutexes,"LOCKEO_EL_MUTEX");
-    if(mutex == NULL){
-        ncPrint("TEST ERROR: Couldn't find mutex");
-        return;
-    }
-    if (((tproc*)getFirstL(mutex->waitingPIDs))->pid == 3){
-        ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
-        ncPrintTestPassed("PASSED!");
-				tests_passed++;
-    }else{
-        ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
-        ncPrintTestFailed("FAILED!");
-    }
-
-}
-
-void unlockOfLockedMutexChangesOwnerTest(){
-    unlock("LOCKEO_EL_MUTEX", 2);
-    tmutex * mutex = getL(mutexes, "LOCKEO_EL_MUTEX");
-    if(mutex == NULL){
-        ncPrint("TEST ERROR: Couldn't find mutex");
-        return;
-    }
-
-    if (mutex->ownerpid == 3){
-        ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
-        ncPrintTestPassed("PASSED!");
-				tests_passed++;
-    }else{
-        ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
-        ncPrintTestFailed("FAILED!");
-    }
-}
-
-void unlockWithoutWaitingChangesStatusToUnlockTest(){
-    unlock("LOCKEO_EL_MUTEX", 3);
-
-    tmutex * mutex = getL(mutexes, "LOCKEO_EL_MUTEX");
-    if(mutex == NULL){
-        ncPrint("TEST ERROR: Couldn't find mutex");
-        return;
-    }
-
-    if( mutex->status == UNLOCKED){
-        ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
-        ncPrintTestPassed("PASSED!");
-				tests_passed++;
-    }else{
-        ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
-        ncPrintTestFailed("FAILED!");
-    }
-}
+// void lockOfLockedMutexAddsToWaitingListTest(){
+//
+//     lock("LOCKEO_EL_MUTEX", 3);
+//
+//     tmutex * mutex = getL(mutexes,"LOCKEO_EL_MUTEX");
+//     if(mutex == NULL){
+//         ncPrint("TEST ERROR: Couldn't find mutex");
+//         return;
+//     }
+//     if (((tproc*)getFirstL(mutex->waitingPIDs))->pid == 3){
+//         ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
+//         ncPrintTestPassed("PASSED!");
+// 				tests_passed++;
+//     }else{
+//         ncPrint("lockOfLockedMutexAddsToWaitingListTest: ");
+//         ncPrintTestFailed("FAILED!");
+//     }
+//
+// }
+//
+// void unlockOfLockedMutexChangesOwnerTest(){
+//     unlock("LOCKEO_EL_MUTEX", 2);
+//     tmutex * mutex = getL(mutexes, "LOCKEO_EL_MUTEX");
+//     if(mutex == NULL){
+//         ncPrint("TEST ERROR: Couldn't find mutex");
+//         return;
+//     }
+//
+//     if (mutex->ownerpid == 3){
+//         ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
+//         ncPrintTestPassed("PASSED!");
+// 				tests_passed++;
+//     }else{
+//         ncPrint("unlockOfLockedMutexChangesOwnerTest: ");
+//         ncPrintTestFailed("FAILED!");
+//     }
+// }
+//
+// void unlockWithoutWaitingChangesStatusToUnlockTest(){
+//     unlock("LOCKEO_EL_MUTEX", 3);
+//
+//     tmutex * mutex = getL(mutexes, "LOCKEO_EL_MUTEX");
+//     if(mutex == NULL){
+//         ncPrint("TEST ERROR: Couldn't find mutex");
+//         return;
+//     }
+//
+//     if( mutex->status == UNLOCKED){
+//         ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
+//         ncPrintTestPassed("PASSED!");
+// 				tests_passed++;
+//     }else{
+//         ncPrint("unlockWithoutWaitingChangesStatusToUnlockTest: ");
+//         ncPrintTestFailed("FAILED!");
+//     }
+// }
 
 
 void terminateMutexEliminatesTheMutexTest(){
