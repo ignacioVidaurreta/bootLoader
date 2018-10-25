@@ -59,7 +59,7 @@ void shell(){
         break;
       case PRODCONS:
         if(prodconsPid == 0)
-          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 9);
+          prodconsPid = start_proc_user("prodcons", (void*) prodcons, 0, 0, 10);
         break;
       case END_PRODCONS:
         if(prodconsPid != 0)

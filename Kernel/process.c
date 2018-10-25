@@ -187,6 +187,7 @@ proc get_process(int pid){
 
 void kill(int pid){
     proc process = get_process(pid);
+    delete_from_queue(ready_queue, pid);
     if(process == 0)
         return;
     else{

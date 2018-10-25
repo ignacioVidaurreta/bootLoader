@@ -51,6 +51,29 @@ tNode *pop_queue_node(tHeader *queue_header) {
     return node;
 }
 
+void delete_from_queue(tHeader *queue_header, int pid) {
+    tNode *node = queue_header->first;
+
+    if (node == NULL) {
+        return;
+    }
+    
+    if (node->p->pid == pid) {
+        queue_header->first = node->next;
+    }
+    while (node->next != NULL && node->next->p->pid != pid) {
+        node = node->next;
+    }
+    if (node->next == NULL) {
+        return;
+    } else {
+        node->next = node->next->next;
+        if (node->next == NULL) {
+            queue_header->last = node;
+        }
+    }
+}
+
 void add_proc_to_queue(tHeader *queue_header, proc p) {
     tNode *node = mymalloc(sizeof(tNode));
     node->p = p;

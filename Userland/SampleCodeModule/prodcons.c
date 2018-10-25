@@ -2,7 +2,7 @@
 #include <prodcons.h>
 #include <shell.h>
 
-static int end = 10;
+static int end = PRODUCERS;
 
 void producer()
 {
@@ -23,10 +23,7 @@ void consumer()
   char* c = malloc(sizeof(char));
   while(1) {
     lockMutex("__PRODCONS_MUTEX__");
-    int read = int80(getStdin(), (uint64_t) c, 1, 0, 0, SYS_READ);
-    if(read == 0){
-      break;
-    }
+    int80(getStdin(), (uint64_t) c, 1, 0, 0, SYS_READ);
     unlockMutex("__PRODCONS_MUTEX__");
   }
 }
@@ -37,10 +34,11 @@ void prodcons()
 {
   createMutex("__PRODCONS_MUTEX__");
 	int pids[PRODUCERS] = {0};
+    int pids_consumers[CONSUMERS] = {0};
   int* pipe = createPipe();
   switchFd(STDOUT, pipe[1]);
   for(int i = 0; i < PRODUCERS; i++){
-		printf("created prod\n");
+		//printf("created prod\n");
     char *n = malloc(sizeof(char)*2);
     intToString(i, n);
     pids[i] = start_proc_user(concat("producer",n), (void*)producer, 0,0, 10);
@@ -51,11 +49,13 @@ void prodcons()
 		printf("created cons\n");
     char *n = malloc(sizeof(char)*2);
     intToString(i, n);
-    start_proc_user(concat("consumer", n), (void*)consumer, 0, 0, 10);
+    pids_consumers[i] = start_proc_user(concat("consumer", n), (void*)consumer, 0, 0, 10);
   }
   switchFd(STDIN, STDIN);
-	while(end){;}
+	//while(end){;}
 	for(int i = 0; i < PRODUCERS; i++)
 		kill(pids[i]);
+    for (int i = 0; i < CONSUMERS; i++)
+        kill(pids_consumers[i]);
   destroyPipe(pipe[0]);
 }
