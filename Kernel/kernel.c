@@ -22,7 +22,7 @@
 
 // void lockOfLocklockofLockedMutexClaimsMutex();
 
-int action = ACTION_TEST;
+int action = ACTION_STARTUP;
 
 extern void ctx_switch();
 
@@ -145,7 +145,6 @@ int main(){
 	switch(action){
 		case ACTION_TEST:
 			test_pid = start_proc("runTests", runTests, 0, NULL, 1);
-
 			break;
 		case ACTION_STARTUP:
 			shell_pid = start_proc("SCM", sampleCodeModuleAddress, 0, NULL, 1);
